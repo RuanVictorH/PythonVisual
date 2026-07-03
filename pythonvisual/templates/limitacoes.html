@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <title>Limitações - PythonVisual</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; background: #f8fafc; color: #1e293b; min-height: 100vh; }
+    header { background: #ffffff; border-bottom: 1px solid #dbe3ef; padding: 18px 32px; display: flex; align-items: center; gap: 18px; flex-wrap: wrap; box-shadow: 0 1px 4px rgba(15,23,42,0.08); }
+    .brand h1 { color: #0f172a; font-size: 1.7rem; line-height: 1.1; }
+    .brand p { color: #475569; font-size: 0.9rem; margin-top: 4px; }
+    nav { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
+    nav a { color: #17324d; text-decoration: none; font-size: 0.9rem; font-weight: 700; padding: 8px 11px; border-radius: 7px; border: 1px solid transparent; }
+    nav a:hover, nav a.ativo { background: #eef6ff; border-color: #bfdbfe; color: #1d4ed8; }
+    main { max-width: 960px; margin: 0 auto; padding: 38px 32px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .card { background: white; border: 1px solid #dbe3ef; border-radius: 8px; padding: 20px; box-shadow: 0 1px 4px rgba(15,23,42,0.06); }
+    .intro { grid-column: 1 / -1; }
+    h2 { color: #0f172a; font-size: 1.8rem; margin-bottom: 12px; }
+    h3 { color: #17324d; font-size: 1rem; margin-bottom: 8px; }
+    p, li { color: #475569; line-height: 1.62; font-size: 0.95rem; }
+    ul { padding-left: 20px; }
+    code { background: #eef2f7; border: 1px solid #dbe3ef; border-radius: 5px; padding: 1px 5px; color: #0f172a; }
+    @media (max-width: 800px) {
+      nav { width: 100%; margin-left: 0; }
+      main { padding: 24px 16px; }
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <h1>PythonVisual</h1>
+      <p>Funcionamento e limitações da ferramenta</p>
+    </div>
+    <nav aria-label="Navegação principal">
+      <a href="/">Home</a>
+      <a href="/visualizador">Visualizador</a>
+      <a href="/sobre">Sobre</a>
+      <a href="/limitacoes" class="ativo">Limitações</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="grid">
+      <article class="card intro">
+        <h2>Explicação da ferramenta e limitações</h2>
+        <p>O PythonVisual executa um único trecho de código Python em ambiente isolado, captura os passos com rastreamento de execução e transforma o estado interno em uma visualização didática. Ele é adequado para exemplos pequenos e médios de lógica, estruturas de dados e funções.</p>
+      </article>
+
+      <article class="card">
+        <h3>Imports</h3>
+        <ul>
+          <li>Imports da biblioteca padrão podem funcionar quando disponíveis no ambiente Python.</li>
+          <li>Bibliotecas externas não instaladas no ambiente não serão carregadas.</li>
+          <li>Importações pesadas, gráficas ou que dependem de sistema operacional podem falhar.</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <h3>Múltiplos arquivos</h3>
+        <ul>
+          <li>A ferramenta executa apenas o código digitado no editor.</li>
+          <li>Não há suporte para projetos com vários arquivos, pacotes locais ou leitura de módulos criados pelo usuário.</li>
+          <li>O foco é ensino de fluxo e memória, não simulação completa de um projeto Python.</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <h3>Entrada e saída</h3>
+        <ul>
+          <li><code>input()</code> solicita um valor por vez, conforme a linha em execução.</li>
+          <li>A saída exibida considera principalmente chamadas de <code>print()</code>.</li>
+          <li>Programas interativos longos não são o cenário ideal.</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <h3>Tempo e segurança</h3>
+        <ul>
+          <li>A execução tem limite de tempo para evitar travamentos.</li>
+          <li>Loops infinitos são interrompidos por timeout ou limite de passos.</li>
+          <li>A ferramenta não deve ser usada para executar código desconhecido em ambiente sensível.</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <h3>Visualização de memória</h3>
+        <ul>
+          <li>Listas, tuplas, conjuntos, dicionários e objetos simples são representados visualmente.</li>
+          <li>Objetos complexos podem aparecer resumidos.</li>
+          <li>Valores muito grandes são truncados para manter a interface legível.</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <h3>Recursos avançados</h3>
+        <ul>
+          <li>Threads, processos, rede, arquivos e interfaces gráficas não são foco da ferramenta.</li>
+          <li>Decorators, generators e recursos internos avançados podem ser exibidos de forma simplificada.</li>
+          <li>O rastreamento prioriza clareza didática sobre cobertura total da linguagem.</li>
+        </ul>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

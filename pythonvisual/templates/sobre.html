@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <title>Sobre - PythonVisual</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; background: #f8fafc; color: #1e293b; min-height: 100vh; }
+    header { background: #ffffff; border-bottom: 1px solid #dbe3ef; padding: 18px 32px; display: flex; align-items: center; gap: 18px; flex-wrap: wrap; box-shadow: 0 1px 4px rgba(15,23,42,0.08); }
+    .brand h1 { color: #0f172a; font-size: 1.7rem; line-height: 1.1; }
+    .brand p { color: #475569; font-size: 0.9rem; margin-top: 4px; }
+    nav { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
+    nav a { color: #17324d; text-decoration: none; font-size: 0.9rem; font-weight: 700; padding: 8px 11px; border-radius: 7px; border: 1px solid transparent; }
+    nav a:hover, nav a.ativo { background: #eef6ff; border-color: #bfdbfe; color: #1d4ed8; }
+    main { max-width: 900px; margin: 0 auto; padding: 38px 32px; }
+    .card { background: white; border: 1px solid #dbe3ef; border-radius: 8px; padding: 24px; box-shadow: 0 1px 4px rgba(15,23,42,0.06); }
+    h2 { color: #0f172a; font-size: 1.8rem; margin-bottom: 14px; }
+    h3 { color: #17324d; font-size: 1rem; margin: 22px 0 8px; }
+    p { color: #475569; line-height: 1.65; margin-bottom: 12px; }
+    ul { padding-left: 20px; color: #475569; line-height: 1.7; }
+    @media (max-width: 800px) {
+      nav { width: 100%; margin-left: 0; }
+      main { padding: 24px 16px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <h1>PythonVisual</h1>
+      <p>Visualização didática de código Python</p>
+    </div>
+    <nav aria-label="Navegação principal">
+      <a href="/">Home</a>
+      <a href="/visualizador">Visualizador</a>
+      <a href="/sobre" class="ativo">Sobre</a>
+      <a href="/limitacoes">Limitações</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>Sobre o sistema</h2>
+      <p>O PythonVisual é uma ferramenta educacional inspirada no PythonTutor. A proposta é transformar a execução de um programa Python em uma sequência visual de estados, mostrando como variáveis, objetos, funções e saídas mudam ao longo do tempo.</p>
+      <p>O sistema foi adaptado para uma interface em português, com foco em acessibilidade, leitura clara dos quadros de memória e navegação simples entre os passos.</p>
+
+      <h3>Objetivo</h3>
+      <ul>
+        <li>Apoiar estudantes no aprendizado de lógica de programação.</li>
+        <li>Mostrar a relação entre variáveis e objetos em memória.</li>
+        <li>Facilitar aulas, demonstrações e revisão de código básico.</li>
+      </ul>
+
+      <h3>Principais melhorias desta versão</h3>
+      <ul>
+        <li>Painel de memória organizado por variáveis, objetos, funções e importações.</li>
+        <li>Setas dinâmicas entre variáveis e objetos.</li>
+        <li>Temas claro e escuro.</li>
+        <li>Controle de tamanho da fonte.</li>
+        <li>Entrada guiada por linha para códigos com input().</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>

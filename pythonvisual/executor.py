@@ -21,6 +21,14 @@ class LimiteDePassos(Exception):
     pass
 
 
+class EntradaPendente(Exception):
+    def __init__(self, linha, prompt, frame):
+        super().__init__("entrada pendente")
+        self.linha = linha
+        self.prompt = prompt
+        self.frame = frame
+
+
 def repr_seguro(valor, limite=120):
     try:
         texto = repr(valor)
@@ -69,14 +77,23 @@ def serializar_variavel(valor):
             "repr": repr_seguro(valor)
         }
 
-    if isinstance(valor, type) and getattr(valor, "__module__", "builtins") != "builtins":
-        return {
-            "categoria": "importacao",
-            "tipo": "classe_importada",
-            "nome": getattr(valor, "__name__", tipo),
-            "modulo": getattr(valor, "__module__", ""),
-            "repr": repr_seguro(valor)
-        }
+    if isinstance(valor, type):
+        modulo = getattr(valor, "__module__", "builtins")
+        if modulo == "__main__":
+            return {
+                "categoria": "funcao",
+                "tipo": "classe",
+                "nome": getattr(valor, "__name__", tipo),
+                "repr": repr_seguro(valor)
+            }
+        if modulo != "builtins":
+            return {
+                "categoria": "importacao",
+                "tipo": "classe_importada",
+                "nome": getattr(valor, "__name__", tipo),
+                "modulo": modulo,
+                "repr": repr_seguro(valor)
+            }
 
     if isinstance(valor, (types.BuiltinFunctionType, types.BuiltinMethodType)):
         modulo = getattr(valor, "__module__", "")
@@ -117,16 +134,37 @@ def serializar_variavel(valor):
             "truncado": len(valor) > 50
         }
 
+    if hasattr(valor, "__dict__") and getattr(type(valor), "__module__", "") == "__main__":
+        atributos = {}
+        for indice, (nome, item) in enumerate(vars(valor).items()):
+            if indice >= 50:
+                break
+            atributos[nome] = repr_seguro(item)
+        return {
+            "categoria": "objeto",
+            "tipo": tipo,
+            "atributos": atributos,
+            "truncado": len(vars(valor)) > 50,
+            "repr": repr_seguro(valor)
+        }
+
     return {"categoria": "primitivo", "tipo": tipo, "repr": repr_seguro(valor)}
 
 
 payload = json.loads(sys.stdin.read() or "{}")
 codigo = payload.get("codigo", "")
 entrada = payload.get("entrada", "")
+entradas_payload = payload.get("entradas")
 limite_passos = int(payload.get("limite_passos", 1000))
 
 execucoes = []
 stdout_capture = io.StringIO()
+
+if isinstance(entradas_payload, list):
+    entradas_fornecidas = entradas_payload
+else:
+    entradas_fornecidas = [{"linha": None, "valor": valor} for valor in entrada.splitlines()]
+indice_entrada = 0
 
 
 def registrar_passo(frame, evento):
@@ -158,9 +196,26 @@ def tracer(frame, event, arg):
     return tracer
 
 
+def input_visual(prompt=""):
+    global indice_entrada
+    frame_chamador = sys._getframe(1)
+    linha = frame_chamador.f_lineno if frame_chamador.f_code.co_filename == ARQUIVO_USUARIO else None
+    texto_prompt = str(prompt)
+    stdout_capture.write(texto_prompt)
+
+    if indice_entrada < len(entradas_fornecidas):
+        entrada_atual = entradas_fornecidas[indice_entrada]
+        linha_entrada = entrada_atual.get("linha")
+        if linha_entrada is None or linha_entrada == linha:
+            indice_entrada += 1
+            return str(entrada_atual.get("valor", ""))
+
+    raise EntradaPendente(linha, texto_prompt, frame_chamador)
+
+
 stdout_original = sys.stdout
 stdin_original = sys.stdin
-ambiente = {"__name__": "__main__"}
+ambiente = {"__name__": "__main__", "input": input_visual}
 
 sys.stdout = stdout_capture
 sys.stdin = io.StringIO(entrada)
@@ -184,6 +239,24 @@ except LimiteDePassos:
         "erro": f"LimiteDePassos: execução interrompida após {limite_passos} passos.",
         "saida": stdout_capture.getvalue()
     })
+except EntradaPendente as exc:
+    frame = exc.frame
+    variaveis = {}
+    if frame and frame.f_code.co_filename == ARQUIVO_USUARIO:
+        for nome, valor in frame.f_locals.items():
+            if nome.startswith("__") and nome.endswith("__"):
+                continue
+            variaveis[nome] = serializar_variavel(valor)
+    escopo = frame.f_code.co_name if frame else "Global"
+    execucoes.append({
+        "linha": exc.linha,
+        "escopo": escopo if escopo != "<module>" else "Global",
+        "variaveis": variaveis,
+        "saida": stdout_capture.getvalue(),
+        "evento": "input_pendente",
+        "entrada_pendente": True,
+        "prompt": exc.prompt,
+    })
 except BaseException as exc:
     execucoes.append({
         "erro": f"{type(exc).__name__}: {exc}",
@@ -201,12 +274,14 @@ print(json.dumps(execucoes, ensure_ascii=False))
 def executar_codigo(
     codigo,
     entrada="",
+    entradas=None,
     tempo_limite=TEMPO_LIMITE_SEGUNDOS,
     limite_passos=LIMITE_PASSOS,
 ):
     payload = json.dumps({
         "codigo": codigo,
         "entrada": entrada,
+        "entradas": entradas,
         "limite_passos": limite_passos,
     }, ensure_ascii=False)
 

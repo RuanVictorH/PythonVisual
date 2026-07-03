@@ -6,6 +6,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.js"></script>
@@ -18,6 +19,9 @@
     header img { height: 52px; width: auto; }
     .header-text h1 { color: #0f172a; font-size: 1.6rem; font-weight: 700; letter-spacing: 0; line-height: 1.1; }
     .header-text p { color: #475569; font-size: 0.82rem; margin-top: 2px; }
+    .top-nav { display: flex; align-items: center; gap: 8px; margin-left: 12px; flex-wrap: wrap; }
+    .top-nav a { color: #17324d; text-decoration: none; font-size: 0.86rem; font-weight: 700; padding: 7px 10px; border-radius: 7px; border: 1px solid transparent; }
+    .top-nav a:hover, .top-nav a.ativo { background: #eef6ff; border-color: #bfdbfe; color: #1d4ed8; }
     .accessibility-controls { margin-left: auto; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
     .btn-access { min-width: 38px; padding: 8px 10px; border: 1.5px solid #cbd5e1; border-radius: 7px; background: #f8fafc; color: #17324d; font-family: "Inter", sans-serif; font-weight: 700; font-size: 0.82rem; cursor: pointer; transition: background 0.2s, border-color 0.2s; }
     .btn-access:hover { background: #e0f2fe; border-color: #2563eb; }
@@ -27,6 +31,7 @@
 
     .card { background: white; border: 1px solid #dbe3ef; border-radius: 8px; box-shadow: 0 1px 4px rgba(15,23,42,0.06); overflow: hidden; }
     .card-header { background: #eef6ff; color: #17324d; border-bottom: 1px solid #dbe3ef; font-weight: 700; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.06em; padding: 10px 16px; }
+    .card-header i, .top-nav i, button i, .section-label i, .terminal-label i { margin-right: 6px; }
     .card-body { padding: 16px; }
 
     .exemplos-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
@@ -39,12 +44,17 @@
     .CodeMirror-linenumber { color: #64748b; }
     .exec-gutter { width: 30px; }
     .exec-marker { display: flex; align-items: center; justify-content: center; width: 22px; height: 20px; margin-left: 3px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; }
-    .exec-marker.proxima { background: #1d4ed8; color: white; }
+    .exec-marker.proxima { background: #dc2626; color: white; }
     .exec-marker.executada { background: #047857; color: white; }
-    .linha-proxima { background: #dbeafe !important; }
+    .linha-proxima { background: #fee2e2 !important; }
     .linha-executada { background: #dcfce7 !important; }
-    .entrada-area { width: 100%; min-height: 72px; resize: vertical; padding: 10px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; outline: none; font-family: "Fira Mono", "Courier New", monospace; font-size: 0.86rem; color: #0f172a; background: #f8fafc; }
+    .entrada-area { width: 100%; padding: 10px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; outline: none; font-family: "Fira Mono", "Courier New", monospace; font-size: 0.9rem; color: #0f172a; background: #f8fafc; }
     .entrada-area:focus { border-color: #2563eb; background: white; }
+    .entrada-linha-info { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; color: #475569; font-size: 0.88rem; }
+    .entrada-linha-badge { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; border-radius: 999px; padding: 3px 9px; font-weight: 800; }
+    .entrada-form { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: stretch; }
+    .btn-entrada { padding: 0 14px; background: #dc2626; color: white; border: none; border-radius: 8px; font-family: "Inter", sans-serif; font-size: 0.86rem; font-weight: 800; cursor: pointer; white-space: nowrap; }
+    .btn-entrada:hover { background: #b91c1c; }
 
     .acoes-codigo { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: stretch; }
     .btn-executar { width: 100%; padding: 12px; background: #2563eb; color: white; border: none; border-radius: 8px; font-family: "Inter", sans-serif; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: background 0.2s, transform 0.1s; letter-spacing: 0.02em; }
@@ -64,7 +74,9 @@
     .memoria-bloco { border: 1px solid #dbe3ef; border-radius: 8px; padding: 12px; background: #f8fafc; }
     .memoria-topo { margin-bottom: 12px; }
     .memoria-subtitulo { color: #64748b; font-size: 0.82rem; margin-top: 2px; }
-    .memoria-container { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .memoria-diagrama { position: relative; }
+    .memoria-setas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; z-index: 4; }
+    .memoria-container { position: relative; z-index: 2; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .painel-memoria { min-width: 0; }
     .painel-titulo { font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.07em; color: #475569; margin-bottom: 8px; padding-bottom: 4px; border-bottom: 2px solid #dbe3ef; }
 
@@ -79,6 +91,7 @@
     .tipo-chip { display: inline-block; border-radius: 999px; padding: 2px 8px; background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; font-family: "Inter", sans-serif; font-size: 0.72rem; font-weight: 700; line-height: 1.35; }
     .quadro-cel-valor { font-family: "Fira Mono", "Courier New", monospace; color: #0f172a; }
     .quadro-cel-seta { color: #2563eb; font-weight: bold; font-size: 1rem; }
+    .referencia-dot { display: inline-block; width: 9px; height: 9px; border-radius: 999px; background: #0f5f8f; border: 2px solid white; box-shadow: 0 0 0 1px #0f5f8f; vertical-align: middle; }
 
     .objeto-card { border: 2px solid #059669; border-radius: 8px; overflow: hidden; margin-bottom: 10px; background: white; }
     .objeto-titulo { background: #059669; color: white; font-weight: 600; font-size: 0.78rem; padding: 4px 10px; }
@@ -106,7 +119,7 @@
     .escopo-badge { background: #e0f2fe; color: #0369a1; border-radius: 5px; padding: 2px 8px; font-size: 0.78rem; font-weight: 600; }
     .linha-badge { border-radius: 5px; padding: 2px 8px; font-size: 0.78rem; font-weight: 700; }
     .linha-badge.executada { background: #dcfce7; color: #14532d; }
-    .linha-badge.proxima { background: #dbeafe; color: #1e3a8a; }
+    .linha-badge.proxima { background: #fee2e2; color: #991b1b; }
 
     .empty { color: #94a3b8; font-style: italic; font-size: 0.85rem; }
     .error-box { background: #fef2f2; border: 1.5px solid #fca5a5; border-radius: 8px; padding: 12px 14px; color: #b91c1c; font-size: 0.88rem; font-weight: 500; }
@@ -123,6 +136,8 @@
     body.tema-escuro .lista-item,
     body.tema-escuro .terminal-body { color: #e2e8f0; }
     body.tema-escuro .header-text p,
+    body.tema-escuro .top-nav a,
+    body.tema-escuro .entrada-linha-info,
     body.tema-escuro .memoria-subtitulo,
     body.tema-escuro .painel-titulo,
     body.tema-escuro .terminal-label,
@@ -139,7 +154,7 @@
     body.tema-escuro .exemplos-row select { background: #0b1120; color: #e2e8f0; border-color: #475569; }
     body.tema-escuro .CodeMirror-linenumber { color: #94a3b8; }
     body.tema-escuro .CodeMirror-cursor { border-left-color: #e2e8f0; }
-    body.tema-escuro .linha-proxima { background: #1e3a8a !important; }
+    body.tema-escuro .linha-proxima { background: #7f1d1d !important; }
     body.tema-escuro .linha-executada { background: #14532d !important; }
     body.tema-escuro .quadro-titulo { background: #334155; color: #ffffff; }
     body.tema-escuro .quadro-cel-nome,
@@ -154,13 +169,18 @@
     body.tema-escuro .btn-limpar { background: #1e293b; color: #dbeafe; border-color: #475569; }
     body.tema-escuro .btn-access:hover,
     body.tema-escuro .btn-limpar:hover { background: #334155; border-color: #60a5fa; }
+    body.tema-escuro .entrada-linha-badge { background: #7f1d1d; color: #fecaca; border-color: #991b1b; }
+    body.tema-escuro .top-nav a:hover,
+    body.tema-escuro .top-nav a.ativo { background: #1e293b; border-color: #475569; color: #bfdbfe; }
+    body.tema-escuro .referencia-dot { background: #38bdf8; border-color: #0b1120; box-shadow: 0 0 0 1px #38bdf8; }
     body.tema-escuro .empty { color: #94a3b8; }
     @media (max-width: 900px) {
       .main, .memoria-container { grid-template-columns: 1fr; }
       .main { padding: 16px; }
       header { align-items: flex-start; flex-wrap: wrap; }
+      .top-nav { width: 100%; margin-left: 0; }
       .accessibility-controls { width: 100%; justify-content: flex-start; margin-left: 0; }
-      .acoes-codigo { grid-template-columns: 1fr; }
+      .acoes-codigo, .entrada-form { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -172,17 +192,23 @@
       <h1>PythonVisual</h1>
       <p>Analise a execução do seu código Python passo a passo</p>
     </div>
+    <nav class="top-nav" aria-label="Navegação principal">
+      <a href="/"><i class="fa-solid fa-house"></i>Home</a>
+      <a href="/visualizador" class="ativo"><i class="fa-solid fa-code"></i>Visualizador</a>
+      <a href="/sobre"><i class="fa-solid fa-circle-info"></i>Sobre</a>
+      <a href="/limitacoes"><i class="fa-solid fa-triangle-exclamation"></i>Limitações</a>
+    </nav>
     <div class="accessibility-controls" aria-label="Controles de acessibilidade">
-      <button class="btn-access" type="button" onclick="alterarFonte(-0.1)" title="Diminuir fonte">A-</button>
-      <button class="btn-access" type="button" onclick="alterarFonte(0.1)" title="Aumentar fonte">A+</button>
-      <button class="btn-access" type="button" id="btn-tema" onclick="alternarTema()" title="Alternar tema claro e escuro">Tema escuro</button>
+      <button class="btn-access" type="button" onclick="alterarFonte(-0.1)" title="Diminuir fonte"><i class="fa-solid fa-magnifying-glass-minus"></i>A-</button>
+      <button class="btn-access" type="button" onclick="alterarFonte(0.1)" title="Aumentar fonte"><i class="fa-solid fa-magnifying-glass-plus"></i>A+</button>
+      <button class="btn-access" type="button" id="btn-tema" onclick="alternarTema()" title="Alternar tema claro e escuro"><i class="fa-solid fa-moon"></i>Tema escuro</button>
     </div>
   </header>
 
   <div class="main">
     <div class="coluna-esquerda">
       <div class="card">
-        <div class="card-header">Código</div>
+        <div class="card-header"><i class="fa-solid fa-terminal"></i>Código</div>
         <div class="card-body" style="padding: 12px 16px 10px;">
           <div class="exemplos-row">
             <label for="exemplos">Exemplo:</label>
@@ -196,7 +222,11 @@
               <option value="fatorial">Fatorial (recursão)</option>
               <option value="fibonacci">Fibonacci</option>
               <option value="lista">Manipulação de lista</option>
+              <option value="dicionario">Dicionário</option>
+              <option value="tupla">Tupla</option>
               <option value="input">Entrada com input()</option>
+              <option value="classe">Classe e objeto</option>
+              <option value="try_except">Try/except</option>
               <option value="bubble_sort">Bubble Sort</option>
             </select>
           </div>
@@ -204,36 +234,43 @@
         </div>
       </div>
 
-      <div class="card" id="entrada-card" style="display:none;">
-        <div class="card-header">Entrada padrão</div>
-        <div class="card-body">
-          <textarea id="entrada" class="entrada-area" placeholder="Valores para input(), uma linha por entrada"></textarea>
-        </div>
-      </div>
-
       <div class="acoes-codigo">
-        <button class="btn-executar" type="button" onclick="executar()">&#9654; Executar código</button>
-        <button class="btn-limpar" type="button" onclick="limparCodigo()" title="Limpar o código atual">Limpar</button>
+        <button class="btn-executar" type="button" onclick="executar()"><i class="fa-solid fa-play"></i>Executar código</button>
+        <button class="btn-limpar" type="button" onclick="limparCodigo()" title="Limpar o código atual"><i class="fa-solid fa-eraser"></i>Limpar</button>
       </div>
 
       <div class="card" id="navegacao">
-        <div class="card-header">Navegação</div>
+        <div class="card-header"><i class="fa-solid fa-route"></i>Navegação</div>
         <div class="card-body nav-container">
           <div class="nav-buttons">
-            <button class="btn-nav" id="btn-primeiro" type="button" onclick="irParaPrimeiro()">« Início</button>
-            <button class="btn-nav" id="btn-anterior" type="button" onclick="passo(-1)">‹ Anterior</button>
+            <button class="btn-nav" id="btn-primeiro" type="button" onclick="irParaPrimeiro()"><i class="fa-solid fa-backward-fast"></i>Início</button>
+            <button class="btn-nav" id="btn-anterior" type="button" onclick="passo(-1)"><i class="fa-solid fa-chevron-left"></i>Anterior</button>
             <div class="contador" id="contador"></div>
-            <button class="btn-nav" id="btn-proximo" type="button" onclick="passo(1)">Próximo ›</button>
-            <button class="btn-nav" id="btn-ultimo" type="button" onclick="irParaUltimo()">Fim »</button>
+            <button class="btn-nav" id="btn-proximo" type="button" onclick="passo(1)">Próximo<i class="fa-solid fa-chevron-right" style="margin-left:6px;margin-right:0;"></i></button>
+            <button class="btn-nav" id="btn-ultimo" type="button" onclick="irParaUltimo()">Fim<i class="fa-solid fa-forward-fast" style="margin-left:6px;margin-right:0;"></i></button>
           </div>
           <input type="range" id="slider" min="0" value="0" oninput="irPara(this.value)">
+        </div>
+      </div>
+
+      <div class="card" id="entrada-card" style="display:none;">
+        <div class="card-header"><i class="fa-solid fa-keyboard"></i>Entrada solicitada</div>
+        <div class="card-body">
+          <div class="entrada-linha-info">
+            <span class="entrada-linha-badge" id="entrada-linha-badge">Linha -</span>
+            <span id="entrada-prompt-texto">Informe o valor solicitado por input().</span>
+          </div>
+          <div class="entrada-form">
+            <input id="entrada" class="entrada-area" type="text" autocomplete="off" placeholder="Digite o valor para esta linha">
+            <button class="btn-entrada" type="button" onclick="enviarEntradaPendente()"><i class="fa-solid fa-paper-plane"></i>Enviar</button>
+          </div>
         </div>
       </div>
     </div>
 
     <div class="coluna-direita">
       <div class="card" id="saida" style="display:none;">
-        <div class="card-header">Visualização</div>
+        <div class="card-header"><i class="fa-solid fa-diagram-project"></i>Visualização</div>
         <div class="card-body" id="saida-corpo"></div>
       </div>
     </div>
@@ -257,17 +294,23 @@
     let linhaProximaMarcada = null;
     let escalaFonte = 1;
     let temaEscuro = false;
+    let entradasColetadas = [];
+    let entradaPendente = null;
 
     const exemplos = {
       variaveis:   'x = 10\ny = 5\nprint("Soma:", x + y)\nx = x + y\nprint("Novo x:", x)',
       condicional: 'idade = 18\nif idade >= 18:\n    print("Maior de idade")\nelse:\n    print("Menor de idade")',
       loop_for:    'soma = 0\nfor i in range(1, 6):\n    soma = soma + i\n    print("i =", i, "| soma =", soma)',
       loop_while:  'n = 1\nwhile n <= 5:\n    print("n =", n)\n    n = n + 1',
-      funcao:      'def saudacao(nome):\n    mensagem = "Ola, " + nome + "!"\n    return mensagem\n\nresultado = saudacao("Ruan")\nprint(resultado)',
+      funcao:      'def saudacao(nome):\n    mensagem = "Ola, " + nome + "!"\n    return mensagem\n\nresultado = saudacao("Ana")\nprint(resultado)',
       fatorial:    'def fatorial(n):\n    if n == 0:\n        return 1\n    return n * fatorial(n - 1)\n\nprint(fatorial(5))',
       fibonacci:   'def fibonacci(n):\n    if n <= 1:\n        return n\n    return fibonacci(n - 1) + fibonacci(n - 2)\n\nfor i in range(7):\n    print("fib(" + str(i) + ") =", fibonacci(i))',
       lista:       'numeros = [3, 1, 4, 1, 5]\nnumeros.append(9)\nprint("Lista:", numeros)\nprint("Tamanho:", len(numeros))\nprint("Maior:", max(numeros))',
+      dicionario:  'aluno = {"nome": "Ana", "nota": 8.5}\naluno["status"] = "aprovada"\nfor chave, valor in aluno.items():\n    print(chave, "=", valor)',
+      tupla:       'ponto = (10, 20)\nx, y = ponto\nprint("x =", x)\nprint("y =", y)',
       input:       'nome = input("Nome: ")\nidade = int(input("Idade: "))\nprint(nome, "tem", idade, "anos")',
+      classe:      'class Pessoa:\n    def __init__(self, nome, idade):\n        self.nome = nome\n        self.idade = idade\n\npessoa = Pessoa("Ana", 18)\nprint(pessoa.nome)',
+      try_except:  'texto = "10"\ntry:\n    numero = int(texto)\n    print("Numero:", numero)\nexcept ValueError:\n    print("Valor invalido")',
       bubble_sort: 'lista = [5, 3, 8, 1, 2]\nn = len(lista)\nfor i in range(n):\n    for j in range(0, n - i - 1):\n        if lista[j] > lista[j + 1]:\n            lista[j], lista[j + 1] = lista[j + 1], lista[j]\nprint("Ordenada:", lista)'
     };
 
@@ -276,9 +319,7 @@
       if (!chave || !exemplos[chave]) return;
       editor.setValue(exemplos[chave]);
       document.getElementById("saida").style.display = "none";
-      if (chave === "input") document.getElementById("entrada").value = "Ruan\n18\n";
-      else document.getElementById("entrada").value = "";
-      atualizarEntradaDinamica();
+      ocultarEntradaPendente();
       resetarExecucaoVisual();
     }
 
@@ -287,15 +328,34 @@
     }
 
     function atualizarEntradaDinamica() {
-      const precisaEntrada = codigoPedeEntrada(editor.getValue());
-      const entradaCard = document.getElementById("entrada-card");
-      entradaCard.style.display = precisaEntrada ? "block" : "none";
-      if (!precisaEntrada) document.getElementById("entrada").value = "";
+      if (!entradaPendente) ocultarEntradaPendente();
+    }
+
+    function ocultarEntradaPendente() {
+      entradaPendente = null;
+      document.getElementById("entrada-card").style.display = "none";
+      document.getElementById("entrada").value = "";
+    }
+
+    function mostrarEntradaPendente(passoAtual) {
+      entradaPendente = {
+        linha: passoAtual.linha,
+        prompt: passoAtual.prompt || ""
+      };
+      document.getElementById("entrada-card").style.display = "block";
+      document.getElementById("entrada-linha-badge").textContent = "Linha " + passoAtual.linha;
+      document.getElementById("entrada-prompt-texto").textContent =
+        entradaPendente.prompt ? "Prompt: " + entradaPendente.prompt : "Informe o valor solicitado por input().";
+      const campoEntrada = document.getElementById("entrada");
+      campoEntrada.value = "";
+      campoEntrada.focus();
     }
 
     function resetarExecucaoVisual() {
       passos = [];
       indiceAtual = 0;
+      entradasColetadas = [];
+      ocultarEntradaPendente();
       limparMarcacoes();
       const slider = document.getElementById("slider");
       slider.max = 0;
@@ -310,13 +370,13 @@
       document.getElementById("entrada").value = "";
       document.getElementById("saida").style.display = "none";
       resetarExecucaoVisual();
-      atualizarEntradaDinamica();
       editor.focus();
     }
 
     function aplicarFonte() {
       document.documentElement.style.setProperty("--font-scale", escalaFonte.toFixed(2));
       editor.refresh();
+      requestAnimationFrame(desenharSetasMemoria);
     }
 
     function alterarFonte(delta) {
@@ -329,6 +389,7 @@
       document.body.classList.toggle("tema-escuro", temaEscuro);
       document.getElementById("btn-tema").textContent = temaEscuro ? "Tema claro" : "Tema escuro";
       editor.refresh();
+      requestAnimationFrame(desenharSetasMemoria);
     }
 
     function escaparHTML(texto) {
@@ -355,8 +416,10 @@
     function criarMarcador(tipo) {
       const marcador = document.createElement("div");
       marcador.className = "exec-marker " + tipo;
-      marcador.title = tipo === "proxima" ? "Próxima linha a executar" : "Linha executada";
-      marcador.textContent = tipo === "proxima" ? "▶" : "✓";
+      marcador.title = tipo === "proxima" ? "Linha em execução" : "Linha executada";
+      marcador.innerHTML = tipo === "proxima"
+        ? "<i class=\"fa-solid fa-arrow-right\"></i>"
+        : "<i class=\"fa-solid fa-check\"></i>";
       return marcador;
     }
 
@@ -397,7 +460,7 @@
         linhasQuadro += "<div class=\"quadro-linha\">"
           + "<div class=\"quadro-cel quadro-cel-nome\">" + escaparHTML(nome) + "</div>"
           + "<div class=\"quadro-cel quadro-cel-tipo\"><span class=\"tipo-chip\">" + escaparHTML(info.tipo || "objeto") + "</span></div>"
-          + "<div class=\"quadro-cel quadro-cel-seta\">→</div>"
+          + "<div class=\"quadro-cel quadro-cel-seta\"><span class=\"referencia-dot\" data-ref-origem=\"" + escaparHTML(nome) + "\" title=\"Referência para o objeto " + escaparHTML(nome) + "\"></span></div>"
           + "<div class=\"quadro-cel quadro-cel-valor\" style=\"color:#059669;font-style:italic;\">" + escaparHTML(nome) + "</div>"
           + "</div>";
       }
@@ -425,12 +488,16 @@
           corpo = Object.entries(info.pares).map(([k, v]) =>
             "<div class=\"objeto-dict-par\"><span class=\"objeto-dict-chave\">" + escaparHTML(k) + "</span><span>:</span><span>" + escaparHTML(v) + "</span></div>"
           ).join("");
+        } else if (info.atributos) {
+          corpo = Object.entries(info.atributos).map(([k, v]) =>
+            "<div class=\"objeto-dict-par\"><span class=\"objeto-dict-chave\">" + escaparHTML(k) + "</span><span>=</span><span>" + escaparHTML(v) + "</span></div>"
+          ).join("");
         }
         if (info.truncado) {
           corpo += "<div class=\"objeto-item\">...</div>";
         }
         const tipoLabel = { lista:"Lista", tupla:"Tupla", conjunto:"Conjunto", dicionario:"Dicionário" }[info.tipo] || info.tipo;
-        objetosHTML += "<div class=\"objeto-card\">"
+        objetosHTML += "<div class=\"objeto-card\" data-ref-destino=\"" + escaparHTML(nome) + "\">"
           + "<div class=\"objeto-titulo\">" + escaparHTML(nome) + " — " + tipoLabel + "</div>"
           + "<div class=\"objeto-corpo\">" + (corpo || "<span class=\"empty\">vazio</span>") + "</div>"
           + "</div>";
@@ -454,14 +521,70 @@
         + "<div class=\"section-label\">Memória</div>"
         + "<div class=\"memoria-subtitulo\">Quadros, objetos, funções e importações separados por categoria.</div>"
         + "</div>"
+        + "<div class=\"memoria-diagrama\">"
+        + "<svg class=\"memoria-setas\" id=\"memoria-setas\" aria-hidden=\"true\"></svg>"
         + "<div class=\"memoria-container\">" + quadroHTML + painelObjetos + painelFuncoes + painelImportacoes + "</div>"
+        + "</div>"
         + "</div>";
     }
 
+    function desenharSetasMemoria() {
+      const diagrama = document.querySelector(".memoria-diagrama");
+      const svg = document.getElementById("memoria-setas");
+      if (!diagrama || !svg) return;
+
+      const area = diagrama.getBoundingClientRect();
+      if (area.width === 0 || area.height === 0) return;
+
+      const cor = document.body.classList.contains("tema-escuro") ? "#38bdf8" : "#0f5f8f";
+      svg.setAttribute("viewBox", "0 0 " + area.width + " " + area.height);
+      svg.setAttribute("width", area.width);
+      svg.setAttribute("height", area.height);
+      svg.innerHTML = "<defs><marker id=\"memoria-arrowhead\" markerWidth=\"10\" markerHeight=\"8\" refX=\"9\" refY=\"4\" orient=\"auto\" markerUnits=\"strokeWidth\"><path d=\"M0,0 L10,4 L0,8 Z\" fill=\"" + cor + "\"></path></marker></defs>";
+
+      const destinos = Array.from(diagrama.querySelectorAll("[data-ref-destino]"));
+      const origens = Array.from(diagrama.querySelectorAll("[data-ref-origem]"));
+
+      for (const origem of origens) {
+        const nome = origem.dataset.refOrigem;
+        const destino = destinos.find((item) => item.dataset.refDestino === nome);
+        if (!destino) continue;
+
+        const origemRect = origem.getBoundingClientRect();
+        const destinoRect = destino.getBoundingClientRect();
+        const x1 = origemRect.left + origemRect.width / 2 - area.left;
+        const y1 = origemRect.top + origemRect.height / 2 - area.top;
+        const destinoEstaADireita = destinoRect.left >= origemRect.left;
+        const x2 = (destinoEstaADireita ? destinoRect.left : destinoRect.right) - area.left;
+        const y2 = destinoRect.top + Math.min(30, destinoRect.height / 2) - area.top;
+        const distancia = Math.max(34, Math.abs(x2 - x1) * 0.45);
+        const c1x = destinoEstaADireita ? x1 + distancia : x1 - distancia;
+        const c2x = destinoEstaADireita ? x2 - distancia : x2 + distancia;
+
+        const caminho = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        caminho.setAttribute("d", "M " + x1 + " " + y1 + " C " + c1x + " " + y1 + ", " + c2x + " " + y2 + ", " + x2 + " " + y2);
+        caminho.setAttribute("fill", "none");
+        caminho.setAttribute("stroke", cor);
+        caminho.setAttribute("stroke-width", "2");
+        caminho.setAttribute("marker-end", "url(#memoria-arrowhead)");
+        svg.appendChild(caminho);
+      }
+    }
+
+    function entradaPendenteAtual() {
+      if (passos.length === 0) return null;
+      const ultimo = passos[passos.length - 1];
+      return ultimo && ultimo.entrada_pendente ? ultimo : null;
+    }
+
     async function executar() {
+      entradasColetadas = [];
+      ocultarEntradaPendente();
+      await executarComEntradas();
+    }
+
+    async function executarComEntradas() {
       const codigo = editor.getValue();
-      atualizarEntradaDinamica();
-      const entrada = codigoPedeEntrada(codigo) ? document.getElementById("entrada").value : "";
       document.getElementById("saida").style.display = "block";
       document.getElementById("saida-corpo").innerHTML = "<p class=\"empty\">Executando...</p>";
       limparMarcacoes();
@@ -470,7 +593,7 @@
         const resp = await fetch("/executar", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ codigo, entrada })
+          body: JSON.stringify({ codigo, entradas: entradasColetadas })
         });
 
         if (!resp.ok) {
@@ -479,7 +602,8 @@
         }
 
         passos = await resp.json();
-        indiceAtual = 0;
+        const pendente = entradaPendenteAtual();
+        indiceAtual = pendente ? passos.length - 1 : 0;
 
         const slider = document.getElementById("slider");
 
@@ -490,15 +614,28 @@
         }
 
         slider.max = passos.length - 1;
-        slider.value = 0;
+        slider.value = indiceAtual;
         slider.disabled = false;
         renderizarPasso();
+        if (pendente) mostrarEntradaPendente(pendente);
+        else ocultarEntradaPendente();
 
       } catch (erro) {
         resetarExecucaoVisual();
         document.getElementById("saida-corpo").innerHTML =
           "<div class=\"error-box\">Erro ao comunicar com o servidor: " + escaparHTML(String(erro)) + "</div>";
       }
+    }
+
+    async function enviarEntradaPendente() {
+      if (!entradaPendente) return;
+      const valor = document.getElementById("entrada").value;
+      entradasColetadas.push({
+        linha: entradaPendente.linha,
+        valor
+      });
+      ocultarEntradaPendente();
+      await executarComEntradas();
     }
 
     function passo(direcao) {
@@ -550,7 +687,7 @@
 
     function linhaProximaAtual() {
       const passoAtual = passos[indiceAtual];
-      if (passoAtual && passoAtual.evento === "line" && Number.isInteger(passoAtual.linha)) {
+      if (passoAtual && (passoAtual.evento === "line" || passoAtual.evento === "input_pendente") && Number.isInteger(passoAtual.linha)) {
         return passoAtual.linha - 1;
       }
       return null;
@@ -606,28 +743,39 @@
       const saidaConteudo = p.saida && p.saida.trim()
         ? escaparHTML(p.saida)
         : "<span class=\"empty\">Nenhum print executado até aqui.</span>";
-      const etapaTexto = p.evento === "fim" ? "Execução finalizada" : (p.evento === "return" ? "Retorno" : "Execução");
+      const etapaTexto = p.evento === "fim" ? "Execução finalizada" : (p.evento === "input_pendente" ? "Aguardando entrada" : (p.evento === "return" ? "Retorno" : "Execução"));
 
       corpo.innerHTML =
         "<div class=\"passo-info\">"
         + "<span class=\"passo-badge\">Passo " + (indiceAtual + 1) + " de " + passos.length + "</span>"
         + escaparHTML(etapaTexto)
-        + "<span class=\"linha-badge executada\">✓ Executada: " + textoExecutada + "</span>"
-        + "<span class=\"linha-badge proxima\">▶ Próxima: " + textoProxima + "</span>"
+        + "<span class=\"linha-badge executada\"><i class=\"fa-solid fa-check\"></i>Executada: " + textoExecutada + "</span>"
+        + "<span class=\"linha-badge proxima\"><i class=\"fa-solid fa-arrow-right\"></i>Em execução: " + textoProxima + "</span>"
         + "<span class=\"escopo-badge\">" + escaparHTML(escopo) + "</span>"
         + "</div>"
         + renderizarMemoria(p.variaveis)
-        + "<div class=\"section-label\" style=\"margin-top:16px;\">Saída</div>"
+        + "<div class=\"section-label\" style=\"margin-top:16px;\"><i class=\"fa-solid fa-square-terminal\"></i>Saída</div>"
         + "<div class=\"terminal\">"
         + "<div class=\"terminal-header\">"
         + "<div class=\"terminal-dot vermelho\"></div>"
         + "<div class=\"terminal-dot amarelo\"></div>"
         + "<div class=\"terminal-dot verde\"></div>"
-        + "<span class=\"terminal-label\">saída</span></div>"
+        + "<span class=\"terminal-label\"><i class=\"fa-solid fa-terminal\"></i>saída</span></div>"
         + "<div class=\"terminal-body\">" + saidaConteudo + "</div></div>";
+      requestAnimationFrame(desenharSetasMemoria);
     }
 
-    editor.on("change", atualizarEntradaDinamica);
+    editor.on("change", () => {
+      entradasColetadas = [];
+      ocultarEntradaPendente();
+    });
+    document.getElementById("entrada").addEventListener("keydown", (evento) => {
+      if (evento.key === "Enter") {
+        evento.preventDefault();
+        enviarEntradaPendente();
+      }
+    });
+    window.addEventListener("resize", desenharSetasMemoria);
     resetarExecucaoVisual();
     atualizarEntradaDinamica();
   </script>

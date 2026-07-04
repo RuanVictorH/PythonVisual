@@ -151,6 +151,34 @@ def serializar_variavel(valor):
     return {"categoria": "primitivo", "tipo": tipo, "repr": repr_seguro(valor)}
 
 
+def serializar_pilha(frame):
+    pilha = []
+    atual = frame
+    while atual:
+        if atual.f_code.co_filename == ARQUIVO_USUARIO:
+            escopo = atual.f_code.co_name
+            argumentos = []
+            total_argumentos = atual.f_code.co_argcount + atual.f_code.co_kwonlyargcount
+            for nome in atual.f_code.co_varnames[:total_argumentos]:
+                if nome in atual.f_locals:
+                    argumentos.append({
+                        "nome": nome,
+                        "valor": repr_seguro(atual.f_locals[nome], limite=70)
+                    })
+            pilha.append({
+                "escopo": escopo if escopo != "<module>" else "Global",
+                "linha": atual.f_lineno,
+                "argumentos": argumentos,
+                "atual": False
+            })
+        atual = atual.f_back
+
+    pilha.reverse()
+    if pilha:
+        pilha[-1]["atual"] = True
+    return pilha
+
+
 payload = json.loads(sys.stdin.read() or "{}")
 codigo = payload.get("codigo", "")
 entrada = payload.get("entrada", "")
@@ -184,6 +212,7 @@ def registrar_passo(frame, evento):
     execucoes.append({
         "linha": frame.f_lineno,
         "escopo": escopo if escopo != "<module>" else "Global",
+        "pilha_chamadas": serializar_pilha(frame),
         "variaveis": variaveis,
         "saida": stdout_capture.getvalue(),
         "evento": evento
@@ -226,6 +255,7 @@ try:
     execucoes.append({
         "linha": None,
         "escopo": "Fim",
+        "pilha_chamadas": [],
         "variaveis": {
             nome: serializar_variavel(valor)
             for nome, valor in ambiente.items()
@@ -251,6 +281,7 @@ except EntradaPendente as exc:
     execucoes.append({
         "linha": exc.linha,
         "escopo": escopo if escopo != "<module>" else "Global",
+        "pilha_chamadas": serializar_pilha(frame) if frame else [],
         "variaveis": variaveis,
         "saida": stdout_capture.getvalue(),
         "evento": "input_pendente",

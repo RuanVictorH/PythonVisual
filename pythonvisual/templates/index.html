@@ -71,6 +71,12 @@
     .contador { flex: 1; text-align: center; font-weight: 600; font-size: 0.9rem; color: #17324d; background: #f0f6ff; border: 1.5px solid #bfdbfe; border-radius: 7px; padding: 8px; }
     #slider { width: 100%; accent-color: #2563eb; cursor: pointer; }
 
+    .explicacao-linha { display: grid; gap: 10px; }
+    .explicacao-meta { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .explicacao-chip { display: inline-flex; align-items: center; border-radius: 999px; padding: 3px 9px; background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; font-size: 0.76rem; font-weight: 800; }
+    .explicacao-codigo { white-space: pre-wrap; word-break: break-word; background: #0f172a; color: #e2e8f0; border-radius: 8px; padding: 10px 12px; font-family: "Fira Mono", "Courier New", monospace; font-size: 0.86rem; }
+    .explicacao-texto { color: #334155; font-size: 0.9rem; line-height: 1.45; }
+
     .memoria-bloco { border: 1px solid #dbe3ef; border-radius: 8px; padding: 12px; background: #f8fafc; }
     .memoria-topo { margin-bottom: 12px; }
     .memoria-subtitulo { color: #64748b; font-size: 0.82rem; margin-top: 2px; }
@@ -120,6 +126,15 @@
     .linha-badge { border-radius: 5px; padding: 2px 8px; font-size: 0.78rem; font-weight: 700; }
     .linha-badge.executada { background: #dcfce7; color: #14532d; }
     .linha-badge.proxima { background: #fee2e2; color: #991b1b; }
+    .pilha-bloco { border: 1px solid #bfdbfe; border-radius: 8px; padding: 12px; background: #f8fbff; margin-bottom: 14px; }
+    .pilha-subtitulo { color: #64748b; font-size: 0.82rem; margin: -4px 0 10px; }
+    .pilha-lista { display: grid; gap: 8px; }
+    .pilha-item { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: flex-start; border: 1px solid #dbeafe; border-radius: 8px; padding: 9px 10px; background: #ffffff; }
+    .pilha-item.atual { border-color: #dc2626; background: #fff7f7; }
+    .pilha-indice { width: 26px; height: 26px; display: grid; place-items: center; border-radius: 999px; background: #e0f2fe; color: #0369a1; font-size: 0.78rem; font-weight: 900; }
+    .pilha-item.atual .pilha-indice { background: #dc2626; color: #ffffff; }
+    .pilha-chamada { font-family: "Fira Mono", "Courier New", monospace; color: #0f172a; font-size: 0.86rem; word-break: break-word; }
+    .pilha-meta { margin-top: 3px; color: #64748b; font-size: 0.76rem; font-weight: 700; }
 
     .empty { color: #94a3b8; font-style: italic; font-size: 0.85rem; }
     .error-box { background: #fef2f2; border: 1.5px solid #fca5a5; border-radius: 8px; padding: 12px 14px; color: #b91c1c; font-size: 0.88rem; font-weight: 500; }
@@ -132,6 +147,8 @@
     body.tema-escuro .lista-card,
     body.tema-escuro .terminal { background: #111827; border-color: #334155; box-shadow: none; }
     body.tema-escuro .header-text h1,
+    body.tema-escuro .explicacao-texto,
+    body.tema-escuro .pilha-chamada,
     body.tema-escuro .quadro-cel-valor,
     body.tema-escuro .lista-item,
     body.tema-escuro .terminal-body { color: #e2e8f0; }
@@ -139,6 +156,8 @@
     body.tema-escuro .top-nav a,
     body.tema-escuro .entrada-linha-info,
     body.tema-escuro .memoria-subtitulo,
+    body.tema-escuro .pilha-subtitulo,
+    body.tema-escuro .pilha-meta,
     body.tema-escuro .painel-titulo,
     body.tema-escuro .terminal-label,
     body.tema-escuro .section-label { color: #cbd5e1; }
@@ -146,6 +165,7 @@
     body.tema-escuro .terminal-header,
     body.tema-escuro .CodeMirror-gutters { background: #1e293b; border-color: #334155; color: #dbeafe; }
     body.tema-escuro .memoria-bloco,
+    body.tema-escuro .pilha-bloco,
     body.tema-escuro .objeto-corpo,
     body.tema-escuro .terminal-body,
     body.tema-escuro .contador { background: #0b1120; border-color: #334155; }
@@ -163,8 +183,12 @@
     body.tema-escuro .quadro-linha:not(:last-child) .quadro-cel,
     body.tema-escuro .lista-item { border-color: #334155; }
     body.tema-escuro .objeto-item,
-    body.tema-escuro .objeto-dict-par { background: #0f172a; border-color: #047857; color: #e2e8f0; }
+    body.tema-escuro .objeto-dict-par,
+    body.tema-escuro .pilha-item { background: #0f172a; border-color: #334155; color: #e2e8f0; }
+    body.tema-escuro .pilha-item.atual { background: #2b1116; border-color: #dc2626; }
     body.tema-escuro .tipo-chip { background: #082f49; color: #bae6fd; border-color: #0369a1; }
+    body.tema-escuro .explicacao-chip { background: #082f49; color: #bae6fd; border-color: #0369a1; }
+    body.tema-escuro .explicacao-codigo { background: #020617; color: #e2e8f0; border: 1px solid #334155; }
     body.tema-escuro .btn-access,
     body.tema-escuro .btn-limpar { background: #1e293b; color: #dbeafe; border-color: #475569; }
     body.tema-escuro .btn-access:hover,
@@ -253,6 +277,11 @@
         </div>
       </div>
 
+      <div class="card" id="explicacao-card" style="display:none;">
+        <div class="card-header"><i class="fa-solid fa-lightbulb"></i>Explicação da linha atual</div>
+        <div class="card-body explicacao-linha" id="explicacao-corpo"></div>
+      </div>
+
       <div class="card" id="entrada-card" style="display:none;">
         <div class="card-header"><i class="fa-solid fa-keyboard"></i>Entrada solicitada</div>
         <div class="card-body">
@@ -337,6 +366,11 @@
       document.getElementById("entrada").value = "";
     }
 
+    function ocultarExplicacaoLinha() {
+      document.getElementById("explicacao-card").style.display = "none";
+      document.getElementById("explicacao-corpo").innerHTML = "";
+    }
+
     function mostrarEntradaPendente(passoAtual) {
       entradaPendente = {
         linha: passoAtual.linha,
@@ -362,6 +396,7 @@
       slider.value = 0;
       slider.disabled = true;
       document.getElementById("contador").textContent = "Execute o código para navegar pelos passos";
+      ocultarExplicacaoLinha();
       atualizarBotoes();
     }
 
@@ -401,6 +436,68 @@
         .replaceAll("'", "&#039;");
     }
 
+    function explicarComandoPython(linha) {
+      const texto = String(linha || "").trim();
+      if (!texto) return "Esta linha está vazia. Ela apenas separa visualmente partes do código.";
+      if (/^#/.test(texto)) return "Comentário: serve para documentar o código e não é executado pelo Python.";
+      if (/^def\s+\w+\s*\(/.test(texto)) return "Define uma função. O bloco indentado abaixo só será executado quando essa função for chamada.";
+      if (/^class\s+\w+/.test(texto)) return "Define uma classe, que funciona como um modelo para criar objetos.";
+      if (/^return\b/.test(texto)) return "Retorna um valor para quem chamou a função e encerra aquela chamada.";
+      if (/^if\b/.test(texto)) return "Testa uma condição. Se ela for verdadeira, o Python executa o bloco indentado abaixo.";
+      if (/^elif\b/.test(texto)) return "Testa uma nova condição quando os testes anteriores do mesmo if não foram verdadeiros.";
+      if (/^else\s*:/.test(texto)) return "Executa este bloco quando nenhuma condição anterior do mesmo if foi verdadeira.";
+      if (/^for\b/.test(texto)) return "Inicia uma repetição. A variável do laço recebe um valor por vez da sequência percorrida.";
+      if (/^while\b/.test(texto)) return "Repete o bloco enquanto a condição continuar verdadeira.";
+      if (/^try\s*:/.test(texto)) return "Tenta executar um bloco que pode gerar erro, permitindo tratar esse erro depois.";
+      if (/^except\b/.test(texto)) return "Trata um erro ocorrido dentro do bloco try.";
+      if (/^finally\s*:/.test(texto)) return "Executa este bloco no final do try, com ou sem erro.";
+      if (/^import\b/.test(texto) || /^from\b.+\bimport\b/.test(texto)) return "Carrega recursos de outro módulo para usar neste código.";
+      if (/^print\s*\(/.test(texto)) return "Mostra uma informação na saída do programa.";
+      if (/(^|[^\w.])input\s*\(/.test(texto)) return "Solicita uma entrada do usuário. A execução pausa até o valor ser informado.";
+      if (/^break\b/.test(texto)) return "Interrompe o laço atual imediatamente.";
+      if (/^continue\b/.test(texto)) return "Pula o restante do bloco atual e avança para a próxima repetição do laço.";
+      if (/^pass\b/.test(texto)) return "Não executa nenhuma ação. É usado como espaço reservado em blocos ainda vazios.";
+      if (/^raise\b/.test(texto)) return "Dispara um erro manualmente.";
+      if (/^[A-Za-z_]\w*\.[A-Za-z_]\w*\s*\(/.test(texto)) return "Chama um método de um objeto, alterando ou consultando esse objeto.";
+      if (/^[A-Za-z_]\w*\s*\(/.test(texto)) return "Chama uma função, transferindo a execução para o bloco definido por ela.";
+      if (/^[^=<>!]+(\+=|-=|\*=|\/=|\/\/=|%=|\*\*=)/.test(texto)) return "Atualiza uma variável usando o valor que ela já tinha.";
+      if (/^[^=<>!]+=[^=]/.test(texto)) return "Atribui um valor a uma variável, guardando essa informação na memória.";
+      return "Executa uma instrução Python. Observe as variáveis, a pilha e a saída para ver o efeito deste passo.";
+    }
+
+    function alvoExplicacaoLinha() {
+      const proxima = linhaProximaAtual();
+      if (proxima !== null) return { indice: proxima, status: "Em execução" };
+      const executada = linhaExecutadaAtual();
+      if (executada !== null) return { indice: executada, status: "Executada" };
+      return null;
+    }
+
+    function atualizarExplicacaoLinha() {
+      const card = document.getElementById("explicacao-card");
+      const corpo = document.getElementById("explicacao-corpo");
+      if (passos.length === 0) {
+        ocultarExplicacaoLinha();
+        return;
+      }
+
+      const alvo = alvoExplicacaoLinha();
+      card.style.display = "block";
+      if (!alvo) {
+        corpo.innerHTML = "<p class=\"explicacao-texto\">Execução finalizada. Não há uma próxima linha de código para explicar neste passo.</p>";
+        return;
+      }
+
+      const linhaCodigo = editor.getLine(alvo.indice) || "";
+      corpo.innerHTML =
+        "<div class=\"explicacao-meta\">"
+        + "<span class=\"explicacao-chip\">Linha " + (alvo.indice + 1) + "</span>"
+        + "<span class=\"explicacao-chip\">" + escaparHTML(alvo.status) + "</span>"
+        + "</div>"
+        + "<pre class=\"explicacao-codigo\">" + escaparHTML(linhaCodigo || "(linha vazia)") + "</pre>"
+        + "<p class=\"explicacao-texto\">" + escaparHTML(explicarComandoPython(linhaCodigo)) + "</p>";
+    }
+
     function limparMarcacoes() {
       if (linhaExecutadaMarcada !== null) {
         editor.removeLineClass(linhaExecutadaMarcada, "background", "linha-executada");
@@ -430,6 +527,37 @@
         return "<div class=\"lista-item\"><strong>" + escaparHTML(nome) + "</strong>" + detalhe
           + "<br>" + escaparHTML(info.repr || info.nome || info.tipo) + "</div>";
       }).join("") + "</div>";
+    }
+
+    function formatarChamadaPilha(item) {
+      if (!item || item.escopo === "Global") return "Global";
+      const argumentos = Array.isArray(item.argumentos) ? item.argumentos : [];
+      const textoArgumentos = argumentos.map((arg) =>
+        escaparHTML(arg.nome) + "=" + escaparHTML(arg.valor)
+      ).join(", ");
+      return escaparHTML(item.escopo) + "(" + textoArgumentos + ")";
+    }
+
+    function renderizarPilhaChamadas(pilha) {
+      if (!Array.isArray(pilha) || pilha.length <= 1) return "";
+      const itens = pilha.map((item, indice) => {
+        const atual = item.atual ? " atual" : "";
+        const marcadorAtual = item.atual ? " - escopo atual" : "";
+        const linha = Number.isInteger(item.linha) ? "Linha " + item.linha : "Linha -";
+        return "<div class=\"pilha-item" + atual + "\">"
+          + "<div class=\"pilha-indice\">" + (indice + 1) + "</div>"
+          + "<div>"
+          + "<div class=\"pilha-chamada\">" + formatarChamadaPilha(item) + "</div>"
+          + "<div class=\"pilha-meta\">" + linha + marcadorAtual + "</div>"
+          + "</div>"
+          + "</div>";
+      }).join("");
+
+      return "<div class=\"pilha-bloco\">"
+        + "<div class=\"section-label\"><i class=\"fa-solid fa-layer-group\"></i>Pilha de chamadas</div>"
+        + "<div class=\"pilha-subtitulo\">Mostra a sequência dinâmica de funções ativas neste passo.</div>"
+        + "<div class=\"pilha-lista\">" + itens + "</div>"
+        + "</div>";
     }
 
     function renderizarMemoria(variaveis) {
@@ -726,6 +854,7 @@
       document.getElementById("contador").textContent = "Passo " + (indiceAtual + 1) + " de " + passos.length;
       atualizarBotoes();
       aplicarMarcacoes();
+      atualizarExplicacaoLinha();
 
       if (p.erro) {
         corpo.innerHTML = "<div class=\"error-box\"><strong>Erro:</strong> " + escaparHTML(p.erro) + "</div>"
@@ -753,6 +882,7 @@
         + "<span class=\"linha-badge proxima\"><i class=\"fa-solid fa-arrow-right\"></i>Em execução: " + textoProxima + "</span>"
         + "<span class=\"escopo-badge\">" + escaparHTML(escopo) + "</span>"
         + "</div>"
+        + renderizarPilhaChamadas(p.pilha_chamadas)
         + renderizarMemoria(p.variaveis)
         + "<div class=\"section-label\" style=\"margin-top:16px;\"><i class=\"fa-solid fa-square-terminal\"></i>Saída</div>"
         + "<div class=\"terminal\">"
@@ -768,6 +898,7 @@
     editor.on("change", () => {
       entradasColetadas = [];
       ocultarEntradaPendente();
+      ocultarExplicacaoLinha();
     });
     document.getElementById("entrada").addEventListener("keydown", (evento) => {
       if (evento.key === "Enter") {

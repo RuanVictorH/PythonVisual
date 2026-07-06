@@ -2,6 +2,7 @@
 <html lang="pt-br">
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Limitações - PythonVisual</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -12,6 +13,10 @@
     nav { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
     nav a { color: #17324d; text-decoration: none; font-size: 0.9rem; font-weight: 700; padding: 8px 11px; border-radius: 7px; border: 1px solid transparent; }
     nav a:hover, nav a.ativo { background: #eef6ff; border-color: #bfdbfe; color: #1d4ed8; }
+    .language-switch { display: inline-flex; gap: 4px; padding: 3px; border: 1.5px solid #cbd5e1; border-radius: 8px; background: #f8fafc; }
+    .lang-btn { border: none; border-radius: 6px; padding: 6px 8px; background: transparent; color: #17324d; font-weight: 800; cursor: pointer; }
+    .lang-btn.active { background: #2563eb; color: white; }
+    a:focus-visible, button:focus-visible { outline: 3px solid #f59e0b; outline-offset: 2px; }
     main { max-width: 960px; margin: 0 auto; padding: 38px 32px; }
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .card { background: white; border: 1px solid #dbe3ef; border-radius: 8px; padding: 20px; box-shadow: 0 1px 4px rgba(15,23,42,0.06); }
@@ -30,79 +35,176 @@
 </head>
 <body>
   <header>
-    <div class="brand">
-      <h1>PythonVisual</h1>
-      <p>Funcionamento e limitações da ferramenta</p>
-    </div>
-    <nav aria-label="Navegação principal">
-      <a href="/">Home</a>
-      <a href="/visualizador">Visualizador</a>
-      <a href="/sobre">Sobre</a>
-      <a href="/limitacoes" class="ativo">Limitações</a>
-    </nav>
-  </header>
+	    <div class="brand">
+	      <h1>PythonVisual</h1>
+	      <p data-i18n="brand.subtitle">Funcionamento e limitações da ferramenta</p>
+	    </div>
+	    <nav aria-label="Navegação principal">
+	      <a href="/" data-i18n="nav.home">Home</a>
+	      <a href="/visualizador" data-i18n="nav.visualizer">Visualizador</a>
+	      <a href="/sobre" data-i18n="nav.about">Sobre</a>
+	      <a href="/limitacoes" class="ativo" data-i18n="nav.limitations">Limitações</a>
+	    </nav>
+	    <div class="language-switch" role="group" aria-label="Idioma">
+	      <button class="lang-btn" id="lang-pt" type="button" onclick="setLang('pt')">PT</button>
+	      <button class="lang-btn" id="lang-en" type="button" onclick="setLang('en')">EN</button>
+	    </div>
+	  </header>
 
   <main>
     <section class="grid">
-      <article class="card intro">
-        <h2>Explicação da ferramenta e limitações</h2>
-        <p>O PythonVisual executa um único trecho de código Python em ambiente isolado, captura os passos com rastreamento de execução e transforma o estado interno em uma visualização didática. Ele é adequado para exemplos pequenos e médios de lógica, estruturas de dados e funções.</p>
-      </article>
+	      <article class="card intro">
+	        <h2 data-i18n="intro.title">Explicação da ferramenta e limitações</h2>
+	        <p data-i18n="intro.text">O PythonVisual executa um único trecho de código Python em ambiente isolado, captura os passos com rastreamento de execução e transforma o estado interno em uma visualização didática. Ele é adequado para exemplos pequenos e médios de lógica, estruturas de dados e funções.</p>
+	      </article>
 
-      <article class="card">
-        <h3>Imports</h3>
-        <ul>
-          <li>Imports da biblioteca padrão podem funcionar quando disponíveis no ambiente Python.</li>
-          <li>Bibliotecas externas não instaladas no ambiente não serão carregadas.</li>
-          <li>Importações pesadas, gráficas ou que dependem de sistema operacional podem falhar.</li>
-        </ul>
-      </article>
+	      <article class="card">
+	        <h3>Imports</h3>
+	        <ul>
+	          <li data-i18n="imports.item1">Imports da biblioteca padrão podem funcionar quando disponíveis no ambiente Python.</li>
+	          <li data-i18n="imports.item2">Bibliotecas externas não instaladas no ambiente não serão carregadas.</li>
+	          <li data-i18n="imports.item3">Importações pesadas, gráficas ou que dependem de sistema operacional podem falhar.</li>
+	        </ul>
+	      </article>
 
-      <article class="card">
-        <h3>Múltiplos arquivos</h3>
-        <ul>
-          <li>A ferramenta executa apenas o código digitado no editor.</li>
-          <li>Não há suporte para projetos com vários arquivos, pacotes locais ou leitura de módulos criados pelo usuário.</li>
-          <li>O foco é ensino de fluxo e memória, não simulação completa de um projeto Python.</li>
-        </ul>
-      </article>
+	      <article class="card">
+	        <h3 data-i18n="files.title">Múltiplos arquivos</h3>
+	        <ul>
+	          <li data-i18n="files.item1">A ferramenta executa apenas o código digitado no editor.</li>
+	          <li data-i18n="files.item2">Não há suporte para projetos com vários arquivos, pacotes locais ou leitura de módulos criados pelo usuário.</li>
+	          <li data-i18n="files.item3">O foco é ensino de fluxo e memória, não simulação completa de um projeto Python.</li>
+	        </ul>
+	      </article>
 
-      <article class="card">
-        <h3>Entrada e saída</h3>
-        <ul>
-          <li><code>input()</code> solicita um valor por vez, conforme a linha em execução.</li>
-          <li>A saída exibida considera principalmente chamadas de <code>print()</code>.</li>
-          <li>Programas interativos longos não são o cenário ideal.</li>
-        </ul>
-      </article>
+	      <article class="card">
+	        <h3 data-i18n="io.title">Entrada e saída</h3>
+	        <ul>
+	          <li><code>input()</code> <span data-i18n="io.item1">solicita um valor por vez, conforme a linha em execução.</span></li>
+	          <li data-i18n="io.item2">A saída exibida considera principalmente chamadas de print().</li>
+	          <li data-i18n="io.item3">Programas interativos longos não são o cenário ideal.</li>
+	        </ul>
+	      </article>
 
-      <article class="card">
-        <h3>Tempo e segurança</h3>
-        <ul>
-          <li>A execução tem limite de tempo para evitar travamentos.</li>
-          <li>Loops infinitos são interrompidos por timeout ou limite de passos.</li>
-          <li>A ferramenta não deve ser usada para executar código desconhecido em ambiente sensível.</li>
-        </ul>
-      </article>
+	      <article class="card">
+	        <h3 data-i18n="safety.title">Tempo e segurança</h3>
+	        <ul>
+	          <li data-i18n="safety.item1">A execução tem limite de tempo para evitar travamentos.</li>
+	          <li data-i18n="safety.item2">Loops infinitos são interrompidos por timeout ou limite de passos.</li>
+	          <li data-i18n="safety.item3">A ferramenta não deve ser usada para executar código desconhecido em ambiente sensível.</li>
+	        </ul>
+	      </article>
 
-      <article class="card">
-        <h3>Visualização de memória</h3>
-        <ul>
-          <li>Listas, tuplas, conjuntos, dicionários e objetos simples são representados visualmente.</li>
-          <li>Objetos complexos podem aparecer resumidos.</li>
-          <li>Valores muito grandes são truncados para manter a interface legível.</li>
-        </ul>
-      </article>
+	      <article class="card">
+	        <h3 data-i18n="memory.title">Visualização de memória</h3>
+	        <ul>
+	          <li data-i18n="memory.item1">Listas, tuplas, conjuntos, dicionários e objetos simples são representados visualmente.</li>
+	          <li data-i18n="memory.item2">Objetos complexos podem aparecer resumidos.</li>
+	          <li data-i18n="memory.item3">Valores muito grandes são truncados para manter a interface legível.</li>
+	        </ul>
+	      </article>
 
-      <article class="card">
-        <h3>Recursos avançados</h3>
-        <ul>
-          <li>Threads, processos, rede, arquivos e interfaces gráficas não são foco da ferramenta.</li>
-          <li>Decorators, generators e recursos internos avançados podem ser exibidos de forma simplificada.</li>
-          <li>O rastreamento prioriza clareza didática sobre cobertura total da linguagem.</li>
-        </ul>
-      </article>
+	      <article class="card">
+	        <h3 data-i18n="advanced.title">Recursos avançados</h3>
+	        <ul>
+	          <li data-i18n="advanced.item1">Threads, processos, rede, arquivos e interfaces gráficas não são foco da ferramenta.</li>
+	          <li data-i18n="advanced.item2">Decorators, generators e recursos internos avançados podem ser exibidos de forma simplificada.</li>
+	          <li data-i18n="advanced.item3">O rastreamento prioriza clareza didática sobre cobertura total da linguagem.</li>
+	        </ul>
+	      </article>
     </section>
   </main>
-</body>
-</html>
+	  <script>
+	    const pageI18n = {
+	      pt: {
+	        "title": "Limitações - PythonVisual",
+	        "brand.subtitle": "Funcionamento e limitações da ferramenta",
+	        "nav.home": "Home",
+	        "nav.visualizer": "Visualizador",
+	        "nav.about": "Sobre",
+	        "nav.limitations": "Limitações",
+	        "intro.title": "Explicação da ferramenta e limitações",
+	        "intro.text": "O PythonVisual executa um único trecho de código Python em ambiente isolado, captura os passos com rastreamento de execução e transforma o estado interno em uma visualização didática. Ele é adequado para exemplos pequenos e médios de lógica, estruturas de dados e funções.",
+	        "imports.item1": "Imports da biblioteca padrão podem funcionar quando disponíveis no ambiente Python.",
+	        "imports.item2": "Bibliotecas externas não instaladas no ambiente não serão carregadas.",
+	        "imports.item3": "Importações pesadas, gráficas ou que dependem de sistema operacional podem falhar.",
+	        "files.title": "Múltiplos arquivos",
+	        "files.item1": "A ferramenta executa apenas o código digitado no editor.",
+	        "files.item2": "Não há suporte para projetos com vários arquivos, pacotes locais ou leitura de módulos criados pelo usuário.",
+	        "files.item3": "O foco é ensino de fluxo e memória, não simulação completa de um projeto Python.",
+	        "io.title": "Entrada e saída",
+	        "io.item1": "solicita um valor por vez, conforme a linha em execução.",
+	        "io.item2": "A saída exibida considera principalmente chamadas de print().",
+	        "io.item3": "Programas interativos longos não são o cenário ideal.",
+	        "safety.title": "Tempo e segurança",
+	        "safety.item1": "A execução tem limite de tempo para evitar travamentos.",
+	        "safety.item2": "Loops infinitos são interrompidos por timeout ou limite de passos.",
+	        "safety.item3": "A ferramenta não deve ser usada para executar código desconhecido em ambiente sensível.",
+	        "memory.title": "Visualização de memória",
+	        "memory.item1": "Listas, tuplas, conjuntos, dicionários e objetos simples são representados visualmente.",
+	        "memory.item2": "Objetos complexos podem aparecer resumidos.",
+	        "memory.item3": "Valores muito grandes são truncados para manter a interface legível.",
+	        "advanced.title": "Recursos avançados",
+	        "advanced.item1": "Threads, processos, rede, arquivos e interfaces gráficas não são foco da ferramenta.",
+	        "advanced.item2": "Decorators, generators e recursos internos avançados podem ser exibidos de forma simplificada.",
+	        "advanced.item3": "O rastreamento prioriza clareza didática sobre cobertura total da linguagem."
+	      },
+	      en: {
+	        "title": "Limitations - PythonVisual",
+	        "brand.subtitle": "How the tool works and its limitations",
+	        "nav.home": "Home",
+	        "nav.visualizer": "Visualizer",
+	        "nav.about": "About",
+	        "nav.limitations": "Limitations",
+	        "intro.title": "Tool explanation and limitations",
+	        "intro.text": "PythonVisual runs a single Python code snippet in an isolated environment, captures execution steps through tracing, and turns the internal state into an educational visualization. It is suitable for small and medium examples of logic, data structures, and functions.",
+	        "imports.item1": "Standard-library imports may work when available in the Python environment.",
+	        "imports.item2": "External libraries not installed in the environment will not load.",
+	        "imports.item3": "Heavy, graphical, or operating-system-dependent imports may fail.",
+	        "files.title": "Multiple files",
+	        "files.item1": "The tool runs only the code typed in the editor.",
+	        "files.item2": "There is no support for multi-file projects, local packages, or reading user-created modules.",
+	        "files.item3": "The focus is teaching flow and memory, not fully simulating a Python project.",
+	        "io.title": "Input and output",
+	        "io.item1": "requests one value at a time, according to the running line.",
+	        "io.item2": "Displayed output mainly considers print() calls.",
+	        "io.item3": "Long interactive programs are not the ideal scenario.",
+	        "safety.title": "Time and safety",
+	        "safety.item1": "Execution has a time limit to prevent freezes.",
+	        "safety.item2": "Infinite loops are interrupted by timeout or step limit.",
+	        "safety.item3": "The tool should not be used to run unknown code in a sensitive environment.",
+	        "memory.title": "Memory visualization",
+	        "memory.item1": "Lists, tuples, sets, dictionaries, and simple objects are represented visually.",
+	        "memory.item2": "Complex objects may appear summarized.",
+	        "memory.item3": "Very large values are truncated to keep the interface readable.",
+	        "advanced.title": "Advanced features",
+	        "advanced.item1": "Threads, processes, networking, files, and graphical interfaces are not the tool's focus.",
+	        "advanced.item2": "Decorators, generators, and advanced internals may be displayed in a simplified way.",
+	        "advanced.item3": "Tracing prioritizes educational clarity over full language coverage."
+	      }
+	    };
+	    let currentLang = localStorage.getItem("pythonvisual_lang") || "pt";
+	    if (!pageI18n[currentLang]) currentLang = "pt";
+	    function translate(key) {
+	      return (pageI18n[currentLang] && pageI18n[currentLang][key]) || pageI18n.pt[key] || key;
+	    }
+	    function applyPageLang() {
+	      document.documentElement.lang = currentLang === "en" ? "en" : "pt-br";
+	      document.title = translate("title");
+	      document.querySelectorAll("[data-i18n]").forEach((el) => {
+	        el.textContent = translate(el.dataset.i18n);
+	      });
+	      document.querySelectorAll(".lang-btn").forEach((button) => {
+	        const active = button.id === "lang-" + currentLang;
+	        button.classList.toggle("active", active);
+	        button.setAttribute("aria-pressed", active ? "true" : "false");
+	      });
+	    }
+	    function setLang(lang) {
+	      currentLang = pageI18n[lang] ? lang : "pt";
+	      localStorage.setItem("pythonvisual_lang", currentLang);
+	      applyPageLang();
+	    }
+	    applyPageLang();
+	  </script>
+	</body>
+	</html>

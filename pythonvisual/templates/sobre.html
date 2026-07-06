@@ -2,6 +2,7 @@
 <html lang="pt-br">
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sobre - PythonVisual</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -12,6 +13,10 @@
     nav { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
     nav a { color: #17324d; text-decoration: none; font-size: 0.9rem; font-weight: 700; padding: 8px 11px; border-radius: 7px; border: 1px solid transparent; }
     nav a:hover, nav a.ativo { background: #eef6ff; border-color: #bfdbfe; color: #1d4ed8; }
+    .language-switch { display: inline-flex; gap: 4px; padding: 3px; border: 1.5px solid #cbd5e1; border-radius: 8px; background: #f8fafc; }
+    .lang-btn { border: none; border-radius: 6px; padding: 6px 8px; background: transparent; color: #17324d; font-weight: 800; cursor: pointer; }
+    .lang-btn.active { background: #2563eb; color: white; }
+    a:focus-visible, button:focus-visible { outline: 3px solid #f59e0b; outline-offset: 2px; }
     main { max-width: 900px; margin: 0 auto; padding: 38px 32px; }
     .card { background: white; border: 1px solid #dbe3ef; border-radius: 8px; padding: 24px; box-shadow: 0 1px 4px rgba(15,23,42,0.06); }
     h2 { color: #0f172a; font-size: 1.8rem; margin-bottom: 14px; }
@@ -26,40 +31,113 @@
 </head>
 <body>
   <header>
-    <div class="brand">
-      <h1>PythonVisual</h1>
-      <p>Visualização didática de código Python</p>
-    </div>
-    <nav aria-label="Navegação principal">
-      <a href="/">Home</a>
-      <a href="/visualizador">Visualizador</a>
-      <a href="/sobre" class="ativo">Sobre</a>
-      <a href="/limitacoes">Limitações</a>
-    </nav>
-  </header>
+	    <div class="brand">
+	      <h1>PythonVisual</h1>
+	      <p data-i18n="brand.subtitle">Visualização didática de código Python</p>
+	    </div>
+	    <nav aria-label="Navegação principal">
+	      <a href="/" data-i18n="nav.home">Home</a>
+	      <a href="/visualizador" data-i18n="nav.visualizer">Visualizador</a>
+	      <a href="/sobre" class="ativo" data-i18n="nav.about">Sobre</a>
+	      <a href="/limitacoes" data-i18n="nav.limitations">Limitações</a>
+	    </nav>
+	    <div class="language-switch" role="group" aria-label="Idioma">
+	      <button class="lang-btn" id="lang-pt" type="button" onclick="setLang('pt')">PT</button>
+	      <button class="lang-btn" id="lang-en" type="button" onclick="setLang('en')">EN</button>
+	    </div>
+	  </header>
 
   <main>
     <section class="card">
-      <h2>Sobre o sistema</h2>
-      <p>O PythonVisual é uma ferramenta educacional inspirada no PythonTutor. A proposta é transformar a execução de um programa Python em uma sequência visual de estados, mostrando como variáveis, objetos, funções e saídas mudam ao longo do tempo.</p>
-      <p>O sistema foi adaptado para uma interface em português, com foco em acessibilidade, leitura clara dos quadros de memória e navegação simples entre os passos.</p>
+	      <h2 data-i18n="about.title">Sobre o sistema</h2>
+	      <p data-i18n="about.p1">O PythonVisual é uma ferramenta educacional inspirada no PythonTutor. A proposta é transformar a execução de um programa Python em uma sequência visual de estados, mostrando como variáveis, objetos, funções e saídas mudam ao longo do tempo.</p>
+	      <p data-i18n="about.p2">O sistema foi adaptado para uma interface em português, com foco em acessibilidade, leitura clara dos quadros de memória e navegação simples entre os passos.</p>
 
-      <h3>Objetivo</h3>
-      <ul>
-        <li>Apoiar estudantes no aprendizado de lógica de programação.</li>
-        <li>Mostrar a relação entre variáveis e objetos em memória.</li>
-        <li>Facilitar aulas, demonstrações e revisão de código básico.</li>
-      </ul>
+	      <h3 data-i18n="goal.title">Objetivo</h3>
+	      <ul>
+	        <li data-i18n="goal.item1">Apoiar estudantes no aprendizado de lógica de programação.</li>
+	        <li data-i18n="goal.item2">Mostrar a relação entre variáveis e objetos em memória.</li>
+	        <li data-i18n="goal.item3">Facilitar aulas, demonstrações e revisão de código básico.</li>
+	      </ul>
 
-      <h3>Principais melhorias desta versão</h3>
-      <ul>
-        <li>Painel de memória organizado por variáveis, objetos, funções e importações.</li>
-        <li>Setas dinâmicas entre variáveis e objetos.</li>
-        <li>Temas claro e escuro.</li>
-        <li>Controle de tamanho da fonte.</li>
-        <li>Entrada guiada por linha para códigos com input().</li>
-      </ul>
+	      <h3 data-i18n="improvements.title">Principais melhorias desta versão</h3>
+	      <ul>
+	        <li data-i18n="improvements.item1">Painel de memória organizado por variáveis, objetos, funções e importações.</li>
+	        <li data-i18n="improvements.item2">Setas dinâmicas entre variáveis e objetos.</li>
+	        <li data-i18n="improvements.item3">Temas claro e escuro.</li>
+	        <li data-i18n="improvements.item4">Controle de tamanho da fonte.</li>
+	        <li data-i18n="improvements.item5">Entrada guiada por linha para códigos com input().</li>
+	      </ul>
     </section>
   </main>
-</body>
-</html>
+	  <script>
+	    const pageI18n = {
+	      pt: {
+	        "title": "Sobre - PythonVisual",
+	        "brand.subtitle": "Visualização didática de código Python",
+	        "nav.home": "Home",
+	        "nav.visualizer": "Visualizador",
+	        "nav.about": "Sobre",
+	        "nav.limitations": "Limitações",
+	        "about.title": "Sobre o sistema",
+	        "about.p1": "O PythonVisual é uma ferramenta educacional inspirada no PythonTutor. A proposta é transformar a execução de um programa Python em uma sequência visual de estados, mostrando como variáveis, objetos, funções e saídas mudam ao longo do tempo.",
+	        "about.p2": "O sistema foi adaptado para uma interface em português, com foco em acessibilidade, leitura clara dos quadros de memória e navegação simples entre os passos.",
+	        "goal.title": "Objetivo",
+	        "goal.item1": "Apoiar estudantes no aprendizado de lógica de programação.",
+	        "goal.item2": "Mostrar a relação entre variáveis e objetos em memória.",
+	        "goal.item3": "Facilitar aulas, demonstrações e revisão de código básico.",
+	        "improvements.title": "Principais melhorias desta versão",
+	        "improvements.item1": "Painel de memória organizado por variáveis, objetos, funções e importações.",
+	        "improvements.item2": "Setas dinâmicas entre variáveis e objetos.",
+	        "improvements.item3": "Temas claro e escuro.",
+	        "improvements.item4": "Controle de tamanho da fonte.",
+	        "improvements.item5": "Entrada guiada por linha para códigos com input()."
+	      },
+	      en: {
+	        "title": "About - PythonVisual",
+	        "brand.subtitle": "Educational visualization of Python code",
+	        "nav.home": "Home",
+	        "nav.visualizer": "Visualizer",
+	        "nav.about": "About",
+	        "nav.limitations": "Limitations",
+	        "about.title": "About the system",
+	        "about.p1": "PythonVisual is an educational tool inspired by PythonTutor. Its purpose is to turn the execution of a Python program into a visual sequence of states, showing how variables, objects, functions, and outputs change over time.",
+	        "about.p2": "The system focuses on accessibility, clear memory-frame reading, and simple navigation between execution steps.",
+	        "goal.title": "Goal",
+	        "goal.item1": "Support students learning programming logic.",
+	        "goal.item2": "Show the relationship between variables and objects in memory.",
+	        "goal.item3": "Support lessons, demonstrations, and basic code review.",
+	        "improvements.title": "Main improvements in this version",
+	        "improvements.item1": "Memory panel organized by variables, objects, functions, and imports.",
+	        "improvements.item2": "Dynamic arrows between variables and objects.",
+	        "improvements.item3": "Light and dark themes.",
+	        "improvements.item4": "Font size control.",
+	        "improvements.item5": "Line-guided input for code that uses input()."
+	      }
+	    };
+	    let currentLang = localStorage.getItem("pythonvisual_lang") || "pt";
+	    if (!pageI18n[currentLang]) currentLang = "pt";
+	    function translate(key) {
+	      return (pageI18n[currentLang] && pageI18n[currentLang][key]) || pageI18n.pt[key] || key;
+	    }
+	    function applyPageLang() {
+	      document.documentElement.lang = currentLang === "en" ? "en" : "pt-br";
+	      document.title = translate("title");
+	      document.querySelectorAll("[data-i18n]").forEach((el) => {
+	        el.textContent = translate(el.dataset.i18n);
+	      });
+	      document.querySelectorAll(".lang-btn").forEach((button) => {
+	        const active = button.id === "lang-" + currentLang;
+	        button.classList.toggle("active", active);
+	        button.setAttribute("aria-pressed", active ? "true" : "false");
+	      });
+	    }
+	    function setLang(lang) {
+	      currentLang = pageI18n[lang] ? lang : "pt";
+	      localStorage.setItem("pythonvisual_lang", currentLang);
+	      applyPageLang();
+	    }
+	    applyPageLang();
+	  </script>
+	</body>
+	</html>

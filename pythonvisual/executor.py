@@ -4,8 +4,23 @@ import sys
 import tempfile
 
 
-TEMPO_LIMITE_SEGUNDOS = 3
-LIMITE_PASSOS = 1000
+from pathlib import Path
+
+def carregar_config():
+    config = {}
+    arquivo = Path(__file__).with_name("env.conf")
+    if arquivo.exists():
+        for linha in arquivo.read_text(encoding="utf-8").splitlines():
+            if "=" in linha:
+                chave, valor = linha.split("=", 1)
+                config[chave.strip()] = valor.strip()
+    return config
+
+CONFIG = carregar_config()
+
+TEMPO_LIMITE_SEGUNDOS = int(CONFIG.get("TEMPO_LIMITE_SEGUNDOS", 3))
+LIMITE_PASSOS = int(CONFIG.get("LIMITE_PASSOS", 1000))
+TAMANHO_MAXIMO_OBJETO = int(CONFIG.get("TAMANHO_MAXIMO_OBJETO", 50))
 
 
 RUNNER_CODE = r"""

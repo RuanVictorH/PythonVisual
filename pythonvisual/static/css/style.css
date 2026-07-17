@@ -36,6 +36,13 @@
     .card-header i, .top-nav i, button i, .section-label i, .terminal-label i { margin-right: 6px; }
     .card-body { padding: 16px; }
 
+    .CodeMirror-placeholder {
+      color: #64748b !important;
+      font-style: normal;
+      opacity: 0.9;
+      white-space: pre-wrap;
+    }
+
     .exemplos-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
     .exemplos-row label { font-weight: 600; font-size: 0.85rem; white-space: nowrap; color: #17324d; }
     .exemplos-row select { flex: 1; padding: 7px 10px; border-radius: 7px; border: 1.5px solid #cbd5e1; font-family: "Inter", sans-serif; font-size: 0.85rem; color: #1e293b; background: #f8fafc; cursor: pointer; outline: none; }
@@ -203,6 +210,7 @@
     body.tema-escuro .top-nav a.ativo { background: #1e293b; border-color: #475569; color: #bfdbfe; }
     body.tema-escuro .referencia-dot { background: #38bdf8; border-color: #0b1120; box-shadow: 0 0 0 1px #38bdf8; }
     body.tema-escuro .empty { color: #94a3b8; }
+    body.tema-escuro .CodeMirror-placeholder { color: #94a3b8 !important; }
     @media (max-width: 900px) {
       .main, .memoria-container { grid-template-columns: 1fr; }
       .main { padding: 16px; }

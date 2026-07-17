@@ -4,9 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PythonVisual - Home</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: Arial, sans-serif; background: #f8fafc; color: #1e293b; min-height: 100vh; }
+    body { font-family: "Inter", Arial, sans-serif; background: #f8fafc; color: #1e293b; min-height: 100vh; }
     header { background: #ffffff; border-bottom: 1px solid #dbe3ef; padding: 18px 32px; display: flex; align-items: center; gap: 18px; flex-wrap: wrap; box-shadow: 0 1px 4px rgba(15,23,42,0.08); }
     .brand h1 { color: #0f172a; font-size: 1.7rem; line-height: 1.1; }
     .brand p { color: #475569; font-size: 0.9rem; margin-top: 4px; }
@@ -29,6 +33,7 @@
     .card { background: white; border: 1px solid #dbe3ef; border-radius: 8px; padding: 18px; }
     .card h3 { color: #17324d; margin-bottom: 8px; font-size: 1rem; }
     .card p { color: #475569; line-height: 1.55; font-size: 0.94rem; }
+    h2 i, h3 i, .cta i { margin-right: 8px; }
     @media (max-width: 800px) {
       header { align-items: flex-start; }
       nav { width: 100%; margin-left: 0; }
@@ -36,34 +41,30 @@
       main { padding: 24px 16px; }
     }
   </style>
+  <link rel="stylesheet" href="/static/css/header.css">
 </head>
 <body>
-  <header>
-	    <div class="brand">
+  <header class="site-header">
+	    <img class="site-logo" src="/static/img/pythonvisual-logo.png" alt="Logo PythonVisual">
+	    <div class="header-text">
 	      <h1>PythonVisual</h1>
 	      <p data-i18n="brand.subtitle">Visualização passo a passo da execução de código Python</p>
 	    </div>
-	    <nav aria-label="Navegação principal">
-	      <a href="/" class="ativo" data-i18n="nav.home">Home</a>
-	      <a href="/visualizador" data-i18n="nav.visualizer">Visualizador</a>
-	      <a href="/sobre" data-i18n="nav.about">Sobre</a>
-	      <a href="/limitacoes" data-i18n="nav.limitations">Limitações</a>
-	    </nav>
-	    <div class="language-switch" role="group" aria-label="Idioma">
-	      <button class="lang-btn" id="lang-pt" type="button" onclick="setLang('pt')">PT</button>
-	      <button class="lang-btn" id="lang-en" type="button" onclick="setLang('en')">EN</button>
+	    {% include "_navigation.html" %}
+	    <div class="header-controls">
+	      {% include "_language_switch.html" %}
 	    </div>
 	  </header>
 
   <main>
     <section class="hero">
       <div>
-	        <h2 data-i18n="hero.title">Entenda o que acontece enquanto o Python executa.</h2>
+	        <h2><i class="fa-solid fa-chart-line" aria-hidden="true"></i><span data-i18n="hero.title">Entenda o que acontece enquanto o Python executa.</span></h2>
 	        <p data-i18n="hero.text">O PythonVisual mostra cada passo do programa, destacando a linha atual, a próxima linha, as variáveis, os objetos em memória, as funções, as importações e a saída gerada pelo código.</p>
-	        <a class="cta" href="/visualizador" data-i18n="hero.cta">Abrir visualizador</a>
+	        <a class="cta" href="/visualizador"><i class="fa-solid fa-play" aria-hidden="true"></i><span data-i18n="hero.cta">Abrir visualizador</span></a>
 	      </div>
 	      <aside class="panel">
-	        <h3 data-i18n="features.title">Recursos principais</h3>
+	        <h3><i class="fa-solid fa-list-check" aria-hidden="true"></i><span data-i18n="features.title">Recursos principais</span></h3>
 	        <ul>
 	          <li data-i18n="features.step">Execução passo a passo.</li>
 	          <li data-i18n="features.memory">Quadros de memória e objetos separados.</li>
@@ -76,15 +77,15 @@
 
     <section class="cards">
 	      <article class="card">
-	        <h3 data-i18n="card.study.title">Para estudo</h3>
+	        <h3><i class="fa-solid fa-book-open" aria-hidden="true"></i><span data-i18n="card.study.title">Para estudo</span></h3>
 	        <p data-i18n="card.study.text">Ajuda a visualizar atribuições, listas, dicionários, funções, classes e tratamento de erros.</p>
 	      </article>
 	      <article class="card">
-	        <h3 data-i18n="card.class.title">Para aula</h3>
+	        <h3><i class="fa-solid fa-chalkboard-user" aria-hidden="true"></i><span data-i18n="card.class.title">Para aula</span></h3>
 	        <p data-i18n="card.class.text">Facilita a explicação de escopo, memória, fluxo de execução e saída padrão.</p>
 	      </article>
 	      <article class="card">
-	        <h3 data-i18n="card.debug.title">Para depuração</h3>
+	        <h3><i class="fa-solid fa-bug" aria-hidden="true"></i><span data-i18n="card.debug.title">Para depuração</span></h3>
 	        <p data-i18n="card.debug.text">Permite observar o estado do programa sem usar um depurador profissional completo.</p>
 	      </article>
     </section>

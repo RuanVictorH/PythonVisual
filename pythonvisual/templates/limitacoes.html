@@ -4,9 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Limitações - PythonVisual</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: Arial, sans-serif; background: #f8fafc; color: #1e293b; min-height: 100vh; }
+    body { font-family: "Inter", Arial, sans-serif; background: #f8fafc; color: #1e293b; min-height: 100vh; }
     header { background: #ffffff; border-bottom: 1px solid #dbe3ef; padding: 18px 32px; display: flex; align-items: center; gap: 18px; flex-wrap: wrap; box-shadow: 0 1px 4px rgba(15,23,42,0.08); }
     .brand h1 { color: #0f172a; font-size: 1.7rem; line-height: 1.1; }
     .brand p { color: #475569; font-size: 0.9rem; margin-top: 4px; }
@@ -26,40 +30,37 @@
     p, li { color: #475569; line-height: 1.62; font-size: 0.95rem; }
     ul { padding-left: 20px; }
     code { background: #eef2f7; border: 1px solid #dbe3ef; border-radius: 5px; padding: 1px 5px; color: #0f172a; }
+    h2 i, h3 i { margin-right: 8px; }
     @media (max-width: 800px) {
       nav { width: 100%; margin-left: 0; }
       main { padding: 24px 16px; }
       .grid { grid-template-columns: 1fr; }
     }
   </style>
+  <link rel="stylesheet" href="/static/css/header.css">
 </head>
 <body>
-  <header>
-	    <div class="brand">
+  <header class="site-header">
+	    <img class="site-logo" src="/static/img/pythonvisual-logo.png" alt="Logo PythonVisual">
+	    <div class="header-text">
 	      <h1>PythonVisual</h1>
 	      <p data-i18n="brand.subtitle">Funcionamento e limitações da ferramenta</p>
 	    </div>
-	    <nav aria-label="Navegação principal">
-	      <a href="/" data-i18n="nav.home">Home</a>
-	      <a href="/visualizador" data-i18n="nav.visualizer">Visualizador</a>
-	      <a href="/sobre" data-i18n="nav.about">Sobre</a>
-	      <a href="/limitacoes" class="ativo" data-i18n="nav.limitations">Limitações</a>
-	    </nav>
-	    <div class="language-switch" role="group" aria-label="Idioma">
-	      <button class="lang-btn" id="lang-pt" type="button" onclick="setLang('pt')">PT</button>
-	      <button class="lang-btn" id="lang-en" type="button" onclick="setLang('en')">EN</button>
+	    {% include "_navigation.html" %}
+	    <div class="header-controls">
+	      {% include "_language_switch.html" %}
 	    </div>
 	  </header>
 
   <main>
     <section class="grid">
 	      <article class="card intro">
-	        <h2 data-i18n="intro.title">Explicação da ferramenta e limitações</h2>
+	        <h2><i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i><span data-i18n="intro.title">Explicação da ferramenta e limitações</span></h2>
 	        <p data-i18n="intro.text">O PythonVisual executa um único trecho de código Python em ambiente isolado, captura os passos com rastreamento de execução e transforma o estado interno em uma visualização didática. Ele é adequado para exemplos pequenos e médios de lógica, estruturas de dados e funções.</p>
 	      </article>
 
 	      <article class="card">
-	        <h3>Imports</h3>
+	        <h3><i class="fa-solid fa-box-open" aria-hidden="true"></i><span>Imports</span></h3>
 	        <ul>
 	          <li data-i18n="imports.item1">Imports da biblioteca padrão podem funcionar quando disponíveis no ambiente Python.</li>
 	          <li data-i18n="imports.item2">Bibliotecas externas não instaladas no ambiente não serão carregadas.</li>
@@ -68,7 +69,7 @@
 	      </article>
 
 	      <article class="card">
-	        <h3 data-i18n="files.title">Múltiplos arquivos</h3>
+	        <h3><i class="fa-solid fa-file-circle-xmark" aria-hidden="true"></i><span data-i18n="files.title">Múltiplos arquivos</span></h3>
 	        <ul>
 	          <li data-i18n="files.item1">A ferramenta executa apenas o código digitado no editor.</li>
 	          <li data-i18n="files.item2">Não há suporte para projetos com vários arquivos, pacotes locais ou leitura de módulos criados pelo usuário.</li>
@@ -77,7 +78,7 @@
 	      </article>
 
 	      <article class="card">
-	        <h3 data-i18n="io.title">Entrada e saída</h3>
+	        <h3><i class="fa-solid fa-right-left" aria-hidden="true"></i><span data-i18n="io.title">Entrada e saída</span></h3>
 	        <ul>
 	          <li><code>input()</code> <span data-i18n="io.item1">solicita um valor por vez, conforme a linha em execução.</span></li>
 	          <li data-i18n="io.item2">A saída exibida considera principalmente chamadas de print().</li>
@@ -86,7 +87,7 @@
 	      </article>
 
 	      <article class="card">
-	        <h3 data-i18n="safety.title">Tempo e segurança</h3>
+	        <h3><i class="fa-solid fa-shield-halved" aria-hidden="true"></i><span data-i18n="safety.title">Tempo e segurança</span></h3>
 	        <ul>
 	          <li data-i18n="safety.item1">A execução tem limite de tempo para evitar travamentos.</li>
 	          <li data-i18n="safety.item2">Loops infinitos são interrompidos por timeout ou limite de passos.</li>
@@ -95,7 +96,7 @@
 	      </article>
 
 	      <article class="card">
-	        <h3 data-i18n="memory.title">Visualização de memória</h3>
+	        <h3><i class="fa-solid fa-memory" aria-hidden="true"></i><span data-i18n="memory.title">Visualização de memória</span></h3>
 	        <ul>
 	          <li data-i18n="memory.item1">Listas, tuplas, conjuntos, dicionários e objetos simples são representados visualmente.</li>
 	          <li data-i18n="memory.item2">Objetos complexos podem aparecer resumidos.</li>
@@ -104,7 +105,7 @@
 	      </article>
 
 	      <article class="card">
-	        <h3 data-i18n="advanced.title">Recursos avançados</h3>
+	        <h3><i class="fa-solid fa-gears" aria-hidden="true"></i><span data-i18n="advanced.title">Recursos avançados</span></h3>
 	        <ul>
 	          <li data-i18n="advanced.item1">Threads, processos, rede, arquivos e interfaces gráficas não são foco da ferramenta.</li>
 	          <li data-i18n="advanced.item2">Decorators, generators e recursos internos avançados podem ser exibidos de forma simplificada.</li>

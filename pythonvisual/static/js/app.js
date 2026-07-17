@@ -7,6 +7,7 @@ carregarExemplos();
       gutters: ["exec-gutter", "CodeMirror-linenumbers"],
       indentUnit: 4,
       indentWithTabs: false,
+      placeholder: "",
       autofocus: true
     });
     editor.setValue('');
@@ -28,6 +29,7 @@ carregarExemplos();
 	        "nav.visualizer": "Visualizador",
 	        "nav.about": "Sobre",
 	        "nav.limitations": "Limitações",
+	        "editor.shortcutsPlaceholder": "Atalhos PythonVisual\n\n→ ou Espaço: próximo passo\n←: passo anterior\nHome: início\nEnd: fim\nCtrl + Enter: executar\nEsc: focar o editor\nR: executar, quando não estiver digitando\nC: limpar, quando não estiver digitando",
 	        "access.fontDown": "Diminuir fonte",
 	        "access.fontUp": "Aumentar fonte",
 	        "access.themeToggle": "Alternar tema claro e escuro",
@@ -141,6 +143,7 @@ carregarExemplos();
 	        "nav.visualizer": "Visualizer",
 	        "nav.about": "About",
 	        "nav.limitations": "Limitations",
+	        "editor.shortcutsPlaceholder": "PythonVisual shortcuts\n\n→ or Space: next step\n←: previous step\nHome: start\nEnd: end\nCtrl + Enter: run\nEsc: focus the editor\nR: run, when not typing\nC: clear, when not typing",
 	        "access.fontDown": "Decrease font size",
 	        "access.fontUp": "Increase font size",
 	        "access.themeToggle": "Toggle light and dark theme",
@@ -293,6 +296,7 @@ carregarExemplos();
 	        botao.classList.toggle("active", ativo);
 	        botao.setAttribute("aria-pressed", ativo ? "true" : "false");
 	      });
+	      editor.setOption("placeholder", traduzir("editor.shortcutsPlaceholder"));
 	      atualizarBotaoTema();
 	      if (entradaPendente) {
 	        document.getElementById("entrada-linha-badge").textContent = traduzir("input.line") + " " + entradaPendente.linha;
@@ -952,4 +956,3 @@ async function carregarExemplos(){
 	    resetarExecucaoVisual();
 	    aplicarIdioma();
 	    atualizarEntradaDinamica();
-	  

@@ -1,0 +1,18 @@
+<nav class="top-nav" aria-label="Navegação principal">
+  <a href="/"{% if request.endpoint == "home" %} class="ativo" aria-current="page"{% endif %}>
+    <i class="fa-solid fa-house" aria-hidden="true"></i>
+    <span data-i18n="nav.home">Home</span>
+  </a>
+  <a href="/visualizador"{% if request.endpoint == "visualizador" %} class="ativo" aria-current="page"{% endif %}>
+    <i class="fa-solid fa-code" aria-hidden="true"></i>
+    <span data-i18n="nav.visualizer">Visualizador</span>
+  </a>
+  <a href="/sobre"{% if request.endpoint == "sobre" %} class="ativo" aria-current="page"{% endif %}>
+    <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+    <span data-i18n="nav.about">Sobre</span>
+  </a>
+  <a href="/limitacoes"{% if request.endpoint == "limitacoes" %} class="ativo" aria-current="page"{% endif %}>
+    <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+    <span data-i18n="nav.limitations">Limitações</span>
+  </a>
+</nav>

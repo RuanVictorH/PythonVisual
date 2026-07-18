@@ -69,7 +69,7 @@ def serializar_variavel(valor):
     if isinstance(valor, types.ModuleType):
         return {
             "categoria": "importacao",
-            "tipo": "modulo",
+            "tipo": "module",
             "nome": getattr(valor, "__name__", tipo),
             "repr": repr_seguro(valor)
         }
@@ -80,14 +80,14 @@ def serializar_variavel(valor):
         if modulo and (modulo != "__main__" or arquivo_codigo != ARQUIVO_USUARIO):
             return {
                 "categoria": "importacao",
-                "tipo": "funcao_importada",
+                "tipo": "function",
                 "nome": getattr(valor, "__name__", tipo),
                 "modulo": modulo,
                 "repr": repr_seguro(valor)
             }
         return {
             "categoria": "funcao",
-            "tipo": "funcao",
+            "tipo": "function",
             "nome": getattr(valor, "__name__", tipo),
             "repr": repr_seguro(valor)
         }
@@ -96,15 +96,15 @@ def serializar_variavel(valor):
         modulo = getattr(valor, "__module__", "builtins")
         if modulo == "__main__":
             return {
-                "categoria": "funcao",
-                "tipo": "classe",
+                "categoria": "classe",
+                "tipo": "class",
                 "nome": getattr(valor, "__name__", tipo),
                 "repr": repr_seguro(valor)
             }
         if modulo != "builtins":
             return {
                 "categoria": "importacao",
-                "tipo": "classe_importada",
+                "tipo": "class",
                 "nome": getattr(valor, "__name__", tipo),
                 "modulo": modulo,
                 "repr": repr_seguro(valor)
@@ -115,7 +115,7 @@ def serializar_variavel(valor):
         categoria = "importacao" if modulo and modulo != "builtins" else "primitivo"
         return {
             "categoria": categoria,
-            "tipo": "funcao_importada" if categoria == "importacao" else tipo,
+            "tipo": "function" if categoria == "importacao" else tipo,
             "nome": getattr(valor, "__name__", tipo),
             "modulo": modulo,
             "repr": repr_seguro(valor)
@@ -126,15 +126,15 @@ def serializar_variavel(valor):
 
     if isinstance(valor, list):
         dados = serializar_sequencia(valor)
-        return {"categoria": "objeto", "tipo": "lista", **dados}
+        return {"categoria": "objeto", "tipo": "list", **dados}
 
     if isinstance(valor, tuple):
         dados = serializar_sequencia(valor)
-        return {"categoria": "objeto", "tipo": "tupla", **dados}
+        return {"categoria": "objeto", "tipo": "tuple", **dados}
 
     if isinstance(valor, set):
         dados = serializar_sequencia(valor)
-        return {"categoria": "objeto", "tipo": "conjunto", **dados}
+        return {"categoria": "objeto", "tipo": "set", **dados}
 
     if isinstance(valor, dict):
         pares = {}
@@ -144,7 +144,7 @@ def serializar_variavel(valor):
             pares[repr_seguro(chave)] = repr_seguro(item)
         return {
             "categoria": "objeto",
-            "tipo": "dicionario",
+            "tipo": "dict",
             "pares": pares,
             "truncado": len(valor) > 50
         }

@@ -103,15 +103,17 @@ carregarExemplos();
 	        "memory.noObjects": "Nenhum objeto neste passo.",
 	        "memory.functions": "Funções",
 	        "memory.noFunctions": "Nenhuma função definida neste passo.",
+	        "memory.classes": "Classes",
+	        "memory.noClasses": "Nenhuma classe definida neste passo.",
 	        "memory.imports": "Importações",
 	        "memory.noImports": "Nenhuma importação neste passo.",
-	        "memory.subtitle": "Quadros, objetos, funções e importações separados por categoria.",
+	        "memory.subtitle": "Quadros, objetos, funções, classes e importações separados por categoria.",
 	        "memory.referenceTitle": "Referência para o objeto {name}",
 	        "memory.objectEmpty": "vazio",
-	        "type.list": "Lista",
-	        "type.tuple": "Tupla",
-	        "type.set": "Conjunto",
-	        "type.dict": "Dicionário",
+	        "type.list": "list",
+	        "type.tuple": "tuple",
+	        "type.set": "set",
+	        "type.dict": "dict",
 	        "explain.empty": "Esta linha está vazia. Ela apenas separa visualmente partes do código.",
 	        "explain.comment": "Comentário: serve para documentar o código e não é executado pelo Python.",
 	        "explain.def": "Define uma função. O bloco indentado abaixo só será executado quando essa função for chamada.",
@@ -219,15 +221,17 @@ carregarExemplos();
 	        "memory.noObjects": "No object in this step.",
 	        "memory.functions": "Functions",
 	        "memory.noFunctions": "No function defined in this step.",
+	        "memory.classes": "Classes",
+	        "memory.noClasses": "No class defined in this step.",
 	        "memory.imports": "Imports",
 	        "memory.noImports": "No import in this step.",
-	        "memory.subtitle": "Frames, objects, functions, and imports separated by category.",
+	        "memory.subtitle": "Frames, objects, functions, classes, and imports separated by category.",
 	        "memory.referenceTitle": "Reference to object {name}",
 	        "memory.objectEmpty": "empty",
-	        "type.list": "List",
-	        "type.tuple": "Tuple",
-	        "type.set": "Set",
-	        "type.dict": "Dictionary",
+	        "type.list": "list",
+	        "type.tuple": "tuple",
+	        "type.set": "set",
+	        "type.dict": "dict",
 	        "explain.empty": "This line is empty. It only visually separates parts of the code.",
 	        "explain.comment": "Comment: documents the code and is not executed by Python.",
 	        "explain.def": "Defines a function. The indented block below runs only when this function is called.",
@@ -543,9 +547,24 @@ async function carregarExemplos(){
       return "<div class=\"lista-card\">" + itens.map(({ nome, info }) => {
         const detalhe = info.modulo ? " <span>(" + escaparHTML(info.modulo) + ")</span>" : "";
         return "<div class=\"lista-item\"><strong>" + escaparHTML(nome) + "</strong>" + detalhe
-          + "<br>" + escaparHTML(info.repr || info.nome || info.tipo) + "</div>";
+          + "<br>" + escaparHTML(info.repr || info.nome || normalizarTipoPython(info.tipo)) + "</div>";
       }).join("") + "</div>";
     }
+
+	    function normalizarTipoPython(tipo) {
+	      const equivalencias = {
+	        lista: "list",
+	        tupla: "tuple",
+	        conjunto: "set",
+	        dicionario: "dict",
+	        funcao: "function",
+	        funcao_importada: "function",
+	        classe: "class",
+	        classe_importada: "class",
+	        modulo: "module"
+	      };
+	      return equivalencias[tipo] || tipo || "object";
+	    }
 
 	    function formatarChamadaPilha(item) {
 	      if (!item || item.escopo === "Global") return traduzir("scope.global");
@@ -585,10 +604,13 @@ async function carregarExemplos(){
       const primitivos = [];
       const objetos = [];
       const funcoes = [];
+	      const classes = [];
       const importacoes = [];
       for (const [nome, info] of Object.entries(variaveis)) {
         if (info.categoria === "primitivo") primitivos.push({ nome, info });
         else if (info.categoria === "objeto") objetos.push({ nome, info });
+	        else if (info.categoria === "classe") classes.push({ nome, info });
+	        else if (info.categoria === "funcao" && normalizarTipoPython(info.tipo) === "class") classes.push({ nome, info });
         else if (info.categoria === "funcao") funcoes.push({ nome, info });
         else if (info.categoria === "importacao") importacoes.push({ nome, info });
         else primitivos.push({ nome, info });
@@ -598,14 +620,14 @@ async function carregarExemplos(){
       for (const { nome, info } of primitivos) {
         linhasQuadro += "<div class=\"quadro-linha\">"
           + "<div class=\"quadro-cel quadro-cel-nome\">" + escaparHTML(nome) + "</div>"
-          + "<div class=\"quadro-cel quadro-cel-tipo\"><span class=\"tipo-chip\">" + escaparHTML(info.tipo || "var") + "</span></div>"
+          + "<div class=\"quadro-cel quadro-cel-tipo\"><span class=\"tipo-chip\">" + escaparHTML(normalizarTipoPython(info.tipo || "var")) + "</span></div>"
           + "<div class=\"quadro-cel quadro-cel-valor\">" + escaparHTML(info.repr) + "</div>"
           + "</div>";
       }
       for (const { nome, info } of objetos) {
         linhasQuadro += "<div class=\"quadro-linha\">"
           + "<div class=\"quadro-cel quadro-cel-nome\">" + escaparHTML(nome) + "</div>"
-          + "<div class=\"quadro-cel quadro-cel-tipo\"><span class=\"tipo-chip\">" + escaparHTML(info.tipo || "objeto") + "</span></div>"
+	          + "<div class=\"quadro-cel quadro-cel-tipo\"><span class=\"tipo-chip\">" + escaparHTML(normalizarTipoPython(info.tipo)) + "</span></div>"
 	          + "<div class=\"quadro-cel quadro-cel-seta\"><span class=\"referencia-dot\" data-ref-origem=\"" + escaparHTML(nome) + "\" title=\"" + escaparHTML(traduzir("memory.referenceTitle", { name: nome })) + "\"></span></div>"
           + "<div class=\"quadro-cel quadro-cel-valor\" style=\"color:#059669;font-style:italic;\">" + escaparHTML(nome) + "</div>"
           + "</div>";
@@ -622,15 +644,16 @@ async function carregarExemplos(){
       let objetosHTML = "";
       for (const { nome, info } of objetos) {
         let corpo = "";
-        if (info.tipo === "lista" || info.tipo === "tupla") {
+	        const tipoPython = normalizarTipoPython(info.tipo);
+        if (tipoPython === "list" || tipoPython === "tuple") {
           corpo = info.elementos.map((e, i) =>
             "<div class=\"objeto-item\"><span class=\"objeto-item-idx\">" + i + "</span>" + escaparHTML(e) + "</div>"
           ).join("");
-        } else if (info.tipo === "conjunto") {
+        } else if (tipoPython === "set") {
           corpo = info.elementos.map(e =>
             "<div class=\"objeto-item\">" + escaparHTML(e) + "</div>"
           ).join("");
-        } else if (info.tipo === "dicionario") {
+        } else if (tipoPython === "dict") {
           corpo = Object.entries(info.pares).map(([k, v]) =>
             "<div class=\"objeto-dict-par\"><span class=\"objeto-dict-chave\">" + escaparHTML(k) + "</span><span>:</span><span>" + escaparHTML(v) + "</span></div>"
           ).join("");
@@ -642,9 +665,8 @@ async function carregarExemplos(){
         if (info.truncado) {
           corpo += "<div class=\"objeto-item\">...</div>";
         }
-	        const tipoLabel = { lista:traduzir("type.list"), tupla:traduzir("type.tuple"), conjunto:traduzir("type.set"), dicionario:traduzir("type.dict") }[info.tipo] || info.tipo;
 	        objetosHTML += "<div class=\"objeto-card\" data-ref-destino=\"" + escaparHTML(nome) + "\">"
-	          + "<div class=\"objeto-titulo\">" + escaparHTML(nome) + " — " + tipoLabel + "</div>"
+	          + "<div class=\"objeto-titulo\">" + escaparHTML(nome) + " — " + escaparHTML(tipoPython) + "</div>"
 	          + "<div class=\"objeto-corpo\">" + (corpo || "<span class=\"empty\">" + escaparHTML(traduzir("memory.objectEmpty")) + "</span>") + "</div>"
 	          + "</div>";
 	      }
@@ -656,6 +678,10 @@ async function carregarExemplos(){
 	      const painelFuncoes = "<div class=\"painel-memoria\">"
 	        + "<div class=\"painel-titulo\">" + escaparHTML(traduzir("memory.functions")) + "</div>"
 	        + renderizarListaSimples(funcoes, traduzir("memory.noFunctions"))
+	        + "</div>";
+	      const painelClasses = "<div class=\"painel-memoria\">"
+	        + "<div class=\"painel-titulo\">" + escaparHTML(traduzir("memory.classes")) + "</div>"
+	        + renderizarListaSimples(classes, traduzir("memory.noClasses"))
 	        + "</div>";
 	      const painelImportacoes = "<div class=\"painel-memoria\">"
 	        + "<div class=\"painel-titulo\">" + escaparHTML(traduzir("memory.imports")) + "</div>"
@@ -669,7 +695,7 @@ async function carregarExemplos(){
 	        + "</div>"
         + "<div class=\"memoria-diagrama\">"
         + "<svg class=\"memoria-setas\" id=\"memoria-setas\" aria-hidden=\"true\"></svg>"
-        + "<div class=\"memoria-container\">" + quadroHTML + painelObjetos + painelFuncoes + painelImportacoes + "</div>"
+        + "<div class=\"memoria-container\">" + quadroHTML + painelObjetos + painelFuncoes + painelClasses + painelImportacoes + "</div>"
         + "</div>"
         + "</div>";
     }

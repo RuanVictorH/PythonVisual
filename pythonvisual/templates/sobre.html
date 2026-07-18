@@ -28,9 +28,19 @@
     p { color: #475569; line-height: 1.65; margin-bottom: 12px; }
     ul { padding-left: 20px; color: #475569; line-height: 1.7; }
     h2 i, h3 i { margin-right: 8px; }
+    .creditos-institucionais { display: grid; grid-template-columns: 1fr 280px; gap: 28px; align-items: center; margin-top: 28px; padding-top: 24px; border-top: 1px solid #dbe3ef; }
+    .creditos-institucionais h3 { margin-top: 0; }
+    .creditos-lista { display: grid; gap: 10px; }
+    .credito-item { padding: 11px 13px; border: 1px solid #dbe3ef; border-radius: 8px; background: #f8fafc; }
+    .credito-rotulo { display: block; color: #64748b; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 3px; }
+    .credito-nome { color: #17324d; font-weight: 700; }
+    .ufla-identidade { text-align: center; }
+    .ufla-logo { display: block; width: 100%; max-width: 280px; height: auto; margin: 0 auto 10px; }
+    .ufla-nome { color: #17324d; font-size: 0.9rem; font-weight: 700; line-height: 1.4; margin: 0; }
     @media (max-width: 800px) {
       nav { width: 100%; margin-left: 0; }
       main { padding: 24px 16px; }
+      .creditos-institucionais { grid-template-columns: 1fr; }
     }
   </style>
   <link rel="stylesheet" href="/static/css/header.css">
@@ -63,12 +73,32 @@
 
 	      <h3><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i><span data-i18n="improvements.title">Principais melhorias desta versão</span></h3>
 	      <ul>
-	        <li data-i18n="improvements.item1">Painel de memória organizado por variáveis, objetos, funções e importações.</li>
+	        <li data-i18n="improvements.item1">Painel de memória organizado por variáveis, objetos, funções, classes e importações.</li>
 	        <li data-i18n="improvements.item2">Setas dinâmicas entre variáveis e objetos.</li>
 	        <li data-i18n="improvements.item3">Temas claro e escuro.</li>
 	        <li data-i18n="improvements.item4">Controle de tamanho da fonte.</li>
 	        <li data-i18n="improvements.item5">Entrada guiada por linha para códigos com input().</li>
 	      </ul>
+
+	      <div class="creditos-institucionais">
+	        <div>
+	          <h3><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i><span data-i18n="credits.title">Créditos acadêmicos</span></h3>
+	          <div class="creditos-lista">
+	            <div class="credito-item">
+	              <span class="credito-rotulo" data-i18n="credits.developer">Desenvolvedor</span>
+	              <span class="credito-nome">Ruan Víctor Henrique</span>
+	            </div>
+	            <div class="credito-item">
+	              <span class="credito-rotulo" data-i18n="credits.advisor">Orientador</span>
+	              <span class="credito-nome">Jesimar da Silva Arantes</span>
+	            </div>
+	          </div>
+	        </div>
+	        <div class="ufla-identidade">
+	          <img class="ufla-logo" src="/static/img/ufla-logo.png" alt="Logo da Universidade Federal de Lavras" data-i18n-alt="credits.logoAlt">
+	          <p class="ufla-nome" data-i18n="credits.institution">Universidade Federal de Lavras (UFLA)</p>
+	        </div>
+	      </div>
     </section>
   </main>
 	  <script>
@@ -88,11 +118,16 @@
 	        "goal.item2": "Mostrar a relação entre variáveis e objetos em memória.",
 	        "goal.item3": "Facilitar aulas, demonstrações e revisão de código básico.",
 	        "improvements.title": "Principais melhorias desta versão",
-	        "improvements.item1": "Painel de memória organizado por variáveis, objetos, funções e importações.",
+	        "improvements.item1": "Painel de memória organizado por variáveis, objetos, funções, classes e importações.",
 	        "improvements.item2": "Setas dinâmicas entre variáveis e objetos.",
 	        "improvements.item3": "Temas claro e escuro.",
 	        "improvements.item4": "Controle de tamanho da fonte.",
-	        "improvements.item5": "Entrada guiada por linha para códigos com input()."
+	        "improvements.item5": "Entrada guiada por linha para códigos com input().",
+	        "credits.title": "Créditos acadêmicos",
+	        "credits.developer": "Desenvolvedor",
+	        "credits.advisor": "Orientador",
+	        "credits.institution": "Universidade Federal de Lavras (UFLA)",
+	        "credits.logoAlt": "Logo da Universidade Federal de Lavras"
 	      },
 	      en: {
 	        "title": "About - PythonVisual",
@@ -109,11 +144,16 @@
 	        "goal.item2": "Show the relationship between variables and objects in memory.",
 	        "goal.item3": "Support lessons, demonstrations, and basic code review.",
 	        "improvements.title": "Main improvements in this version",
-	        "improvements.item1": "Memory panel organized by variables, objects, functions, and imports.",
+	        "improvements.item1": "Memory panel organized by variables, objects, functions, classes, and imports.",
 	        "improvements.item2": "Dynamic arrows between variables and objects.",
 	        "improvements.item3": "Light and dark themes.",
 	        "improvements.item4": "Font size control.",
-	        "improvements.item5": "Line-guided input for code that uses input()."
+	        "improvements.item5": "Line-guided input for code that uses input().",
+	        "credits.title": "Academic credits",
+	        "credits.developer": "Developer",
+	        "credits.advisor": "Advisor",
+	        "credits.institution": "Federal University of Lavras (UFLA)",
+	        "credits.logoAlt": "Federal University of Lavras logo"
 	      }
 	    };
 	    let currentLang = localStorage.getItem("pythonvisual_lang") || "pt";
@@ -126,6 +166,9 @@
 	      document.title = translate("title");
 	      document.querySelectorAll("[data-i18n]").forEach((el) => {
 	        el.textContent = translate(el.dataset.i18n);
+	      });
+	      document.querySelectorAll("[data-i18n-alt]").forEach((el) => {
+	        el.alt = translate(el.dataset.i18nAlt);
 	      });
 	      document.querySelectorAll(".lang-btn").forEach((button) => {
 	        const active = button.id === "lang-" + currentLang;

@@ -81,6 +81,8 @@ carregarExemplos();
 	        "output.none": "Nenhuma saída.",
 	        "output.noPrint": "Nenhum print executado até aqui.",
 	        "output.errorUntil": "Saída até o erro",
+	        "card.collapse": "Minimizar bloco",
+	        "card.expand": "Expandir bloco",
 	        "run.executing": "Executando...",
 	        "run.noSteps": "Nenhum passo registrado.",
 	        "run.serverError": "Erro ao comunicar com o servidor: {error}",
@@ -195,6 +197,8 @@ carregarExemplos();
 	        "output.none": "No output.",
 	        "output.noPrint": "No print executed up to this step.",
 	        "output.errorUntil": "Output until the error",
+	        "card.collapse": "Collapse block",
+	        "card.expand": "Expand block",
 	        "run.executing": "Running...",
 	        "run.noSteps": "No steps recorded.",
 	        "run.serverError": "Error communicating with the server: {error}",
@@ -298,6 +302,7 @@ carregarExemplos();
 	      });
 	      editor.setOption("placeholder", traduzir("editor.shortcutsPlaceholder"));
 	      atualizarBotaoTema();
+	      atualizarBotoesRecolher();
 	      if (entradaPendente) {
 	        document.getElementById("entrada-linha-badge").textContent = traduzir("input.line") + " " + entradaPendente.linha;
 	        document.getElementById("entrada-prompt-texto").textContent =
@@ -332,6 +337,7 @@ async function carregarExemplos(){
       if (!chave || !exemplos[chave]) return;
       editor.setValue(exemplos[chave]);
       document.getElementById("saida").style.display = "none";
+      document.getElementById("saida-card").style.display = "none";
       ocultarEntradaPendente();
       resetarExecucaoVisual();
     }
@@ -388,20 +394,48 @@ async function carregarExemplos(){
       editor.setValue("");
       document.getElementById("entrada").value = "";
       document.getElementById("saida").style.display = "none";
+      document.getElementById("saida-card").style.display = "none";
       resetarExecucaoVisual();
       editor.focus();
     }
 
     function aplicarFonte() {
       document.documentElement.style.setProperty("--font-scale", escalaFonte.toFixed(2));
+	      document.documentElement.classList.toggle("fonte-ampliada", escalaFonte > 1.3);
       editor.refresh();
       requestAnimationFrame(desenharSetasMemoria);
     }
 
     function alterarFonte(delta) {
-      escalaFonte = Math.max(0.85, Math.min(1.35, escalaFonte + delta));
+      escalaFonte = Math.max(0.85, Math.min(1.8, escalaFonte + delta));
       aplicarFonte();
     }
+
+	    function atualizarBotaoRecolher(botao) {
+	      const card = botao.closest(".card");
+	      if (!card) return;
+	      const recolhido = card.classList.contains("recolhido");
+	      const texto = traduzir(recolhido ? "card.expand" : "card.collapse");
+	      const icone = botao.querySelector("i");
+	      botao.setAttribute("aria-expanded", recolhido ? "false" : "true");
+	      botao.setAttribute("aria-label", texto);
+	      botao.title = texto;
+	      if (icone) icone.className = recolhido ? "fa-solid fa-chevron-down" : "fa-solid fa-chevron-up";
+	    }
+
+	    function atualizarBotoesRecolher() {
+	      document.querySelectorAll(".btn-recolher").forEach(atualizarBotaoRecolher);
+	    }
+
+	    function alternarCard(cardId) {
+	      const card = document.getElementById(cardId);
+	      if (!card) return;
+	      card.classList.toggle("recolhido");
+	      const botao = card.querySelector(":scope > .card-header .btn-recolher");
+	      if (botao) atualizarBotaoRecolher(botao);
+	      if (cardId === "codigo-card" && !card.classList.contains("recolhido")) editor.refresh();
+	      requestAnimationFrame(desenharSetasMemoria);
+	    }
 
 	    function alternarTema() {
 	      temaEscuro = !temaEscuro;
@@ -698,7 +732,9 @@ async function carregarExemplos(){
 	    async function executarComEntradas() {
 	      const codigo = editor.getValue();
 	      document.getElementById("saida").style.display = "block";
+	      document.getElementById("saida-card").style.display = "block";
 	      document.getElementById("saida-corpo").innerHTML = "<p class=\"empty\">" + escaparHTML(traduzir("run.executing")) + "</p>";
+	      document.getElementById("saida-programa-corpo").innerHTML = "<p class=\"empty\">" + escaparHTML(traduzir("run.executing")) + "</p>";
 	      limparMarcacoes();
 
       try {
@@ -721,6 +757,7 @@ async function carregarExemplos(){
 
 	        if (passos.length === 0) {
 	          document.getElementById("saida-corpo").innerHTML = "<p class=\"empty\">" + escaparHTML(traduzir("run.noSteps")) + "</p>";
+	          document.getElementById("saida-programa-corpo").innerHTML = "<p class=\"empty\">" + escaparHTML(traduzir("output.none")) + "</p>";
 	          resetarExecucaoVisual();
 	          return;
 	        }
@@ -736,6 +773,8 @@ async function carregarExemplos(){
 	        resetarExecucaoVisual();
 	        document.getElementById("saida-corpo").innerHTML =
 	          "<div class=\"error-box\">" + escaparHTML(traduzir("run.serverError", { error: String(erro) })) + "</div>";
+	        document.getElementById("saida-programa-corpo").innerHTML =
+	          "<p class=\"empty\">" + escaparHTML(traduzir("output.none")) + "</p>";
 	      }
 	    }
 
@@ -825,10 +864,24 @@ async function carregarExemplos(){
       if (alvo !== null) editor.scrollIntoView({ line: alvo, ch: 0 }, 60);
     }
 
+	    function montarTerminalSaida(saida, chaveVazio) {
+	      const conteudo = saida && String(saida).trim()
+	        ? escaparHTML(saida)
+	        : "<span class=\"empty\">" + escaparHTML(traduzir(chaveVazio)) + "</span>";
+	      return "<div class=\"terminal\">"
+	        + "<div class=\"terminal-header\">"
+	        + "<div class=\"terminal-dot vermelho\"></div>"
+	        + "<div class=\"terminal-dot amarelo\"></div>"
+	        + "<div class=\"terminal-dot verde\"></div>"
+	        + "<span class=\"terminal-label\"><i class=\"fa-solid fa-terminal\"></i>" + escaparHTML(traduzir("output.label")) + "</span></div>"
+	        + "<div class=\"terminal-body\">" + conteudo + "</div></div>";
+	    }
+
     function renderizarPasso() {
       if (passos.length === 0) return;
       const p = passos[indiceAtual];
       const corpo = document.getElementById("saida-corpo");
+	      const corpoSaida = document.getElementById("saida-programa-corpo");
       const linhaExecutada = linhaExecutadaAtual();
       const linhaProxima = linhaProximaAtual();
       const textoExecutada = linhaExecutada === null ? "-" : String(linhaExecutada + 1);
@@ -841,21 +894,13 @@ async function carregarExemplos(){
 	      atualizarExplicacaoLinha();
 
 	      if (p.erro) {
-	        corpo.innerHTML = "<div class=\"error-box\"><strong>" + escaparHTML(traduzir("error.label")) + "</strong> " + escaparHTML(p.erro) + "</div>"
-	          + "<div class=\"section-label\" style=\"margin-top:14px;\">" + escaparHTML(traduzir("output.errorUntil")) + "</div>"
-	          + "<div class=\"terminal\">"
-	          + "<div class=\"terminal-header\">"
-	          + "<div class=\"terminal-dot vermelho\"></div>"
-	          + "<div class=\"terminal-dot amarelo\"></div>"
-	          + "<div class=\"terminal-dot verde\"></div>"
-	          + "<span class=\"terminal-label\">" + escaparHTML(traduzir("output.label")) + "</span></div>"
-	          + "<div class=\"terminal-body\">" + (p.saida && p.saida.trim() ? escaparHTML(p.saida) : "<span class=\"empty\">" + escaparHTML(traduzir("output.none")) + "</span>") + "</div></div>";
+	        corpo.innerHTML = "<div class=\"error-box\"><strong>" + escaparHTML(traduzir("error.label")) + "</strong> " + escaparHTML(p.erro) + "</div>";
+	        corpoSaida.innerHTML = "<div class=\"section-label\">" + escaparHTML(traduzir("output.errorUntil")) + "</div>"
+	          + montarTerminalSaida(p.saida, "output.none");
+	        requestAnimationFrame(desenharSetasMemoria);
 	        return;
 	      }
 
-	      const saidaConteudo = p.saida && p.saida.trim()
-	        ? escaparHTML(p.saida)
-	        : "<span class=\"empty\">" + escaparHTML(traduzir("output.noPrint")) + "</span>";
 	      const etapaTexto = p.evento === "fim" ? traduzir("state.finished") : (p.evento === "input_pendente" ? traduzir("state.waitingInput") : (p.evento === "return" ? traduzir("state.return") : traduzir("state.running")));
 
 	      corpo.innerHTML =
@@ -867,15 +912,8 @@ async function carregarExemplos(){
 	        + "<span class=\"escopo-badge\">" + escaparHTML(escopo) + "</span>"
 	        + "</div>"
 	        + renderizarPilhaChamadas(p.pilha_chamadas)
-	        + renderizarMemoria(p.variaveis)
-	        + "<div class=\"section-label\" style=\"margin-top:16px;\"><i class=\"fa-solid fa-square-terminal\"></i>" + escaparHTML(traduzir("output.section")) + "</div>"
-	        + "<div class=\"terminal\">"
-	        + "<div class=\"terminal-header\">"
-	        + "<div class=\"terminal-dot vermelho\"></div>"
-	        + "<div class=\"terminal-dot amarelo\"></div>"
-	        + "<div class=\"terminal-dot verde\"></div>"
-	        + "<span class=\"terminal-label\"><i class=\"fa-solid fa-terminal\"></i>" + escaparHTML(traduzir("output.label")) + "</span></div>"
-	        + "<div class=\"terminal-body\">" + saidaConteudo + "</div></div>";
+	        + renderizarMemoria(p.variaveis);
+	      corpoSaida.innerHTML = montarTerminalSaida(p.saida, "output.noPrint");
       requestAnimationFrame(desenharSetasMemoria);
     }
 

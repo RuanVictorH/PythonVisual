@@ -1,6 +1,9 @@
-:root { --font-scale: 1; }
+:root {
+  --font-scale: 1;
+  font-size: calc(16px * var(--font-scale));
+}
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: "Inter", Arial, sans-serif; font-size: calc(16px * var(--font-scale)); background: #f8fafc; color: #1e293b; min-height: 100vh; transition: background 0.2s, color 0.2s; }
+    body { font-family: "Inter", Arial, sans-serif; font-size: 1rem; background: #f8fafc; color: #1e293b; min-height: 100vh; transition: background 0.2s, color 0.2s; }
 
     header { background: #ffffff; border-bottom: 1px solid #dbe3ef; padding: 14px 32px; display: flex; align-items: center; gap: 16px; box-shadow: 0 1px 4px rgba(15,23,42,0.08); }
     header img { height: 52px; width: auto; }
@@ -17,6 +20,7 @@
     .btn-executar:focus-visible,
     .btn-limpar:focus-visible,
     .btn-entrada:focus-visible,
+    .btn-recolher:focus-visible,
     .top-nav a:focus-visible,
     .exemplos-row select:focus-visible,
     .entrada-area:focus-visible,
@@ -32,9 +36,15 @@
     .coluna-esquerda, .coluna-direita { display: flex; flex-direction: column; gap: 16px; }
 
     .card { background: white; border: 1px solid #dbe3ef; border-radius: 8px; box-shadow: 0 1px 4px rgba(15,23,42,0.06); overflow: hidden; }
-    .card-header { background: #eef6ff; color: #17324d; border-bottom: 1px solid #dbe3ef; font-weight: 700; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.06em; padding: 10px 16px; }
+    .card-header { background: #eef6ff; color: #17324d; border-bottom: 1px solid #dbe3ef; font-weight: 700; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.06em; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .card-header-title { display: inline-flex; align-items: center; min-width: 0; }
     .card-header i, .top-nav i, button i, .section-label i, .terminal-label i { margin-right: 6px; }
     .card-body { padding: 16px; }
+    .btn-recolher { width: 32px; height: 32px; flex: 0 0 auto; display: inline-grid; place-items: center; border: 1px solid #bfdbfe; border-radius: 7px; background: #ffffff; color: #17324d; cursor: pointer; transition: background 0.2s, border-color 0.2s; }
+    .btn-recolher:hover { background: #dbeafe; border-color: #2563eb; }
+    .btn-recolher i { margin: 0; }
+    .card.recolhido > .card-header { border-bottom-color: transparent; }
+    .card.recolhido > .card-body { display: none; }
 
     .CodeMirror-placeholder {
       color: #64748b !important;
@@ -48,7 +58,7 @@
     .exemplos-row select { flex: 1; padding: 7px 10px; border-radius: 7px; border: 1.5px solid #cbd5e1; font-family: "Inter", sans-serif; font-size: 0.85rem; color: #1e293b; background: #f8fafc; cursor: pointer; outline: none; }
     .exemplos-row select:focus { border-color: #2563eb; }
 
-    .CodeMirror { height: 280px; font-size: calc(14px * var(--font-scale)); border: 1px solid #cbd5e1; border-radius: 8px; font-family: "Fira Mono", "Courier New", monospace; background: #f8fafc; color: #0f172a; }
+    .CodeMirror { height: 280px; font-size: 0.875rem; border: 1px solid #cbd5e1; border-radius: 8px; font-family: "Fira Mono", "Courier New", monospace; background: #f8fafc; color: #0f172a; }
     .CodeMirror-gutters { background: #eef2f7; border-right: 1px solid #cbd5e1; }
     .CodeMirror-linenumber { color: #64748b; }
     .exec-gutter { width: 30px; }
@@ -199,9 +209,11 @@
     body.tema-escuro .explicacao-chip { background: #082f49; color: #bae6fd; border-color: #0369a1; }
     body.tema-escuro .explicacao-codigo { background: #020617; color: #e2e8f0; border: 1px solid #334155; }
     body.tema-escuro .btn-access,
-    body.tema-escuro .btn-limpar { background: #1e293b; color: #dbeafe; border-color: #475569; }
+    body.tema-escuro .btn-limpar,
+    body.tema-escuro .btn-recolher { background: #1e293b; color: #dbeafe; border-color: #475569; }
     body.tema-escuro .btn-access:hover,
-    body.tema-escuro .btn-limpar:hover { background: #334155; border-color: #60a5fa; }
+    body.tema-escuro .btn-limpar:hover,
+    body.tema-escuro .btn-recolher:hover { background: #334155; border-color: #60a5fa; }
     body.tema-escuro .language-switch { background: #1e293b; border-color: #475569; }
     body.tema-escuro .lang-btn { color: #dbeafe; }
     body.tema-escuro .lang-btn.active { background: #60a5fa; color: #0b1120; }
@@ -235,7 +247,7 @@ body { overflow-x: hidden; }
 
   .CodeMirror {
     height: 300px !important;
-    font-size: 14px !important;
+    font-size: 0.875rem !important;
   }
 
   .nav, .navbar, .topbar {
@@ -245,7 +257,11 @@ body { overflow-x: hidden; }
 
   button {
     padding: 10px 12px !important;
-    font-size: 14px !important;
+    font-size: 0.875rem !important;
+  }
+
+  .btn-recolher {
+    padding: 0 !important;
   }
 
   .memory-container {
@@ -260,7 +276,7 @@ body { overflow-x: hidden; }
   }
 
   .title {
-    font-size: 16px !important;
+    font-size: 1rem !important;
   }
 
   .card {

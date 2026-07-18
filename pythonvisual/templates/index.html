@@ -35,9 +35,12 @@
 
   <div class="main">
     <div class="coluna-esquerda">
-      <div class="card">
-	        <div class="card-header"><i class="fa-solid fa-terminal"></i><span data-i18n="section.code">Código</span></div>
-        <div class="card-body" style="padding: 12px 16px 10px;">
+      <div class="card" id="codigo-card">
+	        <div class="card-header">
+	          <span class="card-header-title"><i class="fa-solid fa-terminal"></i><span data-i18n="section.code">Código</span></span>
+	          <button class="btn-recolher" type="button" onclick="alternarCard('codigo-card')" aria-expanded="true" aria-controls="codigo-corpo"><i class="fa-solid fa-chevron-up" aria-hidden="true"></i></button>
+	        </div>
+        <div class="card-body" id="codigo-corpo" style="padding: 12px 16px 10px;">
           <div class="exemplos-row">
 	            <label for="exemplos" data-i18n="examples.label">Exemplo:</label>
 	            <select id="exemplos" onchange="carregarExemplo()">
@@ -68,8 +71,11 @@
 	      </div>
 
 	      <div class="card" id="navegacao">
-	        <div class="card-header"><i class="fa-solid fa-route"></i><span data-i18n="section.navigation">Navegação</span></div>
-	        <div class="card-body nav-container">
+	        <div class="card-header">
+	          <span class="card-header-title"><i class="fa-solid fa-route"></i><span data-i18n="section.navigation">Navegação</span></span>
+	          <button class="btn-recolher" type="button" onclick="alternarCard('navegacao')" aria-expanded="true" aria-controls="navegacao-corpo"><i class="fa-solid fa-chevron-up" aria-hidden="true"></i></button>
+	        </div>
+	        <div class="card-body nav-container" id="navegacao-corpo">
 	          <div class="nav-buttons">
 	            <button class="btn-nav" id="btn-primeiro" type="button" onclick="irParaPrimeiro()"><i class="fa-solid fa-backward-fast"></i><span data-i18n="navSteps.first">Início</span></button>
 	            <button class="btn-nav" id="btn-anterior" type="button" onclick="passo(-1)"><i class="fa-solid fa-chevron-left"></i><span data-i18n="navSteps.previous">Anterior</span></button>
@@ -82,7 +88,10 @@
 	      </div>
 
 	      <div class="card" id="explicacao-card" style="display:none;">
-	        <div class="card-header"><i class="fa-solid fa-lightbulb"></i><span data-i18n="section.explanation">Explicação da linha atual</span></div>
+	        <div class="card-header">
+	          <span class="card-header-title"><i class="fa-solid fa-lightbulb"></i><span data-i18n="section.explanation">Explicação da linha atual</span></span>
+	          <button class="btn-recolher" type="button" onclick="alternarCard('explicacao-card')" aria-expanded="true" aria-controls="explicacao-corpo"><i class="fa-solid fa-chevron-up" aria-hidden="true"></i></button>
+	        </div>
 	        <div class="card-body explicacao-linha" id="explicacao-corpo"></div>
 	      </div>
 
@@ -101,12 +110,23 @@
 	      </div>
     </div>
 
-    <div class="coluna-direita">
+	    <div class="coluna-direita">
 	      <div class="card" id="saida" style="display:none;">
-	        <div class="card-header"><i class="fa-solid fa-diagram-project"></i><span data-i18n="section.visualization">Visualização</span></div>
+	        <div class="card-header">
+	          <span class="card-header-title"><i class="fa-solid fa-diagram-project"></i><span data-i18n="section.visualization">Visualização</span></span>
+	          <button class="btn-recolher" type="button" onclick="alternarCard('saida')" aria-expanded="true" aria-controls="saida-corpo"><i class="fa-solid fa-chevron-up" aria-hidden="true"></i></button>
+	        </div>
 	        <div class="card-body" id="saida-corpo"></div>
 	      </div>
-    </div>
+
+	      <div class="card" id="saida-card" style="display:none;">
+	        <div class="card-header">
+	          <span class="card-header-title"><i class="fa-solid fa-square-terminal"></i><span data-i18n="output.section">Saída</span></span>
+	          <button class="btn-recolher" type="button" onclick="alternarCard('saida-card')" aria-expanded="true" aria-controls="saida-programa-corpo"><i class="fa-solid fa-chevron-up" aria-hidden="true"></i></button>
+	        </div>
+	        <div class="card-body" id="saida-programa-corpo"></div>
+	      </div>
+	    </div>
   </div>
 
   <script src="/static/js/app.js"></script>

@@ -25,6 +25,7 @@ TAMANHO_MAXIMO_OBJETO = int(CONFIG.get("TAMANHO_MAXIMO_OBJETO", 50))
 
 RUNNER_CODE = r"""
 import io
+import inspect
 import json
 import sys
 import types
@@ -63,6 +64,17 @@ def serializar_sequencia(valores, limite=50):
     }
 
 
+def obter_assinatura_funcao(funcao):
+    try:
+        assinatura = str(inspect.signature(funcao))
+    except (TypeError, ValueError):
+        assinatura = "()"
+
+    if len(assinatura) > 160:
+        return assinatura[:157] + "..."
+    return assinatura
+
+
 def serializar_variavel(valor):
     tipo = type(valor).__name__
 
@@ -89,7 +101,7 @@ def serializar_variavel(valor):
             "categoria": "funcao",
             "tipo": "function",
             "nome": getattr(valor, "__name__", tipo),
-            "repr": repr_seguro(valor)
+            "assinatura": obter_assinatura_funcao(valor)
         }
 
     if isinstance(valor, type):

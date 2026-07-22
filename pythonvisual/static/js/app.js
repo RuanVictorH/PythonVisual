@@ -94,6 +94,7 @@ carregarExemplos();
 	        "stack.title": "Pilha de chamadas",
 	        "stack.subtitle": "Mostra a sequência dinâmica de funções ativas neste passo.",
 	        "stack.currentScope": "escopo atual",
+	        "stack.empty": "Nenhuma função ativa além do escopo global neste passo.",
 	        "memory.title": "Memória",
 	        "memory.empty": "Nenhuma variável criada ainda.",
 	        "memory.frames": "Quadros de memória",
@@ -212,6 +213,7 @@ carregarExemplos();
 	        "stack.title": "Call stack",
 	        "stack.subtitle": "Shows the dynamic sequence of active functions in this step.",
 	        "stack.currentScope": "current scope",
+	        "stack.empty": "No function is active beyond the global scope in this step.",
 	        "memory.title": "Memory",
 	        "memory.empty": "No variable created yet.",
 	        "memory.frames": "Memory frames",
@@ -342,6 +344,7 @@ async function carregarExemplos(){
       editor.setValue(exemplos[chave]);
       document.getElementById("saida").style.display = "none";
       document.getElementById("saida-card").style.display = "none";
+      document.getElementById("pilha-card").style.display = "none";
       ocultarEntradaPendente();
       resetarExecucaoVisual();
     }
@@ -399,6 +402,7 @@ async function carregarExemplos(){
       document.getElementById("entrada").value = "";
       document.getElementById("saida").style.display = "none";
       document.getElementById("saida-card").style.display = "none";
+      document.getElementById("pilha-card").style.display = "none";
       resetarExecucaoVisual();
       editor.focus();
     }
@@ -551,6 +555,22 @@ async function carregarExemplos(){
       }).join("") + "</div>";
     }
 
+    function renderizarQuadroFuncoes(funcoes, vazio) {
+      const linhas = funcoes.length === 0
+        ? "<div class=\"quadro-linha\"><div class=\"quadro-cel\"><span class=\"empty\">" + escaparHTML(vazio) + "</span></div></div>"
+        : funcoes.map(({ nome, info }) => {
+          const assinatura = typeof info.assinatura === "string" ? info.assinatura : "()";
+          return "<div class=\"quadro-linha\"><div class=\"quadro-cel quadro-cel-funcao\">"
+            + escaparHTML(nome + assinatura)
+            + "</div></div>";
+        }).join("");
+
+      return "<div class=\"quadro quadro-funcoes\">"
+        + "<div class=\"quadro-titulo\">" + escaparHTML(traduzir("memory.functions")) + "</div>"
+        + "<div class=\"quadro-linhas\">" + linhas + "</div>"
+        + "</div>";
+    }
+
 	    function normalizarTipoPython(tipo) {
 	      const equivalencias = {
 	        lista: "list",
@@ -575,8 +595,10 @@ async function carregarExemplos(){
       return escaparHTML(item.escopo) + "(" + textoArgumentos + ")";
     }
 
-    function renderizarPilhaChamadas(pilha) {
-      if (!Array.isArray(pilha) || pilha.length <= 1) return "";
+	    function renderizarPilhaChamadas(pilha) {
+	      if (!Array.isArray(pilha) || pilha.length <= 1) {
+	        return "<p class=\"empty\">" + escaparHTML(traduzir("stack.empty")) + "</p>";
+	      }
 	      const itens = pilha.map((item, indice) => {
 	        const atual = item.atual ? " atual" : "";
 	        const marcadorAtual = item.atual ? " - " + traduzir("stack.currentScope") : "";
@@ -591,7 +613,6 @@ async function carregarExemplos(){
       }).join("");
 
 	      return "<div class=\"pilha-bloco\">"
-	        + "<div class=\"section-label\"><i class=\"fa-solid fa-layer-group\"></i>" + escaparHTML(traduzir("stack.title")) + "</div>"
 	        + "<div class=\"pilha-subtitulo\">" + escaparHTML(traduzir("stack.subtitle")) + "</div>"
 	        + "<div class=\"pilha-lista\">" + itens + "</div>"
 	        + "</div>";
@@ -676,8 +697,7 @@ async function carregarExemplos(){
 	        + (objetosHTML || "<p class=\"empty\">" + escaparHTML(traduzir("memory.noObjects")) + "</p>")
 	        + "</div>";
 	      const painelFuncoes = "<div class=\"painel-memoria\">"
-	        + "<div class=\"painel-titulo\">" + escaparHTML(traduzir("memory.functions")) + "</div>"
-	        + renderizarListaSimples(funcoes, traduzir("memory.noFunctions"))
+	        + renderizarQuadroFuncoes(funcoes, traduzir("memory.noFunctions"))
 	        + "</div>";
 	      const painelClasses = "<div class=\"painel-memoria\">"
 	        + "<div class=\"painel-titulo\">" + escaparHTML(traduzir("memory.classes")) + "</div>"
@@ -759,8 +779,10 @@ async function carregarExemplos(){
 	      const codigo = editor.getValue();
 	      document.getElementById("saida").style.display = "block";
 	      document.getElementById("saida-card").style.display = "block";
+	      document.getElementById("pilha-card").style.display = "block";
 	      document.getElementById("saida-corpo").innerHTML = "<p class=\"empty\">" + escaparHTML(traduzir("run.executing")) + "</p>";
 	      document.getElementById("saida-programa-corpo").innerHTML = "<p class=\"empty\">" + escaparHTML(traduzir("run.executing")) + "</p>";
+	      document.getElementById("pilha-corpo").innerHTML = "<p class=\"empty\">" + escaparHTML(traduzir("run.executing")) + "</p>";
 	      limparMarcacoes();
 
       try {
@@ -784,6 +806,7 @@ async function carregarExemplos(){
 	        if (passos.length === 0) {
 	          document.getElementById("saida-corpo").innerHTML = "<p class=\"empty\">" + escaparHTML(traduzir("run.noSteps")) + "</p>";
 	          document.getElementById("saida-programa-corpo").innerHTML = "<p class=\"empty\">" + escaparHTML(traduzir("output.none")) + "</p>";
+	          document.getElementById("pilha-corpo").innerHTML = "<p class=\"empty\">" + escaparHTML(traduzir("stack.empty")) + "</p>";
 	          resetarExecucaoVisual();
 	          return;
 	        }
@@ -801,6 +824,8 @@ async function carregarExemplos(){
 	          "<div class=\"error-box\">" + escaparHTML(traduzir("run.serverError", { error: String(erro) })) + "</div>";
 	        document.getElementById("saida-programa-corpo").innerHTML =
 	          "<p class=\"empty\">" + escaparHTML(traduzir("output.none")) + "</p>";
+	        document.getElementById("pilha-corpo").innerHTML =
+	          "<p class=\"empty\">" + escaparHTML(traduzir("stack.empty")) + "</p>";
 	      }
 	    }
 
@@ -908,6 +933,7 @@ async function carregarExemplos(){
       const p = passos[indiceAtual];
       const corpo = document.getElementById("saida-corpo");
 	      const corpoSaida = document.getElementById("saida-programa-corpo");
+	      const corpoPilha = document.getElementById("pilha-corpo");
       const linhaExecutada = linhaExecutadaAtual();
       const linhaProxima = linhaProximaAtual();
       const textoExecutada = linhaExecutada === null ? "-" : String(linhaExecutada + 1);
@@ -923,6 +949,7 @@ async function carregarExemplos(){
 	        corpo.innerHTML = "<div class=\"error-box\"><strong>" + escaparHTML(traduzir("error.label")) + "</strong> " + escaparHTML(p.erro) + "</div>";
 	        corpoSaida.innerHTML = "<div class=\"section-label\">" + escaparHTML(traduzir("output.errorUntil")) + "</div>"
 	          + montarTerminalSaida(p.saida, "output.none");
+	        corpoPilha.innerHTML = renderizarPilhaChamadas(p.pilha_chamadas);
 	        requestAnimationFrame(desenharSetasMemoria);
 	        return;
 	      }
@@ -937,9 +964,9 @@ async function carregarExemplos(){
 	        + "<span class=\"linha-badge proxima\"><i class=\"fa-solid fa-arrow-right\"></i>" + escaparHTML(traduzir("status.running")) + ": " + textoProxima + "</span>"
 	        + "<span class=\"escopo-badge\">" + escaparHTML(escopo) + "</span>"
 	        + "</div>"
-	        + renderizarPilhaChamadas(p.pilha_chamadas)
 	        + renderizarMemoria(p.variaveis);
 	      corpoSaida.innerHTML = montarTerminalSaida(p.saida, "output.noPrint");
+	      corpoPilha.innerHTML = renderizarPilhaChamadas(p.pilha_chamadas);
       requestAnimationFrame(desenharSetasMemoria);
     }
 

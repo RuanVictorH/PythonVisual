@@ -115,6 +115,7 @@
     .quadro-cel-tipo { width: 1%; white-space: nowrap; padding-left: 0; padding-right: 8px; }
     .tipo-chip { display: inline-block; border-radius: 999px; padding: 2px 8px; background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; font-family: "Inter", sans-serif; font-size: 0.72rem; font-weight: 700; line-height: 1.35; }
     .quadro-cel-valor { font-family: "Fira Mono", "Courier New", monospace; color: #0f172a; }
+	.quadro-cel-funcao { font-family: "Fira Mono", "Courier New", monospace; color: #0f172a; font-weight: 600; word-break: break-word; }
     .quadro-cel-seta { color: #2563eb; font-weight: bold; font-size: 1rem; }
     .referencia-dot { display: inline-block; width: 9px; height: 9px; border-radius: 999px; background: #0f5f8f; border: 2px solid white; box-shadow: 0 0 0 1px #0f5f8f; vertical-align: middle; }
 
@@ -145,8 +146,8 @@
     .linha-badge { border-radius: 5px; padding: 2px 8px; font-size: 0.78rem; font-weight: 700; }
     .linha-badge.executada { background: #dcfce7; color: #14532d; }
     .linha-badge.proxima { background: #fee2e2; color: #991b1b; }
-    .pilha-bloco { border: 1px solid #bfdbfe; border-radius: 8px; padding: 12px; background: #f8fbff; margin-bottom: 14px; }
-    .pilha-subtitulo { color: #64748b; font-size: 0.82rem; margin: -4px 0 10px; }
+    .pilha-bloco { border: 1px solid #bfdbfe; border-radius: 8px; padding: 12px; background: #f8fbff; }
+    .pilha-subtitulo { color: #64748b; font-size: 0.82rem; margin: 0 0 10px; }
     .pilha-lista { display: grid; gap: 8px; }
     .pilha-item { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: flex-start; border: 1px solid #dbeafe; border-radius: 8px; padding: 9px 10px; background: #ffffff; }
     .pilha-item.atual { border-color: #dc2626; background: #fff7f7; }
@@ -168,6 +169,7 @@
     body.tema-escuro .header-text h1,
     body.tema-escuro .explicacao-texto,
     body.tema-escuro .pilha-chamada,
+	body.tema-escuro .quadro-cel-funcao,
     body.tema-escuro .quadro-cel-valor,
     body.tema-escuro .lista-item,
     body.tema-escuro .terminal-body { color: #e2e8f0; }

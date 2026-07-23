@@ -105,26 +105,39 @@
     .painel-memoria { min-width: 0; }
     .painel-titulo { font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.07em; color: #475569; margin-bottom: 8px; padding-bottom: 4px; border-bottom: 2px solid #dbe3ef; }
 
-    .quadro { border: 2px solid #17324d; border-radius: 8px; overflow: hidden; background: white; }
-    .quadro-titulo { background: #17324d; color: white; font-weight: 600; font-size: 0.82rem; padding: 5px 12px; }
+    .quadro { --quadro-cor: #17324d; border: 2px solid var(--quadro-cor); border-radius: 8px; overflow: hidden; background: white; }
+    .quadro-titulo { background: var(--quadro-cor); color: white; font-weight: 600; font-size: 0.82rem; padding: 5px 12px; }
+    .quadro-funcoes { --quadro-cor: #047857; }
+    .quadro-classes { --quadro-cor: #b45309; }
+    .quadro-importacoes { --quadro-cor: #0e7490; }
     .quadro-linhas { display: table; width: 100%; border-collapse: collapse; }
     .quadro-linha { display: table-row; }
     .quadro-linha:not(:last-child) .quadro-cel { border-bottom: 1px solid #e2e8f0; }
     .quadro-cel { display: table-cell; padding: 6px 12px; vertical-align: middle; font-size: 0.85rem; }
     .quadro-cel-nome { font-weight: 600; color: #17324d; white-space: nowrap; padding-right: 16px; }
     .quadro-cel-tipo { width: 1%; white-space: nowrap; padding-left: 0; padding-right: 8px; }
-    .tipo-chip { display: inline-block; border-radius: 999px; padding: 2px 8px; background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; font-family: "Inter", sans-serif; font-size: 0.72rem; font-weight: 700; line-height: 1.35; }
+    .tipo-chip { display: inline-block; border-radius: 999px; padding: 2px 8px; font-family: "Inter", sans-serif; font-size: 0.72rem; font-weight: 700; line-height: 1.35; }
+    .tipo-chip-primitivo { background: #e0f2fe; color: #0369a1; border: 1px solid #7dd3fc; }
+    .tipo-chip-derivado { background: #ede9fe; color: #6d28d9; border: 1px solid #c4b5fd; }
+    .tipo-chip-classe { background: #ffedd5; color: #9a3412; border: 1px solid #fdba74; }
+    .tipo-chip-importacao { background: #cffafe; color: #155e75; border: 1px solid #67e8f9; }
     .quadro-cel-valor { font-family: "Fira Mono", "Courier New", monospace; color: #0f172a; }
-	.quadro-cel-funcao { font-family: "Fira Mono", "Courier New", monospace; color: #0f172a; font-weight: 600; word-break: break-word; }
+	.quadro-cel-funcao { font-family: "Fira Mono", "Courier New", monospace; color: #047857; font-weight: 700; word-break: break-word; }
+    .quadro-cel-detalhe { color: #64748b; font-family: "Fira Mono", "Courier New", monospace; font-size: 0.78rem; word-break: break-word; }
     .quadro-cel-seta { color: #2563eb; font-weight: bold; font-size: 1rem; }
     .referencia-dot { display: inline-block; width: 9px; height: 9px; border-radius: 999px; background: #0f5f8f; border: 2px solid white; box-shadow: 0 0 0 1px #0f5f8f; vertical-align: middle; }
 
-    .objeto-card { border: 2px solid #059669; border-radius: 8px; overflow: hidden; margin-bottom: 10px; background: white; }
-    .objeto-titulo { background: #059669; color: white; font-weight: 600; font-size: 0.78rem; padding: 4px 10px; }
-    .objeto-corpo { padding: 8px 10px; display: flex; flex-wrap: wrap; gap: 6px; background: #f0fdf4; }
-    .objeto-item { background: white; border: 1px solid #6ee7b7; border-radius: 5px; padding: 3px 8px; font-family: "Fira Mono", "Courier New", monospace; font-size: 0.82rem; text-align: center; }
+    .objeto-card { --objeto-cor: #059669; --objeto-fundo: #f0fdf4; --objeto-fundo-escuro: #0b1f1a; --objeto-borda: #6ee7b7; border: 2px solid var(--objeto-cor); border-radius: 8px; overflow: hidden; margin-bottom: 10px; background: white; }
+    .objeto-tipo-list { --objeto-cor: #1d4ed8; --objeto-fundo: #eff6ff; --objeto-fundo-escuro: #111d35; --objeto-borda: #93c5fd; }
+    .objeto-tipo-tuple { --objeto-cor: #7e22ce; --objeto-fundo: #faf5ff; --objeto-fundo-escuro: #211332; --objeto-borda: #d8b4fe; }
+    .objeto-tipo-set { --objeto-cor: #be185d; --objeto-fundo: #fdf2f8; --objeto-fundo-escuro: #2b1220; --objeto-borda: #f9a8d4; }
+    .objeto-tipo-dict { --objeto-cor: #b45309; --objeto-fundo: #fffbeb; --objeto-fundo-escuro: #2a1b0c; --objeto-borda: #fcd34d; }
+    .objeto-tipo-classe { --objeto-cor: #047857; --objeto-fundo: #f0fdf4; --objeto-fundo-escuro: #0b1f1a; --objeto-borda: #6ee7b7; }
+    .objeto-titulo { background: var(--objeto-cor); color: white; font-weight: 600; font-size: 0.78rem; padding: 4px 10px; }
+    .objeto-corpo { padding: 8px 10px; display: flex; flex-wrap: wrap; gap: 6px; background: var(--objeto-fundo); }
+    .objeto-item { background: white; border: 1px solid var(--objeto-borda); border-radius: 5px; padding: 3px 8px; font-family: "Fira Mono", "Courier New", monospace; font-size: 0.82rem; text-align: center; }
     .objeto-item-idx { font-size: 0.65rem; color: #6b7280; display: block; }
-    .objeto-dict-par { display: flex; align-items: center; gap: 4px; background: white; border: 1px solid #6ee7b7; border-radius: 5px; padding: 3px 8px; font-family: "Fira Mono", "Courier New", monospace; font-size: 0.82rem; }
+    .objeto-dict-par { display: flex; align-items: center; gap: 4px; background: white; border: 1px solid var(--objeto-borda); border-radius: 5px; padding: 3px 8px; font-family: "Fira Mono", "Courier New", monospace; font-size: 0.82rem; }
     .objeto-dict-chave { color: #7c3aed; }
     .lista-card { border: 1.5px solid #cbd5e1; border-radius: 8px; background: white; overflow: hidden; }
     .lista-item { padding: 7px 10px; font-family: "Fira Mono", "Courier New", monospace; font-size: 0.83rem; color: #0f172a; border-bottom: 1px solid #e2e8f0; word-break: break-word; }
@@ -169,7 +182,6 @@
     body.tema-escuro .header-text h1,
     body.tema-escuro .explicacao-texto,
     body.tema-escuro .pilha-chamada,
-	body.tema-escuro .quadro-cel-funcao,
     body.tema-escuro .quadro-cel-valor,
     body.tema-escuro .lista-item,
     body.tema-escuro .terminal-body { color: #e2e8f0; }
@@ -197,7 +209,10 @@
     body.tema-escuro .CodeMirror-cursor { border-left-color: #e2e8f0; }
     body.tema-escuro .linha-proxima { background: #7f1d1d !important; }
     body.tema-escuro .linha-executada { background: #14532d !important; }
-    body.tema-escuro .quadro-titulo { background: #334155; color: #ffffff; }
+	body.tema-escuro .quadro-titulo { background: var(--quadro-cor); color: #ffffff; }
+	body.tema-escuro .quadro { border-color: var(--quadro-cor); }
+	body.tema-escuro .quadro-cel-funcao { color: #6ee7b7; }
+	body.tema-escuro .quadro-cel-detalhe { color: #94a3b8; }
     body.tema-escuro .quadro-cel-nome,
     body.tema-escuro .lista-item strong,
     body.tema-escuro .contador { color: #bfdbfe; }
@@ -207,7 +222,12 @@
     body.tema-escuro .objeto-dict-par,
     body.tema-escuro .pilha-item { background: #0f172a; border-color: #334155; color: #e2e8f0; }
     body.tema-escuro .pilha-item.atual { background: #2b1116; border-color: #dc2626; }
-    body.tema-escuro .tipo-chip { background: #082f49; color: #bae6fd; border-color: #0369a1; }
+	body.tema-escuro .tipo-chip-primitivo { background: #082f49; color: #bae6fd; border-color: #0369a1; }
+	body.tema-escuro .tipo-chip-derivado { background: #2e1065; color: #ddd6fe; border-color: #7c3aed; }
+	body.tema-escuro .tipo-chip-classe { background: #431407; color: #fed7aa; border-color: #c2410c; }
+	body.tema-escuro .tipo-chip-importacao { background: #083344; color: #cffafe; border-color: #0e7490; }
+	body.tema-escuro .objeto-corpo { background: var(--objeto-fundo-escuro); }
+	body.tema-escuro .objeto-card { border-color: var(--objeto-cor); }
     body.tema-escuro .explicacao-chip { background: #082f49; color: #bae6fd; border-color: #0369a1; }
     body.tema-escuro .explicacao-codigo { background: #020617; color: #e2e8f0; border: 1px solid #334155; }
     body.tema-escuro .btn-access,

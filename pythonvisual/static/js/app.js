@@ -546,15 +546,6 @@ async function carregarExemplos(){
       return marcador;
     }
 
-    function renderizarListaSimples(itens, vazio) {
-      if (itens.length === 0) return "<p class=\"empty\">" + vazio + "</p>";
-      return "<div class=\"lista-card\">" + itens.map(({ nome, info }) => {
-        const detalhe = info.modulo ? " <span>(" + escaparHTML(info.modulo) + ")</span>" : "";
-        return "<div class=\"lista-item\"><strong>" + escaparHTML(nome) + "</strong>" + detalhe
-          + "<br>" + escaparHTML(info.repr || info.nome || normalizarTipoPython(info.tipo)) + "</div>";
-      }).join("") + "</div>";
-    }
-
     function renderizarQuadroFuncoes(funcoes, vazio) {
       const linhas = funcoes.length === 0
         ? "<div class=\"quadro-linha\"><div class=\"quadro-cel\"><span class=\"empty\">" + escaparHTML(vazio) + "</span></div></div>"
@@ -567,6 +558,44 @@ async function carregarExemplos(){
 
       return "<div class=\"quadro quadro-funcoes\">"
         + "<div class=\"quadro-titulo\">" + escaparHTML(traduzir("memory.functions")) + "</div>"
+        + "<div class=\"quadro-linhas\">" + linhas + "</div>"
+        + "</div>";
+    }
+
+    function renderizarQuadroClasses(classes, vazio) {
+      const linhas = classes.length === 0
+        ? "<div class=\"quadro-linha\"><div class=\"quadro-cel\"><span class=\"empty\">" + escaparHTML(vazio) + "</span></div></div>"
+        : classes.map(({ nome }) =>
+          "<div class=\"quadro-linha\">"
+          + "<div class=\"quadro-cel quadro-cel-nome\">" + escaparHTML(nome) + "</div>"
+          + "<div class=\"quadro-cel quadro-cel-tipo\"><span class=\"tipo-chip tipo-chip-classe\">class</span></div>"
+          + "</div>"
+        ).join("");
+
+      return "<div class=\"quadro quadro-classes\">"
+        + "<div class=\"quadro-titulo\">" + escaparHTML(traduzir("memory.classes")) + "</div>"
+        + "<div class=\"quadro-linhas\">" + linhas + "</div>"
+        + "</div>";
+    }
+
+    function renderizarQuadroImportacoes(importacoes, vazio) {
+      const linhas = importacoes.length === 0
+        ? "<div class=\"quadro-linha\"><div class=\"quadro-cel\"><span class=\"empty\">" + escaparHTML(vazio) + "</span></div></div>"
+        : importacoes.map(({ nome, info }) => {
+          const tipo = normalizarTipoPython(info.tipo);
+          const origem = info.modulo || info.nome || "";
+          const detalhe = origem && origem !== nome
+            ? "<div class=\"quadro-cel quadro-cel-detalhe\">" + escaparHTML(origem) + "</div>"
+            : "";
+          return "<div class=\"quadro-linha\">"
+            + "<div class=\"quadro-cel quadro-cel-nome\">" + escaparHTML(nome) + "</div>"
+            + "<div class=\"quadro-cel quadro-cel-tipo\"><span class=\"tipo-chip tipo-chip-importacao\">" + escaparHTML(tipo) + "</span></div>"
+            + detalhe
+            + "</div>";
+        }).join("");
+
+      return "<div class=\"quadro quadro-importacoes\">"
+        + "<div class=\"quadro-titulo\">" + escaparHTML(traduzir("memory.imports")) + "</div>"
         + "<div class=\"quadro-linhas\">" + linhas + "</div>"
         + "</div>";
     }
@@ -641,14 +670,14 @@ async function carregarExemplos(){
       for (const { nome, info } of primitivos) {
         linhasQuadro += "<div class=\"quadro-linha\">"
           + "<div class=\"quadro-cel quadro-cel-nome\">" + escaparHTML(nome) + "</div>"
-          + "<div class=\"quadro-cel quadro-cel-tipo\"><span class=\"tipo-chip\">" + escaparHTML(normalizarTipoPython(info.tipo || "var")) + "</span></div>"
+          + "<div class=\"quadro-cel quadro-cel-tipo\"><span class=\"tipo-chip tipo-chip-primitivo\">" + escaparHTML(normalizarTipoPython(info.tipo || "var")) + "</span></div>"
           + "<div class=\"quadro-cel quadro-cel-valor\">" + escaparHTML(info.repr) + "</div>"
           + "</div>";
       }
       for (const { nome, info } of objetos) {
         linhasQuadro += "<div class=\"quadro-linha\">"
           + "<div class=\"quadro-cel quadro-cel-nome\">" + escaparHTML(nome) + "</div>"
-	          + "<div class=\"quadro-cel quadro-cel-tipo\"><span class=\"tipo-chip\">" + escaparHTML(normalizarTipoPython(info.tipo)) + "</span></div>"
+	          + "<div class=\"quadro-cel quadro-cel-tipo\"><span class=\"tipo-chip tipo-chip-derivado\">" + escaparHTML(normalizarTipoPython(info.tipo)) + "</span></div>"
 	          + "<div class=\"quadro-cel quadro-cel-seta\"><span class=\"referencia-dot\" data-ref-origem=\"" + escaparHTML(nome) + "\" title=\"" + escaparHTML(traduzir("memory.referenceTitle", { name: nome })) + "\"></span></div>"
           + "<div class=\"quadro-cel quadro-cel-valor\" style=\"color:#059669;font-style:italic;\">" + escaparHTML(nome) + "</div>"
           + "</div>";
@@ -686,7 +715,10 @@ async function carregarExemplos(){
         if (info.truncado) {
           corpo += "<div class=\"objeto-item\">...</div>";
         }
-	        objetosHTML += "<div class=\"objeto-card\" data-ref-destino=\"" + escaparHTML(nome) + "\">"
+	        const classeVisual = ["list", "tuple", "set", "dict"].includes(tipoPython)
+	          ? "objeto-tipo-" + tipoPython
+	          : "objeto-tipo-classe";
+	        objetosHTML += "<div class=\"objeto-card " + classeVisual + "\" data-ref-destino=\"" + escaparHTML(nome) + "\">"
 	          + "<div class=\"objeto-titulo\">" + escaparHTML(nome) + " — " + escaparHTML(tipoPython) + "</div>"
 	          + "<div class=\"objeto-corpo\">" + (corpo || "<span class=\"empty\">" + escaparHTML(traduzir("memory.objectEmpty")) + "</span>") + "</div>"
 	          + "</div>";
@@ -700,12 +732,10 @@ async function carregarExemplos(){
 	        + renderizarQuadroFuncoes(funcoes, traduzir("memory.noFunctions"))
 	        + "</div>";
 	      const painelClasses = "<div class=\"painel-memoria\">"
-	        + "<div class=\"painel-titulo\">" + escaparHTML(traduzir("memory.classes")) + "</div>"
-	        + renderizarListaSimples(classes, traduzir("memory.noClasses"))
+	        + renderizarQuadroClasses(classes, traduzir("memory.noClasses"))
 	        + "</div>";
 	      const painelImportacoes = "<div class=\"painel-memoria\">"
-	        + "<div class=\"painel-titulo\">" + escaparHTML(traduzir("memory.imports")) + "</div>"
-	        + renderizarListaSimples(importacoes, traduzir("memory.noImports"))
+	        + renderizarQuadroImportacoes(importacoes, traduzir("memory.noImports"))
 	        + "</div>";
 
 	      return "<div class=\"memoria-bloco\">"

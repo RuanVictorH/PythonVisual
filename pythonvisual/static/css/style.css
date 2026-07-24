@@ -135,10 +135,13 @@
     .objeto-tipo-classe { --objeto-cor: #047857; --objeto-fundo: #f0fdf4; --objeto-fundo-escuro: #0b1f1a; --objeto-borda: #6ee7b7; }
     .objeto-titulo { background: var(--objeto-cor); color: white; font-weight: 600; font-size: 0.78rem; padding: 4px 10px; }
     .objeto-corpo { padding: 8px 10px; display: flex; flex-wrap: wrap; gap: 6px; background: var(--objeto-fundo); }
-    .objeto-item { background: white; border: 1px solid var(--objeto-borda); border-radius: 5px; padding: 3px 8px; font-family: "Fira Mono", "Courier New", monospace; font-size: 0.82rem; text-align: center; }
-    .objeto-item-idx { font-size: 0.65rem; color: #6b7280; display: block; }
+    .objeto-item { background: white; border: 1px solid var(--objeto-borda); border-radius: 5px; padding: 3px 8px; font-family: "Fira Mono", "Courier New", monospace; font-size: 0.82rem; text-align: center; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 4px 5px; }
+    .objeto-item-idx { grid-column: 1 / -1; justify-self: center; font-size: 0.65rem; color: #6b7280; display: block; }
     .objeto-dict-par { display: flex; align-items: center; gap: 4px; background: white; border: 1px solid var(--objeto-borda); border-radius: 5px; padding: 3px 8px; font-family: "Fira Mono", "Courier New", monospace; font-size: 0.82rem; }
     .objeto-dict-chave { color: #7c3aed; }
+    .objeto-valor { min-width: 0; overflow-wrap: anywhere; }
+    .objeto-valor-tipado { display: inline-flex; align-items: center; gap: 5px; min-width: 0; }
+    .tipo-chip-interno { flex: 0 0 auto; font-size: 0.64rem; padding: 1px 6px; }
     .lista-card { border: 1.5px solid #cbd5e1; border-radius: 8px; background: white; overflow: hidden; }
     .lista-item { padding: 7px 10px; font-family: "Fira Mono", "Courier New", monospace; font-size: 0.83rem; color: #0f172a; border-bottom: 1px solid #e2e8f0; word-break: break-word; }
     .lista-item:last-child { border-bottom: none; }

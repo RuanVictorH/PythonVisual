@@ -3,6 +3,8 @@ from flask import Flask, jsonify, render_template, request
 from executor import executar_codigo
 
 app = Flask(__name__)
+app.config["JSON_SORT_KEYS"] = False
+app.json.sort_keys = False
 
 
 @app.route("/")

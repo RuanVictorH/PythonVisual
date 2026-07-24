@@ -613,6 +613,42 @@ async function carregarExemplos(){
 	      return equivalencias[tipo] || tipo || "object";
 	    }
 
+	    function normalizarItemObjeto(item) {
+	      if (item && typeof item === "object" && !Array.isArray(item)) {
+	        return {
+	          repr: Object.prototype.hasOwnProperty.call(item, "repr") ? String(item.repr) : "",
+	          tipo: normalizarTipoPython(item.tipo)
+	        };
+	      }
+	      return { repr: String(item ?? ""), tipo: "object" };
+	    }
+
+	    function classeChipTipoInterno(tipo) {
+	      const primitivos = ["int", "float", "bool", "str", "NoneType", "complex", "bytes", "bytearray"];
+	      return primitivos.includes(tipo) ? "tipo-chip-primitivo" : "tipo-chip-derivado";
+	    }
+
+	    function renderizarValorTipado(item) {
+	      const dado = normalizarItemObjeto(item);
+	      return "<span class=\"objeto-valor\">" + escaparHTML(dado.repr) + "</span>"
+	        + "<span class=\"tipo-chip tipo-chip-interno " + classeChipTipoInterno(dado.tipo) + "\">"
+	        + escaparHTML(dado.tipo)
+	        + "</span>";
+	    }
+
+	    function paresDicionario(info) {
+	      if (Array.isArray(info.pares)) return info.pares;
+	      return Object.entries(info.pares || {}).map(([chave, valor]) => ({
+	        chave: { repr: chave, tipo: "object" },
+	        valor
+	      }));
+	    }
+
+	    function atributosObjeto(info) {
+	      if (Array.isArray(info.atributos)) return info.atributos;
+	      return Object.entries(info.atributos || {}).map(([nome, valor]) => ({ nome, valor }));
+	    }
+
 	    function formatarChamadaPilha(item) {
 	      if (!item || item.escopo === "Global") return traduzir("scope.global");
 	      const argumentos = Array.isArray(item.argumentos) ? item.argumentos : [];
@@ -649,36 +685,44 @@ async function carregarExemplos(){
 	      if (!variaveis || Object.keys(variaveis).length === 0) {
 	        return '<div class="memoria-bloco"><div class="section-label">' + escaparHTML(traduzir("memory.title")) + '</div><p class="empty">' + escaparHTML(traduzir("memory.empty")) + '</p></div>';
 	      }
-      const primitivos = [];
       const objetos = [];
+      const variaveisQuadro = [];
       const funcoes = [];
 	      const classes = [];
       const importacoes = [];
       for (const [nome, info] of Object.entries(variaveis)) {
-        if (info.categoria === "primitivo") primitivos.push({ nome, info });
-        else if (info.categoria === "objeto") objetos.push({ nome, info });
+        if (info.categoria === "primitivo") {
+          variaveisQuadro.push({ nome, info });
+        }
+        else if (info.categoria === "objeto") {
+          objetos.push({ nome, info });
+          variaveisQuadro.push({ nome, info });
+        }
 	        else if (info.categoria === "classe") classes.push({ nome, info });
 	        else if (info.categoria === "funcao" && normalizarTipoPython(info.tipo) === "class") classes.push({ nome, info });
         else if (info.categoria === "funcao") funcoes.push({ nome, info });
         else if (info.categoria === "importacao") importacoes.push({ nome, info });
-        else primitivos.push({ nome, info });
+        else {
+          variaveisQuadro.push({ nome, info });
+        }
       }
 
       let linhasQuadro = "";
-      for (const { nome, info } of primitivos) {
-        linhasQuadro += "<div class=\"quadro-linha\">"
-          + "<div class=\"quadro-cel quadro-cel-nome\">" + escaparHTML(nome) + "</div>"
-          + "<div class=\"quadro-cel quadro-cel-tipo\"><span class=\"tipo-chip tipo-chip-primitivo\">" + escaparHTML(normalizarTipoPython(info.tipo || "var")) + "</span></div>"
-          + "<div class=\"quadro-cel quadro-cel-valor\">" + escaparHTML(info.repr) + "</div>"
-          + "</div>";
+      for (const { nome, info } of variaveisQuadro) {
+        if (info.categoria === "objeto") {
+          linhasQuadro += "<div class=\"quadro-linha\">"
+            + "<div class=\"quadro-cel quadro-cel-nome\">" + escaparHTML(nome) + "</div>"
+            + "<div class=\"quadro-cel quadro-cel-tipo\"><span class=\"tipo-chip tipo-chip-derivado\">" + escaparHTML(normalizarTipoPython(info.tipo)) + "</span></div>"
+            + "<div class=\"quadro-cel quadro-cel-seta\"><span class=\"referencia-dot\" data-ref-origem=\"" + escaparHTML(nome) + "\" title=\"" + escaparHTML(traduzir("memory.referenceTitle", { name: nome })) + "\"></span></div>"
+            + "</div>";
+        } else {
+          linhasQuadro += "<div class=\"quadro-linha\">"
+            + "<div class=\"quadro-cel quadro-cel-nome\">" + escaparHTML(nome) + "</div>"
+            + "<div class=\"quadro-cel quadro-cel-tipo\"><span class=\"tipo-chip tipo-chip-primitivo\">" + escaparHTML(normalizarTipoPython(info.tipo || "var")) + "</span></div>"
+            + "<div class=\"quadro-cel quadro-cel-valor\">" + escaparHTML(info.repr) + "</div>"
+            + "</div>";
+        }
       }
-	      for (const { nome, info } of objetos) {
-	        linhasQuadro += "<div class=\"quadro-linha\">"
-	          + "<div class=\"quadro-cel quadro-cel-nome\">" + escaparHTML(nome) + "</div>"
-		          + "<div class=\"quadro-cel quadro-cel-tipo\"><span class=\"tipo-chip tipo-chip-derivado\">" + escaparHTML(normalizarTipoPython(info.tipo)) + "</span></div>"
-		          + "<div class=\"quadro-cel quadro-cel-seta\"><span class=\"referencia-dot\" data-ref-origem=\"" + escaparHTML(nome) + "\" title=\"" + escaparHTML(traduzir("memory.referenceTitle", { name: nome })) + "\"></span></div>"
-	          + "</div>";
-	      }
 
 	      const quadroHTML = "<div class=\"painel-memoria\">"
 	        + "<div class=\"painel-titulo\">" + escaparHTML(traduzir("memory.frames")) + "</div>"
@@ -694,19 +738,19 @@ async function carregarExemplos(){
 	        const tipoPython = normalizarTipoPython(info.tipo);
         if (tipoPython === "list" || tipoPython === "tuple") {
           corpo = info.elementos.map((e, i) =>
-            "<div class=\"objeto-item\"><span class=\"objeto-item-idx\">" + i + "</span>" + escaparHTML(e) + "</div>"
+            "<div class=\"objeto-item\"><span class=\"objeto-item-idx\">" + i + "</span>" + renderizarValorTipado(e) + "</div>"
           ).join("");
         } else if (tipoPython === "set") {
           corpo = info.elementos.map(e =>
-            "<div class=\"objeto-item\">" + escaparHTML(e) + "</div>"
+            "<div class=\"objeto-item\">" + renderizarValorTipado(e) + "</div>"
           ).join("");
         } else if (tipoPython === "dict") {
-          corpo = Object.entries(info.pares).map(([k, v]) =>
-            "<div class=\"objeto-dict-par\"><span class=\"objeto-dict-chave\">" + escaparHTML(k) + "</span><span>:</span><span>" + escaparHTML(v) + "</span></div>"
+          corpo = paresDicionario(info).map(({ chave, valor }) =>
+            "<div class=\"objeto-dict-par\"><span class=\"objeto-dict-chave\">" + escaparHTML(normalizarItemObjeto(chave).repr) + "</span><span>:</span><span class=\"objeto-valor-tipado\">" + renderizarValorTipado(valor) + "</span></div>"
           ).join("");
         } else if (info.atributos) {
-          corpo = Object.entries(info.atributos).map(([k, v]) =>
-            "<div class=\"objeto-dict-par\"><span class=\"objeto-dict-chave\">" + escaparHTML(k) + "</span><span>=</span><span>" + escaparHTML(v) + "</span></div>"
+          corpo = atributosObjeto(info).map(({ nome: atributo, valor }) =>
+            "<div class=\"objeto-dict-par\"><span class=\"objeto-dict-chave\">" + escaparHTML(atributo) + "</span><span>=</span><span class=\"objeto-valor-tipado\">" + renderizarValorTipado(valor) + "</span></div>"
           ).join("");
         }
         if (info.truncado) {

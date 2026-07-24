@@ -56,8 +56,15 @@ def repr_seguro(valor, limite=120):
     return texto
 
 
+def serializar_item_objeto(valor):
+    return {
+        "repr": repr_seguro(valor),
+        "tipo": type(valor).__name__
+    }
+
+
 def serializar_sequencia(valores, limite=50):
-    itens = [repr_seguro(item) for item in list(valores)[:limite]]
+    itens = [serializar_item_objeto(item) for item in list(valores)[:limite]]
     return {
         "elementos": itens,
         "truncado": len(valores) > limite
@@ -149,11 +156,14 @@ def serializar_variavel(valor):
         return {"categoria": "objeto", "tipo": "set", **dados}
 
     if isinstance(valor, dict):
-        pares = {}
+        pares = []
         for indice, (chave, item) in enumerate(valor.items()):
             if indice >= 50:
                 break
-            pares[repr_seguro(chave)] = repr_seguro(item)
+            pares.append({
+                "chave": serializar_item_objeto(chave),
+                "valor": serializar_item_objeto(item)
+            })
         return {
             "categoria": "objeto",
             "tipo": "dict",
@@ -162,11 +172,14 @@ def serializar_variavel(valor):
         }
 
     if hasattr(valor, "__dict__") and getattr(type(valor), "__module__", "") == "__main__":
-        atributos = {}
+        atributos = []
         for indice, (nome, item) in enumerate(vars(valor).items()):
             if indice >= 50:
                 break
-            atributos[nome] = repr_seguro(item)
+            atributos.append({
+                "nome": nome,
+                "valor": serializar_item_objeto(item)
+            })
         return {
             "categoria": "objeto",
             "tipo": tipo,
@@ -264,7 +277,10 @@ def input_visual(prompt=""):
         linha_entrada = entrada_atual.get("linha")
         if linha_entrada is None or linha_entrada == linha:
             indice_entrada += 1
-            return str(entrada_atual.get("valor", ""))
+            valor_entrada = str(entrada_atual.get("valor", ""))
+            stdout_capture.write(valor_entrada)
+            stdout_capture.write("\n")
+            return valor_entrada
 
     raise EntradaPendente(linha, texto_prompt, frame_chamador)
 

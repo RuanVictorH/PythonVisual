@@ -95,31 +95,32 @@
 	        <div class="card-body explicacao-linha" id="explicacao-corpo"></div>
 	      </div>
 
-	      <div class="card" id="entrada-card" style="display:none;">
-	        <div class="card-header"><i class="fa-solid fa-keyboard"></i><span data-i18n="section.input">Entrada solicitada</span></div>
-	        <div class="card-body">
-	          <div class="entrada-linha-info">
-	            <span class="entrada-linha-badge" id="entrada-linha-badge">Linha -</span>
-	            <span id="entrada-prompt-texto" data-i18n="input.promptDefault">Informe o valor solicitado por input().</span>
-	          </div>
-	          <div class="entrada-form">
-	            <input id="entrada" class="entrada-area" type="text" autocomplete="off" placeholder="Digite o valor para esta linha" data-i18n-placeholder="input.placeholder">
-	            <button class="btn-entrada" type="button" onclick="enviarEntradaPendente()"><i class="fa-solid fa-paper-plane"></i><span data-i18n="input.send">Enviar</span></button>
-	          </div>
-	        </div>
-	      </div>
-    </div>
+	    </div>
 
-	    <div class="coluna-direita">
+		    <div class="coluna-direita">
 	      <div class="card" id="saida" style="display:none;">
 	        <div class="card-header">
 	          <span class="card-header-title"><i class="fa-solid fa-diagram-project"></i><span data-i18n="section.visualization">Visualização</span></span>
 	          <button class="btn-recolher" type="button" onclick="alternarCard('saida')" aria-expanded="true" aria-controls="saida-corpo"><i class="fa-solid fa-chevron-up" aria-hidden="true"></i></button>
 	        </div>
-	        <div class="card-body" id="saida-corpo"></div>
-	      </div>
+		        <div class="card-body" id="saida-corpo"></div>
+		      </div>
 
-	      <div class="card" id="saida-card" style="display:none;">
+		      <div class="card" id="entrada-card" style="display:none;">
+		        <div class="card-header"><i class="fa-solid fa-keyboard"></i><span data-i18n="section.input">Entrada solicitada</span></div>
+		        <div class="card-body">
+		          <div class="entrada-linha-info">
+		            <span class="entrada-linha-badge" id="entrada-linha-badge">Linha -</span>
+		            <span id="entrada-prompt-texto" data-i18n="input.promptDefault">Informe o valor solicitado por input().</span>
+		          </div>
+		          <div class="entrada-form">
+		            <input id="entrada" class="entrada-area" type="text" autocomplete="off" placeholder="Digite o valor para esta linha" data-i18n-placeholder="input.placeholder">
+		            <button class="btn-entrada" type="button" onclick="enviarEntradaPendente()"><i class="fa-solid fa-paper-plane"></i><span data-i18n="input.send">Enviar</span></button>
+		          </div>
+		        </div>
+		      </div>
+
+		      <div class="card" id="saida-card" style="display:none;">
 	        <div class="card-header">
 	          <span class="card-header-title"><i class="fa-solid fa-square-terminal"></i><span data-i18n="output.section">Saída</span></span>
 	          <button class="btn-recolher" type="button" onclick="alternarCard('saida-card')" aria-expanded="true" aria-controls="saida-programa-corpo"><i class="fa-solid fa-chevron-up" aria-hidden="true"></i></button>

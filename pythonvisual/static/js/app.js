@@ -64,7 +64,6 @@ carregarExemplos();
 	        "input.placeholder": "Digite o valor para esta linha",
 	        "input.send": "Enviar",
 	        "input.line": "Linha",
-	        "input.prompt": "Prompt",
 	        "counter.empty": "Execute o código para navegar pelos passos",
 	        "counter.step": "Passo {current} de {total}",
 	        "state.running": "Execução",
@@ -183,7 +182,6 @@ carregarExemplos();
 	        "input.placeholder": "Enter the value for this line",
 	        "input.send": "Send",
 	        "input.line": "Line",
-	        "input.prompt": "Prompt",
 	        "counter.empty": "Run the code to navigate through the steps",
 	        "counter.step": "Step {current} of {total}",
 	        "state.running": "Execution",
@@ -309,10 +307,10 @@ carregarExemplos();
 	      editor.setOption("placeholder", traduzir("editor.shortcutsPlaceholder"));
 	      atualizarBotaoTema();
 	      atualizarBotoesRecolher();
-	      if (entradaPendente) {
-	        document.getElementById("entrada-linha-badge").textContent = traduzir("input.line") + " " + entradaPendente.linha;
-	        document.getElementById("entrada-prompt-texto").textContent =
-	          entradaPendente.prompt ? traduzir("input.prompt") + ": " + entradaPendente.prompt : traduzir("input.promptDefault");
+		      if (entradaPendente) {
+		        document.getElementById("entrada-linha-badge").textContent = traduzir("input.line") + " " + entradaPendente.linha;
+		        document.getElementById("entrada-prompt-texto").textContent =
+		          entradaPendente.prompt || traduzir("input.promptDefault");
 	      } else {
 	        document.getElementById("entrada-prompt-texto").textContent = traduzir("input.promptDefault");
 	      }
@@ -375,8 +373,8 @@ async function carregarExemplos(){
 	      };
 	      document.getElementById("entrada-card").style.display = "block";
 	      document.getElementById("entrada-linha-badge").textContent = traduzir("input.line") + " " + passoAtual.linha;
-	      document.getElementById("entrada-prompt-texto").textContent =
-	        entradaPendente.prompt ? traduzir("input.prompt") + ": " + entradaPendente.prompt : traduzir("input.promptDefault");
+		      document.getElementById("entrada-prompt-texto").textContent =
+		        entradaPendente.prompt || traduzir("input.promptDefault");
 	      const campoEntrada = document.getElementById("entrada");
 	      campoEntrada.value = "";
 	      campoEntrada.focus();
@@ -674,14 +672,13 @@ async function carregarExemplos(){
           + "<div class=\"quadro-cel quadro-cel-valor\">" + escaparHTML(info.repr) + "</div>"
           + "</div>";
       }
-      for (const { nome, info } of objetos) {
-        linhasQuadro += "<div class=\"quadro-linha\">"
-          + "<div class=\"quadro-cel quadro-cel-nome\">" + escaparHTML(nome) + "</div>"
-	          + "<div class=\"quadro-cel quadro-cel-tipo\"><span class=\"tipo-chip tipo-chip-derivado\">" + escaparHTML(normalizarTipoPython(info.tipo)) + "</span></div>"
-	          + "<div class=\"quadro-cel quadro-cel-seta\"><span class=\"referencia-dot\" data-ref-origem=\"" + escaparHTML(nome) + "\" title=\"" + escaparHTML(traduzir("memory.referenceTitle", { name: nome })) + "\"></span></div>"
-          + "<div class=\"quadro-cel quadro-cel-valor\" style=\"color:#059669;font-style:italic;\">" + escaparHTML(nome) + "</div>"
-          + "</div>";
-      }
+	      for (const { nome, info } of objetos) {
+	        linhasQuadro += "<div class=\"quadro-linha\">"
+	          + "<div class=\"quadro-cel quadro-cel-nome\">" + escaparHTML(nome) + "</div>"
+		          + "<div class=\"quadro-cel quadro-cel-tipo\"><span class=\"tipo-chip tipo-chip-derivado\">" + escaparHTML(normalizarTipoPython(info.tipo)) + "</span></div>"
+		          + "<div class=\"quadro-cel quadro-cel-seta\"><span class=\"referencia-dot\" data-ref-origem=\"" + escaparHTML(nome) + "\" title=\"" + escaparHTML(traduzir("memory.referenceTitle", { name: nome })) + "\"></span></div>"
+	          + "</div>";
+	      }
 
 	      const quadroHTML = "<div class=\"painel-memoria\">"
 	        + "<div class=\"painel-titulo\">" + escaparHTML(traduzir("memory.frames")) + "</div>"

@@ -24,6 +24,7 @@ TAMANHO_MAXIMO_OBJETO = int(CONFIG.get("TAMANHO_MAXIMO_OBJETO", 50))
 
 
 RUNNER_CODE = r"""
+import ast
 import io
 import inspect
 import json
@@ -31,6 +32,9 @@ import sys
 import types
 
 ARQUIVO_USUARIO = "<codigo_usuario>"
+referencias_objetos = {}
+proxima_referencia_objeto = 1
+ordem_importacoes = {}
 
 
 class LimiteDePassos(Exception):
@@ -63,6 +67,15 @@ def serializar_item_objeto(valor):
     }
 
 
+def obter_referencia_objeto(valor):
+    global proxima_referencia_objeto
+    identificador = id(valor)
+    if identificador not in referencias_objetos:
+        referencias_objetos[identificador] = f"objeto-{proxima_referencia_objeto}"
+        proxima_referencia_objeto += 1
+    return referencias_objetos[identificador]
+
+
 def serializar_sequencia(valores, limite=50):
     itens = [serializar_item_objeto(item) for item in list(valores)[:limite]]
     return {
@@ -82,28 +95,62 @@ def obter_assinatura_funcao(funcao):
     return assinatura
 
 
-def serializar_variavel(valor):
+def obter_ordem_importacoes(codigo):
+    try:
+        arvore = ast.parse(codigo)
+    except SyntaxError:
+        return {}
+
+    nos = [
+        no for no in ast.walk(arvore)
+        if isinstance(no, (ast.Import, ast.ImportFrom))
+    ]
+    nos.sort(key=lambda no: (no.lineno, no.col_offset))
+
+    resultado = {}
+    proxima_ordem = 0
+    for no in nos:
+        for apelido in no.names:
+            if apelido.name == "*":
+                continue
+            if isinstance(no, ast.Import):
+                nome_vinculado = apelido.asname or apelido.name.split(".", 1)[0]
+            else:
+                nome_vinculado = apelido.asname or apelido.name
+            if nome_vinculado not in resultado:
+                resultado[nome_vinculado] = proxima_ordem
+                proxima_ordem += 1
+    return resultado
+
+
+def adicionar_ordem_importacao(dados, nome_variavel):
+    if nome_variavel in ordem_importacoes:
+        dados["ordem_importacao"] = ordem_importacoes[nome_variavel]
+    return dados
+
+
+def serializar_variavel(valor, nome_variavel=None):
     tipo = type(valor).__name__
 
     if isinstance(valor, types.ModuleType):
-        return {
+        return adicionar_ordem_importacao({
             "categoria": "importacao",
             "tipo": "module",
             "nome": getattr(valor, "__name__", tipo),
             "repr": repr_seguro(valor)
-        }
+        }, nome_variavel)
 
     if isinstance(valor, types.FunctionType):
         modulo = getattr(valor, "__module__", "")
         arquivo_codigo = getattr(getattr(valor, "__code__", None), "co_filename", "")
         if modulo and (modulo != "__main__" or arquivo_codigo != ARQUIVO_USUARIO):
-            return {
+            return adicionar_ordem_importacao({
                 "categoria": "importacao",
                 "tipo": "function",
                 "nome": getattr(valor, "__name__", tipo),
                 "modulo": modulo,
                 "repr": repr_seguro(valor)
-            }
+            }, nome_variavel)
         return {
             "categoria": "funcao",
             "tipo": "function",
@@ -121,39 +168,57 @@ def serializar_variavel(valor):
                 "repr": repr_seguro(valor)
             }
         if modulo != "builtins":
-            return {
+            return adicionar_ordem_importacao({
                 "categoria": "importacao",
                 "tipo": "class",
                 "nome": getattr(valor, "__name__", tipo),
                 "modulo": modulo,
                 "repr": repr_seguro(valor)
-            }
+            }, nome_variavel)
 
     if isinstance(valor, (types.BuiltinFunctionType, types.BuiltinMethodType)):
         modulo = getattr(valor, "__module__", "")
         categoria = "importacao" if modulo and modulo != "builtins" else "primitivo"
-        return {
+        dados = {
             "categoria": categoria,
             "tipo": "function" if categoria == "importacao" else tipo,
             "nome": getattr(valor, "__name__", tipo),
             "modulo": modulo,
             "repr": repr_seguro(valor)
         }
+        if categoria == "importacao":
+            return adicionar_ordem_importacao(dados, nome_variavel)
+        return dados
 
     if isinstance(valor, (int, float, bool, str, type(None))):
         return {"categoria": "primitivo", "tipo": tipo, "repr": repr_seguro(valor)}
 
     if isinstance(valor, list):
         dados = serializar_sequencia(valor)
-        return {"categoria": "objeto", "tipo": "list", **dados}
+        return {
+            "categoria": "objeto",
+            "tipo": "list",
+            "referencia": obter_referencia_objeto(valor),
+            **dados
+        }
 
     if isinstance(valor, tuple):
         dados = serializar_sequencia(valor)
-        return {"categoria": "objeto", "tipo": "tuple", **dados}
+        return {
+            "categoria": "objeto",
+            "tipo": "tuple",
+            "referencia": obter_referencia_objeto(valor),
+            **dados
+        }
 
     if isinstance(valor, set):
         dados = serializar_sequencia(valor)
-        return {"categoria": "objeto", "tipo": "set", **dados}
+        return {
+            "categoria": "objeto",
+            "tipo": "set",
+            "referencia": obter_referencia_objeto(valor),
+            **dados
+        }
 
     if isinstance(valor, dict):
         pares = []
@@ -167,6 +232,7 @@ def serializar_variavel(valor):
         return {
             "categoria": "objeto",
             "tipo": "dict",
+            "referencia": obter_referencia_objeto(valor),
             "pares": pares,
             "truncado": len(valor) > 50
         }
@@ -183,12 +249,48 @@ def serializar_variavel(valor):
         return {
             "categoria": "objeto",
             "tipo": tipo,
+            "referencia": obter_referencia_objeto(valor),
             "atributos": atributos,
             "truncado": len(vars(valor)) > 50,
             "repr": repr_seguro(valor)
         }
 
     return {"categoria": "primitivo", "tipo": tipo, "repr": repr_seguro(valor)}
+
+
+def variavel_interna(nome, valor):
+    if nome.startswith("__") and nome.endswith("__"):
+        return True
+    return nome == "input" and valor is input_visual
+
+
+def serializar_mapeamento_variaveis(mapeamento):
+    variaveis = {}
+    for nome, valor in mapeamento.items():
+        if variavel_interna(nome, valor):
+            continue
+        variaveis[nome] = serializar_variavel(valor, nome)
+    return variaveis
+
+
+def serializar_quadros_memoria(frame):
+    frames = []
+    atual = frame
+    while atual:
+        if atual.f_code.co_filename == ARQUIVO_USUARIO:
+            frames.append(atual)
+        atual = atual.f_back
+    frames.reverse()
+
+    quadros = []
+    for indice, frame_atual in enumerate(frames):
+        escopo = frame_atual.f_code.co_name
+        quadros.append({
+            "escopo": escopo if escopo != "<module>" else "Global",
+            "atual": indice == len(frames) - 1,
+            "variaveis": serializar_mapeamento_variaveis(frame_atual.f_locals)
+        })
+    return quadros
 
 
 def serializar_pilha(frame):
@@ -201,10 +303,13 @@ def serializar_pilha(frame):
             total_argumentos = atual.f_code.co_argcount + atual.f_code.co_kwonlyargcount
             for nome in atual.f_code.co_varnames[:total_argumentos]:
                 if nome in atual.f_locals:
-                    argumentos.append({
+                    argumento = {
                         "nome": nome,
-                        "valor": repr_seguro(atual.f_locals[nome], limite=70)
-                    })
+                        "exibir_valor": nome not in ("self", "cls")
+                    }
+                    if argumento["exibir_valor"]:
+                        argumento["valor"] = repr_seguro(atual.f_locals[nome], limite=70)
+                    argumentos.append(argumento)
             pilha.append({
                 "escopo": escopo if escopo != "<module>" else "Global",
                 "linha": atual.f_lineno,
@@ -224,6 +329,7 @@ codigo = payload.get("codigo", "")
 entrada = payload.get("entrada", "")
 entradas_payload = payload.get("entradas")
 limite_passos = int(payload.get("limite_passos", 1000))
+ordem_importacoes = obter_ordem_importacoes(codigo)
 
 execucoes = []
 stdout_capture = io.StringIO()
@@ -242,17 +348,14 @@ def registrar_passo(frame, evento):
     if len(execucoes) >= limite_passos:
         raise LimiteDePassos()
 
-    variaveis = {}
-    for nome, valor in frame.f_locals.items():
-        if nome.startswith("__") and nome.endswith("__"):
-            continue
-        variaveis[nome] = serializar_variavel(valor)
+    variaveis = serializar_mapeamento_variaveis(frame.f_locals)
 
     escopo = frame.f_code.co_name
     execucoes.append({
         "linha": frame.f_lineno,
         "escopo": escopo if escopo != "<module>" else "Global",
         "pilha_chamadas": serializar_pilha(frame),
+        "quadros_memoria": serializar_quadros_memoria(frame),
         "variaveis": variaveis,
         "saida": stdout_capture.getvalue(),
         "evento": evento
@@ -295,15 +398,17 @@ sys.settrace(tracer)
 
 try:
     exec(compile(codigo, ARQUIVO_USUARIO, "exec"), ambiente, ambiente)
+    variaveis_finais = serializar_mapeamento_variaveis(ambiente)
     execucoes.append({
         "linha": None,
         "escopo": "Fim",
         "pilha_chamadas": [],
-        "variaveis": {
-            nome: serializar_variavel(valor)
-            for nome, valor in ambiente.items()
-            if not (nome.startswith("__") and nome.endswith("__"))
-        },
+        "quadros_memoria": [{
+            "escopo": "Global",
+            "atual": True,
+            "variaveis": variaveis_finais
+        }],
+        "variaveis": variaveis_finais,
         "saida": stdout_capture.getvalue(),
         "evento": "fim"
     })
@@ -314,17 +419,17 @@ except LimiteDePassos:
     })
 except EntradaPendente as exc:
     frame = exc.frame
-    variaveis = {}
-    if frame and frame.f_code.co_filename == ARQUIVO_USUARIO:
-        for nome, valor in frame.f_locals.items():
-            if nome.startswith("__") and nome.endswith("__"):
-                continue
-            variaveis[nome] = serializar_variavel(valor)
+    variaveis = (
+        serializar_mapeamento_variaveis(frame.f_locals)
+        if frame and frame.f_code.co_filename == ARQUIVO_USUARIO
+        else {}
+    )
     escopo = frame.f_code.co_name if frame else "Global"
     execucoes.append({
         "linha": exc.linha,
         "escopo": escopo if escopo != "<module>" else "Global",
         "pilha_chamadas": serializar_pilha(frame) if frame else [],
+        "quadros_memoria": serializar_quadros_memoria(frame) if frame else [],
         "variaveis": variaveis,
         "saida": stdout_capture.getvalue(),
         "evento": "input_pendente",

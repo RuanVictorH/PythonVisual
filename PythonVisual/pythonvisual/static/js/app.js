@@ -95,7 +95,7 @@ carregarExemplos();
 	        "stack.currentScope": "escopo atual",
 	        "stack.empty": "Nenhuma função ativa além do escopo global neste passo.",
 	        "memory.title": "Memória",
-	        "memory.empty": "Nenhuma variável criada ainda.",
+	        "memory.empty": "Nenhum dado armazenado neste passo.",
 	        "memory.frames": "Quadros de memória",
 	        "memory.variables": "Variáveis",
 	        "memory.emptyShort": "Vazio",
@@ -213,7 +213,7 @@ carregarExemplos();
 	        "stack.currentScope": "current scope",
 	        "stack.empty": "No function is active beyond the global scope in this step.",
 	        "memory.title": "Memory",
-	        "memory.empty": "No variable created yet.",
+	        "memory.empty": "No data stored in this step.",
 	        "memory.frames": "Memory frames",
 	        "memory.variables": "Variables",
 	        "memory.emptyShort": "Empty",
@@ -690,7 +690,11 @@ async function carregarExemplos(){
 	        quadro.variaveis && Object.keys(quadro.variaveis).length > 0
 	      );
 	      if (!possuiConteudo) {
-	        return '<div class="memoria-bloco"><div class="section-label">' + escaparHTML(traduzir("memory.title")) + '</div><p class="empty">' + escaparHTML(traduzir("memory.empty")) + '</p></div>';
+	        return '<div class="memoria-vazia"><span class="section-label">'
+	          + escaparHTML(traduzir("memory.title"))
+	          + '</span><span class="empty">'
+	          + escaparHTML(traduzir("memory.empty"))
+	          + '</span></div>';
 	      }
       const objetosPorReferencia = new Map();
       const funcoes = [];
@@ -791,19 +795,30 @@ async function carregarExemplos(){
 	          + "</div>";
 	      }
 
-	      const painelObjetos = "<div class=\"painel-memoria\">"
-	        + "<div class=\"painel-titulo\">" + escaparHTML(traduzir("memory.objects")) + "</div>"
-	        + (objetosHTML || "<p class=\"empty\">" + escaparHTML(traduzir("memory.noObjects")) + "</p>")
-	        + "</div>";
-	      const painelFuncoes = "<div class=\"painel-memoria\">"
-	        + renderizarQuadroFuncoes(funcoes, traduzir("memory.noFunctions"))
-	        + "</div>";
-	      const painelClasses = "<div class=\"painel-memoria\">"
-	        + renderizarQuadroClasses(classes, traduzir("memory.noClasses"))
-	        + "</div>";
-	      const painelImportacoes = "<div class=\"painel-memoria\">"
-	        + renderizarQuadroImportacoes(importacoes, traduzir("memory.noImports"))
-	        + "</div>";
+	      const painelObjetos = objetosHTML
+	        ? "<div class=\"painel-memoria\">"
+	          + "<div class=\"painel-titulo\">" + escaparHTML(traduzir("memory.objects")) + "</div>"
+	          + objetosHTML
+	          + "</div>"
+	        : "";
+	      const painelFuncoes = funcoes.length > 0
+	        ? "<div class=\"painel-memoria\">"
+	          + "<div class=\"painel-titulo painel-titulo-reserva\" aria-hidden=\"true\">&nbsp;</div>"
+	          + renderizarQuadroFuncoes(funcoes, traduzir("memory.noFunctions"))
+	          + "</div>"
+	        : "";
+	      const painelClasses = classes.length > 0
+	        ? "<div class=\"painel-memoria\">"
+	          + "<div class=\"painel-titulo painel-titulo-reserva\" aria-hidden=\"true\">&nbsp;</div>"
+	          + renderizarQuadroClasses(classes, traduzir("memory.noClasses"))
+	          + "</div>"
+	        : "";
+	      const painelImportacoes = importacoes.length > 0
+	        ? "<div class=\"painel-memoria\">"
+	          + "<div class=\"painel-titulo painel-titulo-reserva\" aria-hidden=\"true\">&nbsp;</div>"
+	          + renderizarQuadroImportacoes(importacoes, traduzir("memory.noImports"))
+	          + "</div>"
+	        : "";
 
 	      return "<div class=\"memoria-bloco\">"
 	        + "<div class=\"memoria-topo\">"
@@ -1055,7 +1070,6 @@ async function carregarExemplos(){
 
 	      corpo.innerHTML =
 	        "<div class=\"passo-info\">"
-	        + "<span class=\"passo-badge\">" + escaparHTML(traduzir("counter.step", { current: indiceAtual + 1, total: passos.length })) + "</span>"
 	        + escaparHTML(etapaTexto)
 	        + "<span class=\"linha-badge executada\"><i class=\"fa-solid fa-check\"></i>" + escaparHTML(traduzir("status.executed")) + ": " + textoExecutada + "</span>"
 	        + "<span class=\"linha-badge proxima\"><i class=\"fa-solid fa-arrow-right\"></i>" + escaparHTML(traduzir("status.running")) + ": " + textoProxima + "</span>"

@@ -1,0 +1,16 @@
+{
+  "variaveis": "x = 10\ny = 5\nprint(\"Soma:\", x + y)\nx = x + y\nprint(\"Novo x:\", x)",
+  "condicional": "idade = 18\nif idade >= 18:\n    print(\"Maior de idade\")\nelse:\n    print(\"Menor de idade\")",
+  "loop_for": "soma = 0\nfor i in range(1, 6):\n    soma = soma + i\n    print(\"i =\", i, \"| soma =\", soma)",
+  "loop_while": "n = 1\nwhile n <= 5:\n    print(\"n =\", n)\n    n = n + 1",
+  "funcao": "def saudacao(nome):\n    mensagem = \"Ola, \" + nome + \"!\"\n    return mensagem\n\nresultado = saudacao(\"Ana\")\nprint(resultado)",
+  "fatorial": "def fatorial(n):\n    if n == 0:\n        return 1\n    return n * fatorial(n - 1)\n\nprint(fatorial(5))",
+  "fibonacci": "def fibonacci(n):\n    if n <= 1:\n        return n\n    return fibonacci(n - 1) + fibonacci(n - 2)\n\nfor i in range(7):\n    print(\"fib(\" + str(i) + \") =\", fibonacci(i))",
+  "lista": "numeros = [3, 1, 4, 1, 5]\nnumeros.append(9)\nprint(\"Lista:\", numeros)\nprint(\"Tamanho:\", len(numeros))\nprint(\"Maior:\", max(numeros))",
+  "dicionario": "aluno = {\"nome\": \"Ana\", \"nota\": 8.5}\naluno[\"status\"] = \"aprovada\"\nfor chave, valor in aluno.items():\n    print(chave, \"=\", valor)",
+  "tupla": "ponto = (10, 20)\nx, y = ponto\nprint(\"x =\", x)\nprint(\"y =\", y)",
+  "input": "nome = input(\"Nome: \")\nidade = int(input(\"Idade: \"))\nprint(nome, \"tem\", idade, \"anos\")",
+  "classe": "class Pessoa:\n    def __init__(self, nome, idade):\n        self.nome = nome\n        self.idade = idade\n\npessoa = Pessoa(\"Ana\", 18)\nprint(pessoa.nome)",
+  "try_except": "texto = \"10\"\ntry:\n    numero = int(texto)\n    print(\"Numero:\", numero)\nexcept ValueError:\n    print(\"Valor invalido\")",
+  "bubble_sort": "lista = [5, 3, 8, 1, 2]\nn = len(lista)\nfor i in range(n):\n    for j in range(0, n - i - 1):\n        if lista[j] > lista[j + 1]:\n            lista[j], lista[j + 1] = lista[j + 1], lista[j]\nprint(\"Ordenada:\", lista)"
+}

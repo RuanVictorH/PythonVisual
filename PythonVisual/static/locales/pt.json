@@ -1,0 +1,8 @@
+{
+  "run": "Executar",
+  "clear": "Limpar",
+  "memory": "Memória",
+  "output": "Saída",
+  "stack": "Pilha de chamadas",
+  "language": "Idioma"
+}

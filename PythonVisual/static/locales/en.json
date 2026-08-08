@@ -1,0 +1,8 @@
+{
+  "run": "Run",
+  "clear": "Clear",
+  "memory": "Memory",
+  "output": "Output",
+  "stack": "Call stack",
+  "language": "Language"
+}

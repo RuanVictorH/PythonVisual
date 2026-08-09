@@ -129,6 +129,8 @@
     .quadro-cel-valor { font-family: "Fira Mono", "Courier New", monospace; color: #0f172a; }
 	.quadro-cel-funcao { font-family: "Fira Mono", "Courier New", monospace; color: #047857; font-weight: 700; word-break: break-word; }
     .quadro-cel-detalhe { color: #64748b; font-family: "Fira Mono", "Courier New", monospace; font-size: 0.78rem; word-break: break-word; }
+    .importacao-separador { color: #94a3b8; font-weight: 500; }
+    .importacao-descricao { padding-left: 0; }
     .quadro-cel-seta { color: #2563eb; font-weight: bold; font-size: 1rem; }
     .referencia-dot { display: inline-block; width: 9px; height: 9px; border-radius: 999px; background: #0f5f8f; border: 2px solid white; box-shadow: 0 0 0 1px #0f5f8f; vertical-align: middle; }
 
@@ -178,6 +180,7 @@
 
     .empty { color: #94a3b8; font-style: italic; font-size: 0.85rem; }
     .error-box { background: #fef2f2; border: 1.5px solid #fca5a5; border-radius: 8px; padding: 12px 14px; color: #b91c1c; font-size: 0.88rem; font-weight: 500; }
+    .erro-saida { margin-top: 10px; }
     .section-label { font-weight: 700; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; color: #475569; margin-bottom: 8px; }
     body.tema-escuro { background: #0f172a; color: #e2e8f0; }
     body.tema-escuro header,

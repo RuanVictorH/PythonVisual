@@ -136,8 +136,7 @@ def serializar_variavel(valor, nome_variavel=None):
         return adicionar_ordem_importacao({
             "categoria": "importacao",
             "tipo": "module",
-            "nome": getattr(valor, "__name__", tipo),
-            "repr": repr_seguro(valor)
+            "nome": getattr(valor, "__name__", tipo)
         }, nome_variavel)
 
     if isinstance(valor, types.FunctionType):
@@ -148,8 +147,7 @@ def serializar_variavel(valor, nome_variavel=None):
                 "categoria": "importacao",
                 "tipo": "function",
                 "nome": getattr(valor, "__name__", tipo),
-                "modulo": modulo,
-                "repr": repr_seguro(valor)
+                "modulo": modulo
             }, nome_variavel)
         return {
             "categoria": "funcao",
@@ -172,8 +170,7 @@ def serializar_variavel(valor, nome_variavel=None):
                 "categoria": "importacao",
                 "tipo": "class",
                 "nome": getattr(valor, "__name__", tipo),
-                "modulo": modulo,
-                "repr": repr_seguro(valor)
+                "modulo": modulo
             }, nome_variavel)
 
     if isinstance(valor, (types.BuiltinFunctionType, types.BuiltinMethodType)):
@@ -183,11 +180,11 @@ def serializar_variavel(valor, nome_variavel=None):
             "categoria": categoria,
             "tipo": "function" if categoria == "importacao" else tipo,
             "nome": getattr(valor, "__name__", tipo),
-            "modulo": modulo,
-            "repr": repr_seguro(valor)
+            "modulo": modulo
         }
         if categoria == "importacao":
             return adicionar_ordem_importacao(dados, nome_variavel)
+        dados["repr"] = repr_seguro(valor)
         return dados
 
     if isinstance(valor, (int, float, bool, str, type(None))):
@@ -341,7 +338,7 @@ else:
 indice_entrada = 0
 
 
-def registrar_passo(frame, evento):
+def registrar_passo(frame, evento, erro_ocorrido=None):
     if frame.f_code.co_filename != ARQUIVO_USUARIO:
         return
 
@@ -351,7 +348,7 @@ def registrar_passo(frame, evento):
     variaveis = serializar_mapeamento_variaveis(frame.f_locals)
 
     escopo = frame.f_code.co_name
-    execucoes.append({
+    passo = {
         "linha": frame.f_lineno,
         "escopo": escopo if escopo != "<module>" else "Global",
         "pilha_chamadas": serializar_pilha(frame),
@@ -359,12 +356,35 @@ def registrar_passo(frame, evento):
         "variaveis": variaveis,
         "saida": stdout_capture.getvalue(),
         "evento": evento
-    })
+    }
+    if erro_ocorrido:
+        passo["erro_ocorrido"] = erro_ocorrido
+    execucoes.append(passo)
+
+
+erros_em_propagacao = set()
 
 
 def tracer(frame, event, arg):
-    if event in ("line", "return"):
+    if frame.f_code.co_filename != ARQUIVO_USUARIO:
+        return tracer
+
+    if event == "line":
+        erros_em_propagacao.clear()
         registrar_passo(frame, event)
+    elif event == "return":
+        registrar_passo(frame, event)
+    elif event == "exception":
+        tipo_erro, valor_erro, _ = arg
+        erros_internos = (EntradaPendente, LimiteDePassos, StopIteration, GeneratorExit)
+        marcador = id(valor_erro)
+        if not issubclass(tipo_erro, erros_internos) and marcador not in erros_em_propagacao:
+            erros_em_propagacao.add(marcador)
+            registrar_passo(
+                frame,
+                event,
+                erro_ocorrido=f"{tipo_erro.__name__}: {valor_erro}",
+            )
     return tracer
 
 

@@ -107,6 +107,10 @@ carregarExemplos();
 	        "memory.noClasses": "Nenhuma classe definida neste passo.",
 	        "memory.imports": "Importações",
 	        "memory.noImports": "Nenhuma importação neste passo.",
+	        "memory.importModule": "módulo importado",
+	        "memory.importFunction": "função importada de {module}",
+	        "memory.importClass": "classe importada de {module}",
+	        "memory.importItem": "item importado de {module}",
 	        "memory.subtitle": "Quadros, objetos, funções, classes e importações separados por categoria.",
 	        "memory.referenceTitle": "Referência para o objeto {name}",
 	        "memory.objectEmpty": "vazio",
@@ -225,6 +229,10 @@ carregarExemplos();
 	        "memory.noClasses": "No class defined in this step.",
 	        "memory.imports": "Imports",
 	        "memory.noImports": "No import in this step.",
+	        "memory.importModule": "imported module",
+	        "memory.importFunction": "function imported from {module}",
+	        "memory.importClass": "class imported from {module}",
+	        "memory.importItem": "item imported from {module}",
 	        "memory.subtitle": "Frames, objects, functions, classes, and imports separated by category.",
 	        "memory.referenceTitle": "Reference to object {name}",
 	        "memory.objectEmpty": "empty",
@@ -581,14 +589,22 @@ async function carregarExemplos(){
         ? "<div class=\"quadro-linha\"><div class=\"quadro-cel\"><span class=\"empty\">" + escaparHTML(vazio) + "</span></div></div>"
         : importacoes.map(({ nome, info }) => {
           const tipo = normalizarTipoPython(info.tipo);
-          const origem = info.modulo || info.nome || "";
-          const detalhe = origem && origem !== nome
-            ? "<div class=\"quadro-cel quadro-cel-detalhe\">" + escaparHTML(origem) + "</div>"
-            : "";
+          const nomeOriginal = info.nome || nome;
+          const rotulo = nomeOriginal !== nome ? nomeOriginal + " (" + nome + ")" : nome;
+          const modulo = info.modulo || nomeOriginal;
+          let descricao;
+          if (tipo === "module") {
+            descricao = traduzir("memory.importModule");
+          } else if (tipo === "function") {
+            descricao = traduzir("memory.importFunction", { module: modulo });
+          } else if (tipo === "class") {
+            descricao = traduzir("memory.importClass", { module: modulo });
+          } else {
+            descricao = traduzir("memory.importItem", { module: modulo });
+          }
           return "<div class=\"quadro-linha\">"
-            + "<div class=\"quadro-cel quadro-cel-nome\">" + escaparHTML(nome) + "</div>"
-            + "<div class=\"quadro-cel quadro-cel-tipo\"><span class=\"tipo-chip tipo-chip-importacao\">" + escaparHTML(tipo) + "</span></div>"
-            + detalhe
+            + "<div class=\"quadro-cel quadro-cel-nome\">" + escaparHTML(rotulo) + " <span class=\"importacao-separador\">|</span></div>"
+            + "<div class=\"quadro-cel quadro-cel-detalhe importacao-descricao\">" + escaparHTML(descricao) + "</div>"
             + "</div>";
         }).join("");
 
@@ -990,7 +1006,7 @@ async function carregarExemplos(){
 
     function linhaExecutadaAtual() {
       const passoAtual = passos[indiceAtual];
-      if (passoAtual && passoAtual.evento === "return" && Number.isInteger(passoAtual.linha)) {
+	      if (passoAtual && (passoAtual.evento === "return" || passoAtual.evento === "exception") && Number.isInteger(passoAtual.linha)) {
         return passoAtual.linha - 1;
       }
       for (let i = indiceAtual - 1; i >= 0; i--) {
@@ -1004,6 +1020,14 @@ async function carregarExemplos(){
       if (passoAtual && (passoAtual.evento === "line" || passoAtual.evento === "input_pendente") && Number.isInteger(passoAtual.linha)) {
         return passoAtual.linha - 1;
       }
+	      if (passoAtual && passoAtual.evento === "exception") {
+	        for (let i = indiceAtual + 1; i < passos.length; i++) {
+	          if (passos[i].evento === "line" && Number.isInteger(passos[i].linha)) {
+	            return passos[i].linha - 1;
+	          }
+	          if (passos[i].erro) break;
+	        }
+	      }
       return null;
     }
 
@@ -1076,7 +1100,10 @@ async function carregarExemplos(){
 	        + "<span class=\"escopo-badge\">" + escaparHTML(escopo) + "</span>"
 	        + "</div>"
 	        + renderizarMemoria(p.variaveis, p.quadros_memoria);
-	      corpoSaida.innerHTML = montarTerminalSaida(p.saida, "output.noPrint");
+	      corpoSaida.innerHTML = montarTerminalSaida(p.saida, "output.noPrint")
+	        + (p.erro_ocorrido
+	          ? "<div class=\"error-box erro-saida\" role=\"alert\"><strong>" + escaparHTML(traduzir("error.label")) + "</strong> " + escaparHTML(p.erro_ocorrido) + "</div>"
+	          : "");
 	      corpoPilha.innerHTML = renderizarPilhaChamadas(p.pilha_chamadas);
       requestAnimationFrame(desenharSetasMemoria);
     }

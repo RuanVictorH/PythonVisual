@@ -330,6 +330,7 @@ ordem_importacoes = obter_ordem_importacoes(codigo)
 
 execucoes = []
 stdout_capture = io.StringIO()
+stderr_capture = io.StringIO()
 
 if isinstance(entradas_payload, list):
     entradas_fornecidas = entradas_payload
@@ -355,6 +356,7 @@ def registrar_passo(frame, evento, erro_ocorrido=None):
         "quadros_memoria": serializar_quadros_memoria(frame),
         "variaveis": variaveis,
         "saida": stdout_capture.getvalue(),
+        "saida_erro": stderr_capture.getvalue(),
         "evento": evento
     }
     if erro_ocorrido:
@@ -409,10 +411,12 @@ def input_visual(prompt=""):
 
 
 stdout_original = sys.stdout
+stderr_original = sys.stderr
 stdin_original = sys.stdin
 ambiente = {"__name__": "__main__", "input": input_visual}
 
 sys.stdout = stdout_capture
+sys.stderr = stderr_capture
 sys.stdin = io.StringIO(entrada)
 sys.settrace(tracer)
 
@@ -430,12 +434,14 @@ try:
         }],
         "variaveis": variaveis_finais,
         "saida": stdout_capture.getvalue(),
+        "saida_erro": stderr_capture.getvalue(),
         "evento": "fim"
     })
 except LimiteDePassos:
     execucoes.append({
         "erro": f"LimiteDePassos: execução interrompida após {limite_passos} passos.",
-        "saida": stdout_capture.getvalue()
+        "saida": stdout_capture.getvalue(),
+        "saida_erro": stderr_capture.getvalue()
     })
 except EntradaPendente as exc:
     frame = exc.frame
@@ -452,6 +458,7 @@ except EntradaPendente as exc:
         "quadros_memoria": serializar_quadros_memoria(frame) if frame else [],
         "variaveis": variaveis,
         "saida": stdout_capture.getvalue(),
+        "saida_erro": stderr_capture.getvalue(),
         "evento": "input_pendente",
         "entrada_pendente": True,
         "prompt": exc.prompt,
@@ -459,11 +466,13 @@ except EntradaPendente as exc:
 except BaseException as exc:
     execucoes.append({
         "erro": f"{type(exc).__name__}: {exc}",
-        "saida": stdout_capture.getvalue()
+        "saida": stdout_capture.getvalue(),
+        "saida_erro": stderr_capture.getvalue()
     })
 finally:
     sys.settrace(None)
     sys.stdout = stdout_original
+    sys.stderr = stderr_original
     sys.stdin = stdin_original
 
 print(json.dumps(execucoes, ensure_ascii=False))

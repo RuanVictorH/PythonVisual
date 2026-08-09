@@ -77,6 +77,7 @@ carregarExemplos();
 	        "scope.end": "Fim",
 	        "output.section": "Saída",
 	        "output.label": "saída",
+	        "output.errorLabel": "saída de erro",
 	        "output.none": "Nenhuma saída.",
 	        "output.noPrint": "Nenhum print executado até aqui.",
 	        "output.errorUntil": "Saída até o erro",
@@ -120,6 +121,7 @@ carregarExemplos();
 	        "type.dict": "dict",
 	        "explain.empty": "Esta linha está vazia. Ela apenas separa visualmente partes do código.",
 	        "explain.comment": "Comentário: serve para documentar o código e não é executado pelo Python.",
+	        "explain.multilineComment": "Bloco de texto delimitado por aspas triplas. Quando está isolado, costuma ser usado como comentário de múltiplas linhas; tecnicamente, o Python o trata como uma string. No início de um módulo, função ou classe, ele pode ser uma docstring.",
 	        "explain.def": "Define uma função. O bloco indentado abaixo só será executado quando essa função for chamada.",
 	        "explain.class": "Define uma classe, que funciona como um modelo para criar objetos.",
 	        "explain.return": "Retorna um valor para quem chamou a função e encerra aquela chamada.",
@@ -199,6 +201,7 @@ carregarExemplos();
 	        "scope.end": "End",
 	        "output.section": "Output",
 	        "output.label": "output",
+	        "output.errorLabel": "error output",
 	        "output.none": "No output.",
 	        "output.noPrint": "No print executed up to this step.",
 	        "output.errorUntil": "Output until the error",
@@ -242,6 +245,7 @@ carregarExemplos();
 	        "type.dict": "dict",
 	        "explain.empty": "This line is empty. It only visually separates parts of the code.",
 	        "explain.comment": "Comment: documents the code and is not executed by Python.",
+	        "explain.multilineComment": "Text block delimited by triple quotes. When it stands alone, it is commonly used as a multiline comment; technically, Python treats it as a string. At the beginning of a module, function, or class, it can be a docstring.",
 	        "explain.def": "Defines a function. The indented block below runs only when this function is called.",
 	        "explain.class": "Defines a class, which works as a template for creating objects.",
 	        "explain.return": "Returns a value to the caller and ends that function call.",
@@ -468,9 +472,42 @@ async function carregarExemplos(){
         .replaceAll("'", "&#039;");
     }
 
-	    function explicarComandoPython(linha) {
+	    function obterBlocoAspasTriplas(indiceInicial) {
+	      const linhaInicial = editor.getLine(indiceInicial) || "";
+	      const inicio = linhaInicial.trimStart().match(/^(?:[rRuUbB]{0,2})?("""|''')/);
+	      if (!inicio) return null;
+
+	      const delimitador = inicio[1];
+	      const posicaoAbertura = linhaInicial.indexOf(delimitador);
+	      const restanteLinha = linhaInicial.slice(posicaoAbertura + delimitador.length);
+	      let indiceFinal = indiceInicial;
+
+	      if (!restanteLinha.includes(delimitador)) {
+	        indiceFinal = null;
+	        for (let indice = indiceInicial + 1; indice < editor.lineCount(); indice++) {
+	          if ((editor.getLine(indice) || "").includes(delimitador)) {
+	            indiceFinal = indice;
+	            break;
+	          }
+	        }
+	      }
+
+	      if (indiceFinal === null) return null;
+	      const linhas = [];
+	      for (let indice = indiceInicial; indice <= indiceFinal; indice++) {
+	        linhas.push(editor.getLine(indice) || "");
+	      }
+
+	      return {
+	        codigo: linhas.join("\n"),
+	        indiceFinal
+	      };
+	    }
+
+	    function explicarComandoPython(linha, blocoAspasTriplas = null) {
 	      const texto = String(linha || "").trim();
 	      if (!texto) return traduzir("explain.empty");
+	      if (blocoAspasTriplas) return traduzir("explain.multilineComment");
 	      if (/^#/.test(texto)) return traduzir("explain.comment");
 	      if (/^def\s+\w+\s*\(/.test(texto)) return traduzir("explain.def");
 	      if (/^class\s+\w+/.test(texto)) return traduzir("explain.class");
@@ -521,13 +558,18 @@ async function carregarExemplos(){
 	      }
 
       const linhaCodigo = editor.getLine(alvo.indice) || "";
+      const blocoAspasTriplas = obterBlocoAspasTriplas(alvo.indice);
+      const codigoExplicado = blocoAspasTriplas ? blocoAspasTriplas.codigo : linhaCodigo;
+      const identificadorLinha = blocoAspasTriplas && blocoAspasTriplas.indiceFinal !== alvo.indice
+        ? (alvo.indice + 1) + "–" + (blocoAspasTriplas.indiceFinal + 1)
+        : String(alvo.indice + 1);
       corpo.innerHTML =
 	        "<div class=\"explicacao-meta\">"
-	        + "<span class=\"explicacao-chip\">" + escaparHTML(traduzir("input.line")) + " " + (alvo.indice + 1) + "</span>"
+	        + "<span class=\"explicacao-chip\">" + escaparHTML(traduzir("input.line")) + " " + identificadorLinha + "</span>"
 	        + "<span class=\"explicacao-chip\">" + escaparHTML(alvo.status) + "</span>"
 	        + "</div>"
-	        + "<pre class=\"explicacao-codigo\">" + escaparHTML(linhaCodigo || traduzir("line.empty")) + "</pre>"
-	        + "<p class=\"explicacao-texto\">" + escaparHTML(explicarComandoPython(linhaCodigo)) + "</p>";
+	        + "<pre class=\"explicacao-codigo\">" + escaparHTML(codigoExplicado || traduzir("line.empty")) + "</pre>"
+	        + "<p class=\"explicacao-texto\">" + escaparHTML(explicarComandoPython(linhaCodigo, blocoAspasTriplas)) + "</p>";
 	    }
 
     function limparMarcacoes() {
@@ -1064,6 +1106,15 @@ async function carregarExemplos(){
 	        + "<div class=\"terminal-body\">" + conteudo + "</div></div>";
 	    }
 
+	    function montarTerminalSaidaErro(saidaErro) {
+	      if (!saidaErro || !String(saidaErro).trim()) return "";
+	      return "<div class=\"terminal terminal-erro\" role=\"alert\">"
+	        + "<div class=\"terminal-header\">"
+	        + "<div class=\"terminal-dot vermelho\"></div>"
+	        + "<span class=\"terminal-label\"><i class=\"fa-solid fa-triangle-exclamation\"></i>" + escaparHTML(traduzir("output.errorLabel")) + "</span></div>"
+	        + "<div class=\"terminal-body\">" + escaparHTML(saidaErro) + "</div></div>";
+	    }
+
     function renderizarPasso() {
       if (passos.length === 0) return;
       const p = passos[indiceAtual];
@@ -1084,7 +1135,8 @@ async function carregarExemplos(){
 	      if (p.erro) {
 	        corpo.innerHTML = "<div class=\"error-box\"><strong>" + escaparHTML(traduzir("error.label")) + "</strong> " + escaparHTML(p.erro) + "</div>";
 	        corpoSaida.innerHTML = "<div class=\"section-label\">" + escaparHTML(traduzir("output.errorUntil")) + "</div>"
-	          + montarTerminalSaida(p.saida, "output.none");
+	          + montarTerminalSaida(p.saida, "output.none")
+	          + montarTerminalSaidaErro(p.saida_erro);
 	        corpoPilha.innerHTML = renderizarPilhaChamadas(p.pilha_chamadas);
 	        requestAnimationFrame(desenharSetasMemoria);
 	        return;
@@ -1101,6 +1153,7 @@ async function carregarExemplos(){
 	        + "</div>"
 	        + renderizarMemoria(p.variaveis, p.quadros_memoria);
 	      corpoSaida.innerHTML = montarTerminalSaida(p.saida, "output.noPrint")
+	        + montarTerminalSaidaErro(p.saida_erro)
 	        + (p.erro_ocorrido
 	          ? "<div class=\"error-box erro-saida\" role=\"alert\"><strong>" + escaparHTML(traduzir("error.label")) + "</strong> " + escaparHTML(p.erro_ocorrido) + "</div>"
 	          : "");

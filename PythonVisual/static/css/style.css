@@ -185,6 +185,8 @@
 
     .empty { color: #94a3b8; font-style: italic; font-size: 0.85rem; }
     .error-box { background: #fef2f2; border: 1.5px solid #fca5a5; border-radius: 8px; padding: 12px 14px; color: #b91c1c; font-size: 0.88rem; font-weight: 500; }
+	.error-guidance { margin-top: 9px; padding-top: 9px; border-top: 1px solid #fecaca; color: #7f1d1d; line-height: 1.45; }
+	.error-guidance-label { font-weight: 800; }
     .erro-saida { margin-top: 10px; }
     .section-label { font-weight: 700; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; color: #475569; margin-bottom: 8px; }
     body.tema-escuro { background: #0f172a; color: #e2e8f0; }
@@ -250,6 +252,7 @@
     body.tema-escuro .terminal-erro .terminal-label,
     body.tema-escuro .terminal-erro .terminal-body { color: #fecaca; }
     body.tema-escuro .terminal-erro .terminal-body { background: #2b1015; }
+	body.tema-escuro .error-guidance { color: #fecaca; border-top-color: #7f1d1d; }
     body.tema-escuro .btn-access,
     body.tema-escuro .btn-limpar,
     body.tema-escuro .btn-recolher { background: #1e293b; color: #dbeafe; border-color: #475569; }

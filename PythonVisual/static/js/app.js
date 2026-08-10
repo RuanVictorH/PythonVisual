@@ -87,6 +87,51 @@ carregarExemplos();
 	        "run.noSteps": "Nenhum passo registrado.",
 	        "run.serverError": "Erro ao comunicar com o servidor: {error}",
 	        "error.label": "Erro:",
+	        "error.guidanceLabel": "Como corrigir:",
+	        "error.guidance.indicated": "indicado",
+	        "error.guidance.indicatedFeminine": "indicada",
+	        "error.guidance.tab": "Use apenas espaços ou apenas tabulações para indentar o bloco. O recomendado é substituir cada tabulação por 4 espaços e manter o mesmo padrão em todo o código.",
+	        "error.guidance.indentExpected": "A linha indicada inicia um bloco, mas a instrução seguinte não está recuada. Adicione 4 espaços antes das linhas que pertencem ao bloco.",
+	        "error.guidance.indentUnexpected": "A linha indicada possui recuo sem que exista um bloco aberto. Remova os espaços do início da linha ou coloque-a dentro do bloco correto.",
+	        "error.guidance.indentMismatch": "O recuo desta linha não corresponde ao nível das linhas anteriores. Alinhe-a com o bloco ao qual ela pertence e use 4 espaços por nível.",
+	        "error.guidance.indentation": "Revise o recuo da linha indicada e das linhas próximas. Use 4 espaços por nível e mantenha todas as instruções do mesmo bloco alinhadas.",
+	        "error.guidance.stringLiteral": "A string foi iniciada, mas não foi encerrada. Adicione a mesma aspa usada no início ao final do texto.",
+	        "error.guidance.decimalLiteral": "Um número contém letras ou outros caracteres inválidos. Remova esses caracteres ou coloque todo o valor entre aspas se ele deveria ser um texto.",
+	        "error.guidance.delimiter": "Há um parêntese, colchete ou chave sem fechamento ou fora de ordem. Confira os delimitadores da linha indicada e feche cada abertura com o símbolo correspondente.",
+	        "error.guidance.colon": "A instrução precisa terminar com dois-pontos (:). Adicione o sinal ao final da linha indicada.",
+	        "error.guidance.returnOutside": "O comando return só pode ser usado dentro de uma função. Mova esta linha para o bloco de uma função ou retire o return.",
+	        "error.guidance.loopControlOutside": "Esse comando só pode ser usado dentro de um laço for ou while. Mova-o para dentro do laço correspondente.",
+	        "error.guidance.assignment": "O lado esquerdo do sinal de igual deve ser uma variável, atributo ou posição válida. Revise o alvo que receberá o valor.",
+	        "error.guidance.syntax": "Revise a linha indicada e a linha anterior. Procure sinais ausentes ou extras, como dois-pontos, vírgulas, aspas, parênteses, colchetes e operadores.",
+	        "error.guidance.name": "A variável ou função {name} ainda não foi definida. Verifique a escrita do nome e garanta que ela seja criada antes desta linha e esteja acessível neste escopo.",
+	        "error.guidance.nameGeneric": "Uma variável ou função foi usada antes de ser definida. Verifique a escrita do nome, a ordem das instruções e o escopo em que ela foi criada.",
+	        "error.guidance.unboundLocal": "A variável local {name} está sendo lida antes de receber um valor nesta função. Faça a atribuição antes do uso ou revise se deveria usar uma variável de outro escopo.",
+	        "error.guidance.typeConcat": "Os valores concatenados têm tipos diferentes. Converta-os para o mesmo tipo, por exemplo com str(), int() ou float(), antes de usar o operador +.",
+	        "error.guidance.typeOperands": "O operador usado não aceita esses tipos de valores. Verifique os operandos e converta-os para tipos compatíveis antes da operação.",
+	        "error.guidance.notCallable": "O valor foi usado como se fosse uma função. Remova os parênteses da chamada ou verifique se o nome da função foi substituído por outro valor.",
+	        "error.guidance.arguments": "A chamada recebeu uma quantidade ou um formato incorreto de argumentos. Compare a chamada com os parâmetros definidos pela função.",
+	        "error.guidance.type": "A operação recebeu um tipo de valor incompatível. Confira os tipos envolvidos e faça a conversão necessária antes de executar a operação.",
+	        "error.guidance.intValue": "O valor {value} não representa um número inteiro válido. Remova letras e símbolos indevidos ou trate a entrada antes de passá-la para int().",
+	        "error.guidance.unpack": "A quantidade de valores não corresponde à quantidade de variáveis. Ajuste um dos lados da atribuição para que ambos tenham o mesmo número de elementos.",
+	        "error.guidance.mathDomain": "O valor está fora do domínio aceito pela função matemática. Verifique quais entradas a função permite antes de chamá-la.",
+	        "error.guidance.value": "O tipo do valor é aceito, mas seu conteúdo não é válido para essa operação. Confira o formato e os valores permitidos antes de tentar novamente.",
+	        "error.guidance.zeroDivision": "O divisor resultou em zero. Verifique seu valor antes da divisão e trate o caso em que ele seja igual a 0.",
+	        "error.guidance.index": "A posição acessada não existe na sequência. Lembre-se de que os índices começam em 0 e devem ser menores que a quantidade de elementos.",
+	        "error.guidance.key": "A chave {key} não existe no dicionário. Confira sua escrita ou verifique a existência da chave antes do acesso com o operador in ou com get().",
+	        "error.guidance.attribute": "Objetos do tipo {type} não possuem o atributo ou método {attribute}. Confira o tipo do objeto e a escrita do nome utilizado.",
+	        "error.guidance.moduleNotFound": "O módulo {module} não foi encontrado. Confira o nome informado e verifique se o pacote está instalado e disponível no ambiente.",
+	        "error.guidance.import": "O módulo foi encontrado, mas o item solicitado não está disponível nele. Confira o nome importado e a documentação do módulo.",
+	        "error.guidance.fileNotFound": "O arquivo ou diretório não foi encontrado. Confira o caminho, o nome e se o arquivo existe antes de tentar abri-lo.",
+	        "error.guidance.permission": "O programa não tem permissão para acessar esse recurso. Verifique o caminho escolhido e as permissões do arquivo ou diretório.",
+	        "error.guidance.recursion": "A função chamou a si mesma vezes demais. Revise a condição de parada e garanta que cada chamada se aproxime dela.",
+	        "error.guidance.assertion": "Uma condição verificada por assert resultou em falso. Confira a condição e os valores usados naquele ponto do programa.",
+	        "error.guidance.overflow": "O resultado numérico ficou grande demais para essa operação. Revise os valores e considere uma forma de cálculo que evite esse crescimento.",
+	        "error.guidance.eof": "O programa tentou ler uma entrada que não foi fornecida. Garanta que cada chamada de leitura receba um valor.",
+	        "error.guidance.memory": "A operação tentou usar mais memória do que o ambiente permite. Reduza o tamanho das estruturas ou processe os dados em partes menores.",
+	        "error.guidance.timeout": "A execução demorou mais do que o limite permitido. Verifique laços infinitos, condições que nunca se tornam falsas ou operações excessivamente longas.",
+	        "error.guidance.stepLimit": "O código gerou passos demais. Revise principalmente as condições dos laços e da recursão para garantir que a execução termine.",
+	        "error.guidance.internal": "O executor encontrou uma falha interna. Tente executar novamente; se o problema continuar, simplifique o exemplo e informe o erro ao responsável pelo sistema.",
+	        "error.guidance.generic": "Leia a mensagem técnica, localize a linha indicada e confira os valores e a instrução usados nela. Corrija esse ponto e execute o código novamente.",
 	        "line.empty": "(linha vazia)",
 	        "line.finishedExplain": "Execução finalizada. Não há uma próxima linha de código para explicar neste passo.",
 	        "marker.running": "Linha em execução",
@@ -211,6 +256,51 @@ carregarExemplos();
 	        "run.noSteps": "No steps recorded.",
 	        "run.serverError": "Error communicating with the server: {error}",
 	        "error.label": "Error:",
+	        "error.guidanceLabel": "How to fix it:",
+	        "error.guidance.indicated": "indicated",
+	        "error.guidance.indicatedFeminine": "indicated",
+	        "error.guidance.tab": "Use only spaces or only tabs to indent the block. The recommended approach is to replace each tab with 4 spaces and keep the same pattern throughout the code.",
+	        "error.guidance.indentExpected": "The indicated line starts a block, but the next statement is not indented. Add 4 spaces before the lines that belong to the block.",
+	        "error.guidance.indentUnexpected": "The indicated line is indented without an open block. Remove the spaces at the beginning of the line or place it inside the correct block.",
+	        "error.guidance.indentMismatch": "This line's indentation does not match the previous levels. Align it with the block it belongs to and use 4 spaces per level.",
+	        "error.guidance.indentation": "Review the indentation of the indicated line and nearby lines. Use 4 spaces per level and align every statement in the same block.",
+	        "error.guidance.stringLiteral": "The string was started but not closed. Add the same quote used at the beginning to the end of the text.",
+	        "error.guidance.decimalLiteral": "A number contains letters or other invalid characters. Remove them, or put the entire value in quotes if it should be text.",
+	        "error.guidance.delimiter": "A parenthesis, bracket, or brace is unclosed or out of order. Check the delimiters on the indicated line and close each opening symbol with its matching symbol.",
+	        "error.guidance.colon": "The statement must end with a colon (:). Add it to the end of the indicated line.",
+	        "error.guidance.returnOutside": "The return statement can only be used inside a function. Move this line into a function block or remove return.",
+	        "error.guidance.loopControlOutside": "This statement can only be used inside a for or while loop. Move it into the corresponding loop.",
+	        "error.guidance.assignment": "The left side of the equals sign must be a valid variable, attribute, or position. Review the target that should receive the value.",
+	        "error.guidance.syntax": "Review the indicated line and the line before it. Look for missing or extra symbols such as colons, commas, quotes, parentheses, brackets, and operators.",
+	        "error.guidance.name": "The variable or function {name} has not been defined yet. Check its spelling and make sure it is created before this line and is available in this scope.",
+	        "error.guidance.nameGeneric": "A variable or function was used before being defined. Check its spelling, statement order, and the scope where it was created.",
+	        "error.guidance.unboundLocal": "The local variable {name} is being read before receiving a value in this function. Assign it before use or review whether a variable from another scope was intended.",
+	        "error.guidance.typeConcat": "The concatenated values have different types. Convert them to the same type, for example with str(), int(), or float(), before using +.",
+	        "error.guidance.typeOperands": "The operator does not accept these value types. Check the operands and convert them to compatible types before the operation.",
+	        "error.guidance.notCallable": "The value was used as if it were a function. Remove the call parentheses or check whether the function name was replaced by another value.",
+	        "error.guidance.arguments": "The call received an incorrect number or format of arguments. Compare the call with the parameters defined by the function.",
+	        "error.guidance.type": "The operation received an incompatible value type. Check the types involved and perform the required conversion first.",
+	        "error.guidance.intValue": "The value {value} is not a valid integer. Remove invalid letters and symbols or validate the input before passing it to int().",
+	        "error.guidance.unpack": "The number of values does not match the number of variables. Adjust one side of the assignment so both have the same number of elements.",
+	        "error.guidance.mathDomain": "The value is outside the mathematical function's accepted domain. Check which inputs the function allows before calling it.",
+	        "error.guidance.value": "The value type is accepted, but its contents are not valid for this operation. Check the expected format and allowed values.",
+	        "error.guidance.zeroDivision": "The divisor evaluated to zero. Check its value before dividing and handle the case where it equals 0.",
+	        "error.guidance.index": "The requested position does not exist in the sequence. Remember that indexes start at 0 and must be smaller than the number of elements.",
+	        "error.guidance.key": "The key {key} does not exist in the dictionary. Check its spelling or verify it before access with the in operator or get().",
+	        "error.guidance.attribute": "Objects of type {type} do not have the attribute or method {attribute}. Check the object's type and the spelling of the name.",
+	        "error.guidance.moduleNotFound": "The module {module} was not found. Check its name and make sure the package is installed and available in the environment.",
+	        "error.guidance.import": "The module was found, but the requested item is not available in it. Check the imported name and the module documentation.",
+	        "error.guidance.fileNotFound": "The file or directory was not found. Check the path, its name, and whether it exists before opening it.",
+	        "error.guidance.permission": "The program does not have permission to access this resource. Check the selected path and the file or directory permissions.",
+	        "error.guidance.recursion": "The function called itself too many times. Review the stopping condition and make sure each call moves closer to it.",
+	        "error.guidance.assertion": "A condition checked by assert evaluated to false. Review the condition and the values used at that point.",
+	        "error.guidance.overflow": "The numeric result became too large for this operation. Review the values and consider a calculation that avoids this growth.",
+	        "error.guidance.eof": "The program tried to read input that was not provided. Make sure every input operation receives a value.",
+	        "error.guidance.memory": "The operation tried to use more memory than the environment allows. Reduce structure sizes or process the data in smaller parts.",
+	        "error.guidance.timeout": "Execution took longer than the allowed limit. Check for infinite loops, conditions that never become false, or excessively long operations.",
+	        "error.guidance.stepLimit": "The code generated too many steps. Review loop and recursion conditions to make sure execution ends.",
+	        "error.guidance.internal": "The executor encountered an internal failure. Try again; if it continues, simplify the example and report the error to the system maintainer.",
+	        "error.guidance.generic": "Read the technical message, locate the indicated line, and check the values and statement used there. Correct that point and run the code again.",
 	        "line.empty": "(empty line)",
 	        "line.finishedExplain": "Execution finished. There is no next line of code to explain in this step.",
 	        "marker.running": "Running line",
@@ -532,6 +622,127 @@ async function carregarExemplos(){
 	      if (/^[^=<>!]+(\+=|-=|\*=|\/=|\/\/=|%=|\*\*=)/.test(texto)) return traduzir("explain.update");
 	      if (/^[^=<>!]+=[^=]/.test(texto)) return traduzir("explain.assign");
 	      return traduzir("explain.generic");
+	    }
+
+	    function orientarCorrecaoErro(erro) {
+	      const mensagem = String(erro || "").trim();
+	      const mensagemMinuscula = mensagem.toLowerCase();
+	      const correspondenciaTipo = mensagem.match(/^([A-Za-z_][A-Za-z0-9_]*):/);
+	      const tipo = correspondenciaTipo ? correspondenciaTipo[1] : "";
+
+	      if (tipo === "TabError") return traduzir("error.guidance.tab");
+
+	      if (tipo === "IndentationError") {
+	        if (mensagemMinuscula.includes("expected an indented block")) return traduzir("error.guidance.indentExpected");
+	        if (mensagemMinuscula.includes("unexpected indent")) return traduzir("error.guidance.indentUnexpected");
+	        if (mensagemMinuscula.includes("unindent does not match")) return traduzir("error.guidance.indentMismatch");
+	        return traduzir("error.guidance.indentation");
+	      }
+
+	      if (tipo === "SyntaxError") {
+	        if (mensagemMinuscula.includes("unterminated string literal") || mensagemMinuscula.includes("eol while scanning string literal")) {
+	          return traduzir("error.guidance.stringLiteral");
+	        }
+	        if (mensagemMinuscula.includes("invalid decimal literal")) return traduzir("error.guidance.decimalLiteral");
+	        if (mensagemMinuscula.includes("was never closed")
+	          || mensagemMinuscula.includes("unmatched")
+	          || mensagemMinuscula.includes("does not match opening")
+	          || mensagemMinuscula.includes("expecting '}'")
+	          || mensagemMinuscula.includes("closing parenthesis")) {
+	          return traduzir("error.guidance.delimiter");
+	        }
+	        if (mensagemMinuscula.includes("expected ':'")) return traduzir("error.guidance.colon");
+	        if (mensagemMinuscula.includes("'return' outside function")) return traduzir("error.guidance.returnOutside");
+	        if (mensagemMinuscula.includes("'break' outside loop") || mensagemMinuscula.includes("'continue' not properly in loop")) {
+	          return traduzir("error.guidance.loopControlOutside");
+	        }
+	        if (mensagemMinuscula.includes("cannot assign to") || mensagemMinuscula.includes("assignment expression")) {
+	          return traduzir("error.guidance.assignment");
+	        }
+	        return traduzir("error.guidance.syntax");
+	      }
+
+	      if (tipo === "UnboundLocalError") {
+	        const variavelLocal = mensagem.match(/local variable ['\"]([^'\"]+)['\"]/i)
+	          || mensagem.match(/cannot access local variable ['\"]([^'\"]+)['\"]/i);
+	        return traduzir("error.guidance.unboundLocal", {
+	          name: variavelLocal ? "'" + variavelLocal[1] + "'" : traduzir("error.guidance.indicatedFeminine")
+	        });
+	      }
+
+	      if (tipo === "NameError") {
+	        const nome = mensagem.match(/name ['\"]([^'\"]+)['\"] is not defined/i);
+	        return nome
+	          ? traduzir("error.guidance.name", { name: "'" + nome[1] + "'" })
+	          : traduzir("error.guidance.nameGeneric");
+	      }
+
+	      if (tipo === "TypeError") {
+	        if (mensagemMinuscula.includes("concatenate") || mensagemMinuscula.includes("can only concatenate")) {
+	          return traduzir("error.guidance.typeConcat");
+	        }
+	        if (mensagemMinuscula.includes("unsupported operand type")) return traduzir("error.guidance.typeOperands");
+	        if (mensagemMinuscula.includes("not callable")) return traduzir("error.guidance.notCallable");
+	        if (mensagemMinuscula.includes("argument") || mensagemMinuscula.includes("takes ") || mensagemMinuscula.includes("missing ")) {
+	          return traduzir("error.guidance.arguments");
+	        }
+	        return traduzir("error.guidance.type");
+	      }
+
+	      if (tipo === "ValueError") {
+	        const valorInteiro = mensagem.match(/invalid literal for int\(\) with base \d+:\s*(.+)$/i);
+	        if (valorInteiro) return traduzir("error.guidance.intValue", { value: valorInteiro[1] });
+	        if (mensagemMinuscula.includes("values to unpack")) return traduzir("error.guidance.unpack");
+	        if (mensagemMinuscula.includes("math domain error")) return traduzir("error.guidance.mathDomain");
+	        return traduzir("error.guidance.value");
+	      }
+
+	      if (tipo === "ZeroDivisionError") return traduzir("error.guidance.zeroDivision");
+	      if (tipo === "IndexError") return traduzir("error.guidance.index");
+
+	      if (tipo === "KeyError") {
+	        const chave = mensagem.replace(/^KeyError:\s*/, "").trim();
+	        const chaveExibida = chave || traduzir("error.guidance.indicatedFeminine");
+	        return traduzir("error.guidance.key", { key: chaveExibida });
+	      }
+
+	      if (tipo === "AttributeError") {
+	        const atributo = mensagem.match(/['\"]([^'\"]+)['\"] object has no attribute ['\"]([^'\"]+)['\"]/i);
+	        return traduzir("error.guidance.attribute", {
+	          type: atributo ? "'" + atributo[1] + "'" : traduzir("error.guidance.indicated"),
+	          attribute: atributo ? "'" + atributo[2] + "'" : traduzir("error.guidance.indicated")
+	        });
+	      }
+
+	      if (tipo === "ModuleNotFoundError") {
+	        const modulo = mensagem.match(/no module named ['\"]([^'\"]+)['\"]/i);
+	        return traduzir("error.guidance.moduleNotFound", {
+	          module: modulo ? "'" + modulo[1] + "'" : traduzir("error.guidance.indicated")
+	        });
+	      }
+
+	      if (tipo === "ImportError") return traduzir("error.guidance.import");
+	      if (tipo === "FileNotFoundError") return traduzir("error.guidance.fileNotFound");
+	      if (tipo === "PermissionError") return traduzir("error.guidance.permission");
+	      if (tipo === "RecursionError") return traduzir("error.guidance.recursion");
+	      if (tipo === "AssertionError") return traduzir("error.guidance.assertion");
+	      if (tipo === "OverflowError") return traduzir("error.guidance.overflow");
+	      if (tipo === "EOFError") return traduzir("error.guidance.eof");
+	      if (tipo === "MemoryError") return traduzir("error.guidance.memory");
+	      if (tipo === "TempoLimite" || tipo === "TimeoutError") return traduzir("error.guidance.timeout");
+	      if (tipo === "LimiteDePassos") return traduzir("error.guidance.stepLimit");
+	      if (tipo === "FalhaInterna") return traduzir("error.guidance.internal");
+	      return traduzir("error.guidance.generic");
+	    }
+
+	    function montarCaixaErro(erro, classeExtra = "") {
+	      const orientacao = orientarCorrecaoErro(erro);
+	      const classe = classeExtra ? " " + classeExtra : "";
+	      return "<div class=\"error-box" + classe + "\" role=\"alert\">"
+	        + "<div><strong>" + escaparHTML(traduzir("error.label")) + "</strong> " + escaparHTML(erro) + "</div>"
+	        + "<div class=\"error-guidance\"><strong class=\"error-guidance-label\">"
+	        + escaparHTML(traduzir("error.guidanceLabel")) + "</strong> " + escaparHTML(orientacao) + "</div>"
+	        + "</div>";
 	    }
 
     function alvoExplicacaoLinha() {
@@ -1133,7 +1344,7 @@ async function carregarExemplos(){
 	      atualizarExplicacaoLinha();
 
 	      if (p.erro) {
-	        corpo.innerHTML = "<div class=\"error-box\"><strong>" + escaparHTML(traduzir("error.label")) + "</strong> " + escaparHTML(p.erro) + "</div>";
+	        corpo.innerHTML = montarCaixaErro(p.erro);
 	        corpoSaida.innerHTML = "<div class=\"section-label\">" + escaparHTML(traduzir("output.errorUntil")) + "</div>"
 	          + montarTerminalSaida(p.saida, "output.none")
 	          + montarTerminalSaidaErro(p.saida_erro);
@@ -1155,7 +1366,7 @@ async function carregarExemplos(){
 	      corpoSaida.innerHTML = montarTerminalSaida(p.saida, "output.noPrint")
 	        + montarTerminalSaidaErro(p.saida_erro)
 	        + (p.erro_ocorrido
-	          ? "<div class=\"error-box erro-saida\" role=\"alert\"><strong>" + escaparHTML(traduzir("error.label")) + "</strong> " + escaparHTML(p.erro_ocorrido) + "</div>"
+	          ? montarCaixaErro(p.erro_ocorrido, "erro-saida")
 	          : "");
 	      corpoPilha.innerHTML = renderizarPilhaChamadas(p.pilha_chamadas);
       requestAnimationFrame(desenharSetasMemoria);

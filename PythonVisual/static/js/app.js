@@ -7,6 +7,7 @@ carregarExemplos();
       gutters: ["exec-gutter", "CodeMirror-linenumbers"],
       indentUnit: 4,
       indentWithTabs: false,
+      lineWrapping: true,
       placeholder: "",
       autofocus: true
     });

@@ -6,6 +6,7 @@ import tempfile
 
 from pathlib import Path
 
+
 def carregar_config():
     config = {}
     arquivo = Path(__file__).with_name("env.conf")
@@ -15,6 +16,7 @@ def carregar_config():
                 chave, valor = linha.split("=", 1)
                 config[chave.strip()] = valor.strip()
     return config
+
 
 CONFIG = carregar_config()
 
@@ -339,11 +341,16 @@ else:
 indice_entrada = 0
 
 
+controle_interno_em_desenrolamento = False
+
+
 def registrar_passo(frame, evento, erro_ocorrido=None):
+    global controle_interno_em_desenrolamento
     if frame.f_code.co_filename != ARQUIVO_USUARIO:
         return
 
     if len(execucoes) >= limite_passos:
+        controle_interno_em_desenrolamento = True
         raise LimiteDePassos()
 
     variaveis = serializar_mapeamento_variaveis(frame.f_locals)
@@ -375,6 +382,8 @@ def tracer(frame, event, arg):
         erros_em_propagacao.clear()
         registrar_passo(frame, event)
     elif event == "return":
+        if controle_interno_em_desenrolamento:
+            return tracer
         registrar_passo(frame, event)
     elif event == "exception":
         tipo_erro, valor_erro, _ = arg
@@ -391,7 +400,7 @@ def tracer(frame, event, arg):
 
 
 def input_visual(prompt=""):
-    global indice_entrada
+    global indice_entrada, controle_interno_em_desenrolamento
     frame_chamador = sys._getframe(1)
     linha = frame_chamador.f_lineno if frame_chamador.f_code.co_filename == ARQUIVO_USUARIO else None
     texto_prompt = str(prompt)
@@ -407,6 +416,7 @@ def input_visual(prompt=""):
             stdout_capture.write("\n")
             return valor_entrada
 
+    controle_interno_em_desenrolamento = True
     raise EntradaPendente(linha, texto_prompt, frame_chamador)
 
 
@@ -422,6 +432,8 @@ sys.settrace(tracer)
 
 try:
     exec(compile(codigo, ARQUIVO_USUARIO, "exec"), ambiente, ambiente)
+    if execucoes and execucoes[-1].get("evento") == "return" and execucoes[-1].get("escopo") == "Global":
+        execucoes.pop()
     variaveis_finais = serializar_mapeamento_variaveis(ambiente)
     execucoes.append({
         "linha": None,
@@ -486,12 +498,15 @@ def executar_codigo(
     tempo_limite=TEMPO_LIMITE_SEGUNDOS,
     limite_passos=LIMITE_PASSOS,
 ):
-    payload = json.dumps({
-        "codigo": codigo,
-        "entrada": entrada,
-        "entradas": entradas,
-        "limite_passos": limite_passos,
-    }, ensure_ascii=False)
+    payload = json.dumps(
+        {
+            "codigo": codigo,
+            "entrada": entrada,
+            "entradas": entradas,
+            "limite_passos": limite_passos,
+        },
+        ensure_ascii=False,
+    )
 
     try:
         with tempfile.TemporaryDirectory(prefix="pythontutor-") as diretorio:
@@ -504,30 +519,23 @@ def executar_codigo(
                 cwd=diretorio,
             )
     except subprocess.TimeoutExpired:
-        return [{
-            "erro": f"TempoLimite: execução interrompida após {tempo_limite} segundos.",
-            "saida": ""
-        }]
+        return [
+            {
+                "erro": f"TempoLimite: execução interrompida após {tempo_limite} segundos.",
+                "saida": "",
+            }
+        ]
 
     if resultado.returncode != 0:
         erro = resultado.stderr.strip() or "processo de execução encerrado sem resposta."
-        return [{
-            "erro": f"FalhaInterna: {erro[:500]}",
-            "saida": ""
-        }]
+        return [{"erro": f"FalhaInterna: {erro[:500]}", "saida": ""}]
 
     try:
         dados = json.loads(resultado.stdout)
     except json.JSONDecodeError:
-        return [{
-            "erro": "FalhaInterna: resposta invalida do executor.",
-            "saida": ""
-        }]
+        return [{"erro": "FalhaInterna: resposta invalida do executor.", "saida": ""}]
 
     if isinstance(dados, list):
         return dados
 
-    return [{
-        "erro": "FalhaInterna: resposta inesperada do executor.",
-        "saida": ""
-    }]
+    return [{"erro": "FalhaInterna: resposta inesperada do executor.", "saida": ""}]

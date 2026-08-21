@@ -96,7 +96,10 @@
   padding: 5px 8px;
   background: transparent;
   color: #17324d;
-  font: 800 0.78rem "Inter", Arial, sans-serif;
+  font:
+    800 0.78rem "Inter",
+    Arial,
+    sans-serif;
   cursor: pointer;
 }
 
@@ -114,10 +117,16 @@
     row-gap: 12px;
   }
 
-  html.fonte-ampliada .site-logo { grid-area: logo; }
-  html.fonte-ampliada .site-header .header-text { grid-area: title; }
+  html.fonte-ampliada .site-logo {
+    grid-area: logo;
+  }
+  html.fonte-ampliada .site-header .header-text {
+    grid-area: title;
+  }
   html.fonte-ampliada .site-header .header-controls,
-  html.fonte-ampliada .site-header .accessibility-controls { grid-area: controls; }
+  html.fonte-ampliada .site-header .accessibility-controls {
+    grid-area: controls;
+  }
 
   html.fonte-ampliada .site-header .top-nav {
     grid-area: navigation;
@@ -147,8 +156,12 @@
     row-gap: 12px;
   }
 
-  .site-logo { grid-area: logo; }
-  .site-header .header-text { grid-area: title; }
+  .site-logo {
+    grid-area: logo;
+  }
+  .site-header .header-text {
+    grid-area: title;
+  }
 
   .site-header .top-nav {
     grid-area: navigation;

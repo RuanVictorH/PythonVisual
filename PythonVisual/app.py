@@ -35,16 +35,18 @@ def executar():
     entradas = dados.get("entradas")
 
     if not isinstance(codigo, str) or not isinstance(entrada, str):
-        return jsonify([{
-            "erro": "RequisicaoInvalida: codigo e entrada devem ser textos.",
-            "saida": ""
-        }]), 400
+        return (
+            jsonify(
+                [{"erro": "RequisicaoInvalida: codigo e entrada devem ser textos.", "saida": ""}]
+            ),
+            400,
+        )
 
     if entradas is not None and not isinstance(entradas, list):
-        return jsonify([{
-            "erro": "RequisicaoInvalida: entradas deve ser uma lista.",
-            "saida": ""
-        }]), 400
+        return (
+            jsonify([{"erro": "RequisicaoInvalida: entradas deve ser uma lista.", "saida": ""}]),
+            400,
+        )
 
     return jsonify(executar_codigo(codigo, entrada=entrada, entradas=entradas))
 

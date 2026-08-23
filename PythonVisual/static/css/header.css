@@ -1,3 +1,29 @@
+:root {
+  --font-scale: 1;
+  font-size: calc(16px * var(--font-scale));
+}
+
+.btn-access {
+  min-width: 38px;
+  padding: 8px 10px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 7px;
+  background: #f8fafc;
+  color: #17324d;
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    border-color 0.2s;
+}
+
+.btn-access:hover {
+  background: #e0f2fe;
+  border-color: #2563eb;
+}
+
 .site-header {
   background: #ffffff;
   border-bottom: 1px solid #dbe3ef;
@@ -200,4 +226,56 @@
   .site-header .top-nav {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+}
+
+body.tema-escuro {
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+body.tema-escuro .site-header {
+  background: #111827;
+  border-color: #334155;
+  box-shadow: none;
+}
+
+body.tema-escuro .site-header .header-text h1 {
+  color: #e2e8f0;
+}
+
+body.tema-escuro .site-header .header-text p,
+body.tema-escuro .site-header .top-nav a {
+  color: #cbd5e1;
+}
+
+body.tema-escuro .site-header .top-nav a:hover,
+body.tema-escuro .site-header .top-nav a.ativo {
+  background: #1e293b;
+  border-color: #475569;
+  color: #bfdbfe;
+}
+
+body.tema-escuro .btn-access {
+  background: #1e293b;
+  color: #dbeafe;
+  border-color: #475569;
+}
+
+body.tema-escuro .btn-access:hover {
+  background: #334155;
+  border-color: #60a5fa;
+}
+
+body.tema-escuro .site-header .language-switch {
+  background: #1e293b;
+  border-color: #475569;
+}
+
+body.tema-escuro .site-header .lang-btn {
+  color: #dbeafe;
+}
+
+body.tema-escuro .site-header .lang-btn.active {
+  background: #60a5fa;
+  color: #0b1120;
 }

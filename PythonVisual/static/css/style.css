@@ -140,6 +140,23 @@ header img {
   max-width: 1400px;
   margin: 0 auto;
 }
+.intro-visualizador {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-left: 4px solid #2563eb;
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: #1d4ed8;
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+.intro-visualizador i {
+  font-size: 1.05rem;
+}
 .coluna-esquerda,
 .coluna-direita {
   display: flex;
@@ -180,7 +197,8 @@ header img {
 .top-nav i,
 button i,
 .section-label i,
-.terminal-label i {
+.terminal-label i,
+.linha-badge i {
   margin-right: 6px;
 }
 .card-body {
@@ -972,6 +990,33 @@ button i,
   font-size: 0.76rem;
   font-weight: 700;
 }
+.pilha-conector {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 2px 0 2px 12px;
+  padding-left: 13px;
+  border-left: 2px dashed #93c5fd;
+  height: 16px;
+  color: #2563eb;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.pilha-retorno {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 6px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: #dcfce7;
+  color: #14532d;
+  font-size: 0.74rem;
+  font-weight: 800;
+  font-family: "Fira Mono", "Courier New", monospace;
+}
 
 .empty {
   color: #94a3b8;
@@ -1011,6 +1056,12 @@ button i,
 body.tema-escuro {
   background: #0f172a;
   color: #e2e8f0;
+}
+body.tema-escuro .intro-visualizador {
+  background: #082f49;
+  color: #bae6fd;
+  border-color: #0369a1;
+  border-left-color: #38bdf8;
 }
 body.tema-escuro header,
 body.tema-escuro .card,
@@ -1108,6 +1159,14 @@ body.tema-escuro .pilha-item {
 body.tema-escuro .pilha-item.atual {
   background: #2b1116;
   border-color: #dc2626;
+}
+body.tema-escuro .pilha-conector {
+  border-left-color: #1e40af;
+  color: #60a5fa;
+}
+body.tema-escuro .pilha-retorno {
+  background: #052e16;
+  color: #86efac;
 }
 body.tema-escuro .tipo-chip-primitivo {
   background: #082f49;

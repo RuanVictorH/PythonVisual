@@ -17,8 +17,8 @@ let passos = [];
 let indiceAtual = 0;
 let linhaExecutadaMarcada = null;
 let linhaProximaMarcada = null;
-let escalaFonte = 1;
-let temaEscuro = false;
+let escalaFonte = parseFloat(localStorage.getItem("pythonvisual_escala_fonte")) || 1;
+let temaEscuro = localStorage.getItem("pythonvisual_tema_escuro") === "1";
 let entradasColetadas = [];
 let entradaPendente = null;
 
@@ -186,6 +186,8 @@ const i18n = {
       "Mostra a sequência dinâmica de funções ativas neste passo.",
     "stack.currentScope": "escopo atual",
     "stack.empty": "Nenhuma função ativa além do escopo global neste passo.",
+    "stack.calls": "chama",
+    "stack.returns": "retorna",
     "memory.title": "Memória",
     "memory.empty": "Nenhum dado armazenado neste passo.",
     "memory.frames": "Quadros de memória",
@@ -421,6 +423,8 @@ const i18n = {
     "stack.currentScope": "current scope",
     "stack.empty":
       "No function is active beyond the global scope in this step.",
+    "stack.calls": "calls",
+    "stack.returns": "returns",
     "memory.title": "Memory",
     "memory.empty": "No data stored in this step.",
     "memory.frames": "Memory frames",
@@ -660,6 +664,7 @@ function aplicarFonte() {
     "fonte-ampliada",
     escalaFonte > 1.3,
   );
+  localStorage.setItem("pythonvisual_escala_fonte", escalaFonte.toFixed(2));
   editor.refresh();
   requestAnimationFrame(desenharSetasMemoria);
 }
@@ -705,6 +710,7 @@ function alternarCard(cardId) {
 function alternarTema() {
   temaEscuro = !temaEscuro;
   document.body.classList.toggle("tema-escuro", temaEscuro);
+  localStorage.setItem("pythonvisual_tema_escuro", temaEscuro ? "1" : "0");
   atualizarBotaoTema();
   editor.refresh();
   requestAnimationFrame(desenharSetasMemoria);
@@ -1286,10 +1292,16 @@ function formatarChamadaPilha(item) {
   return escaparHTML(item.escopo) + "(" + textoArgumentos + ")";
 }
 
-function renderizarPilhaChamadas(pilha) {
+function renderizarPilhaChamadas(pilha, passoAtual) {
   if (!Array.isArray(pilha) || pilha.length <= 1) {
     return '<p class="empty">' + escaparHTML(traduzir("stack.empty")) + "</p>";
   }
+  const ultimoIndice = pilha.length - 1;
+  const mostrarRetorno =
+    passoAtual &&
+    passoAtual.evento === "return" &&
+    passoAtual.valor_retorno !== undefined;
+
   const itens = pilha
     .map((item, indice) => {
       const atual = item.atual ? " atual" : "";
@@ -1299,6 +1311,20 @@ function renderizarPilhaChamadas(pilha) {
       const linha = Number.isInteger(item.linha)
         ? traduzir("input.line") + " " + item.linha
         : traduzir("input.line") + " -";
+      const retornoHTML =
+        indice === ultimoIndice && mostrarRetorno
+          ? '<div class="pilha-retorno"><i class="fa-solid fa-turn-up" aria-hidden="true"></i>' +
+            escaparHTML(traduzir("stack.returns")) +
+            " " +
+            escaparHTML(passoAtual.valor_retorno) +
+            "</div>"
+          : "";
+      const conectorHTML =
+        indice < ultimoIndice
+          ? '<div class="pilha-conector"><i class="fa-solid fa-arrow-down" aria-hidden="true"></i>' +
+            escaparHTML(traduzir("stack.calls")) +
+            "</div>"
+          : "";
       return (
         '<div class="pilha-item' +
         atual +
@@ -1314,8 +1340,10 @@ function renderizarPilhaChamadas(pilha) {
         linha +
         marcadorAtual +
         "</div>" +
+        retornoHTML +
         "</div>" +
-        "</div>"
+        "</div>" +
+        conectorHTML
       );
     })
     .join("");
@@ -1920,12 +1948,12 @@ function renderizarPasso() {
   if (p.erro) {
     corpo.innerHTML = montarCaixaErro(p.erro);
     corpoSaida.innerHTML =
-      '<div class="section-label">' +
+      '<div class="section-label"><i class="fa-solid fa-square-terminal" aria-hidden="true"></i>' +
       escaparHTML(traduzir("output.errorUntil")) +
       "</div>" +
       montarTerminalSaida(p.saida, "output.none") +
       montarTerminalSaidaErro(p.saida_erro);
-    corpoPilha.innerHTML = renderizarPilhaChamadas(p.pilha_chamadas);
+    corpoPilha.innerHTML = renderizarPilhaChamadas(p.pilha_chamadas, p);
     requestAnimationFrame(desenharSetasMemoria);
     return;
   }
@@ -1961,7 +1989,7 @@ function renderizarPasso() {
     montarTerminalSaida(p.saida, "output.noPrint") +
     montarTerminalSaidaErro(p.saida_erro) +
     (p.erro_ocorrido ? montarCaixaErro(p.erro_ocorrido, "erro-saida") : "");
-  corpoPilha.innerHTML = renderizarPilhaChamadas(p.pilha_chamadas);
+  corpoPilha.innerHTML = renderizarPilhaChamadas(p.pilha_chamadas, p);
   requestAnimationFrame(desenharSetasMemoria);
 }
 
@@ -2050,5 +2078,7 @@ document.addEventListener("keydown", (evento) => {
 
 window.addEventListener("resize", desenharSetasMemoria);
 resetarExecucaoVisual();
+document.body.classList.toggle("tema-escuro", temaEscuro);
+aplicarFonte();
 aplicarIdioma();
 atualizarEntradaDinamica();

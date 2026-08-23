@@ -42,6 +42,16 @@
       main { padding: 24px 16px; }
       .creditos-institucionais { grid-template-columns: 1fr; }
       }
+      body.tema-escuro .card { background: #111827; border-color: #334155; }
+      body.tema-escuro h2,
+      body.tema-escuro h3,
+      body.tema-escuro .credito-nome,
+      body.tema-escuro .ufla-nome { color: #e2e8f0; }
+      body.tema-escuro p,
+      body.tema-escuro ul { color: #cbd5e1; }
+      body.tema-escuro .creditos-institucionais { border-top-color: #334155; }
+      body.tema-escuro .credito-item { background: #0b1120; border-color: #334155; }
+      body.tema-escuro .credito-rotulo { color: #94a3b8; }
     </style>
     <link rel="stylesheet" href="/static/css/header.css">
   </head>
@@ -50,11 +60,13 @@
       <img class="site-logo" src="/static/img/pythonvisual-logo.png" alt="Logo PythonVisual">
       <div class="header-text">
         <h1>PythonVisual</h1>
-        <p data-i18n="brand.subtitle">Visualização didática de código Python</p>
       </div>
       {% include "_navigation.html" %}
       <div class="header-controls">
         {% include "_language_switch.html" %}
+        <button class="btn-access" type="button" onclick="alterarFonte(-0.1)" title="Diminuir fonte" data-i18n-title="access.fontDown"><i class="fa-solid fa-magnifying-glass-minus"></i><span>A-</span></button>
+        <button class="btn-access" type="button" onclick="alterarFonte(0.1)" title="Aumentar fonte" data-i18n-title="access.fontUp"><i class="fa-solid fa-magnifying-glass-plus"></i><span>A+</span></button>
+        <button class="btn-access" type="button" id="btn-tema" onclick="alternarTema()" title="Alternar tema claro e escuro" data-i18n-title="access.themeToggle"><i class="fa-solid fa-moon" id="tema-icone"></i><span id="tema-label">Tema escuro</span></button>
       </div>
     </header>
 
@@ -105,7 +117,6 @@
       const pageI18n = {
       pt: {
       "title": "Sobre - PythonVisual",
-      "brand.subtitle": "Visualização didática de código Python",
       "nav.home": "Home",
       "nav.visualizer": "Visualizador",
       "nav.about": "Sobre",
@@ -127,11 +138,15 @@
       "credits.developer": "Desenvolvedor",
       "credits.advisor": "Orientador",
       "credits.institution": "Universidade Federal de Lavras (UFLA)",
-      "credits.logoAlt": "Logo da Universidade Federal de Lavras"
+      "credits.logoAlt": "Logo da Universidade Federal de Lavras",
+      "access.fontDown": "Diminuir fonte",
+      "access.fontUp": "Aumentar fonte",
+      "access.themeToggle": "Alternar tema claro e escuro",
+      "theme.dark": "Tema escuro",
+      "theme.light": "Tema claro"
       },
       en: {
       "title": "About - PythonVisual",
-      "brand.subtitle": "Educational visualization of Python code",
       "nav.home": "Home",
       "nav.visualizer": "Visualizer",
       "nav.about": "About",
@@ -153,13 +168,42 @@
       "credits.developer": "Developer",
       "credits.advisor": "Advisor",
       "credits.institution": "Federal University of Lavras (UFLA)",
-      "credits.logoAlt": "Federal University of Lavras logo"
+      "credits.logoAlt": "Federal University of Lavras logo",
+      "access.fontDown": "Decrease font size",
+      "access.fontUp": "Increase font size",
+      "access.themeToggle": "Toggle light and dark theme",
+      "theme.dark": "Dark theme",
+      "theme.light": "Light theme"
       }
       };
       let currentLang = localStorage.getItem("pythonvisual_lang") || "pt";
       if (!pageI18n[currentLang]) currentLang = "pt";
+      let escalaFonte = parseFloat(localStorage.getItem("pythonvisual_escala_fonte")) || 1;
+      let temaEscuro = localStorage.getItem("pythonvisual_tema_escuro") === "1";
       function translate(key) {
       return (pageI18n[currentLang] && pageI18n[currentLang][key]) || pageI18n.pt[key] || key;
+      }
+      function aplicarFonte() {
+      document.documentElement.style.setProperty("--font-scale", escalaFonte.toFixed(2));
+      document.documentElement.classList.toggle("fonte-ampliada", escalaFonte > 1.3);
+      localStorage.setItem("pythonvisual_escala_fonte", escalaFonte.toFixed(2));
+      }
+      function alterarFonte(delta) {
+      escalaFonte = Math.max(0.85, Math.min(1.8, escalaFonte + delta));
+      aplicarFonte();
+      }
+      function atualizarBotaoTema() {
+      const icone = document.getElementById("tema-icone");
+      const label = document.getElementById("tema-label");
+      if (!icone || !label) return;
+      icone.className = temaEscuro ? "fa-solid fa-sun" : "fa-solid fa-moon";
+      label.textContent = temaEscuro ? translate("theme.light") : translate("theme.dark");
+      }
+      function alternarTema() {
+      temaEscuro = !temaEscuro;
+      document.body.classList.toggle("tema-escuro", temaEscuro);
+      localStorage.setItem("pythonvisual_tema_escuro", temaEscuro ? "1" : "0");
+      atualizarBotaoTema();
       }
       function applyPageLang() {
       document.documentElement.lang = currentLang === "en" ? "en" : "pt-br";
@@ -170,17 +214,25 @@
       document.querySelectorAll("[data-i18n-alt]").forEach((el) => {
       el.alt = translate(el.dataset.i18nAlt);
       });
+      document.querySelectorAll("[data-i18n-title]").forEach((el) => {
+      const texto = translate(el.dataset.i18nTitle);
+      el.title = texto;
+      el.setAttribute("aria-label", texto);
+      });
       document.querySelectorAll(".lang-btn").forEach((button) => {
       const active = button.id === "lang-" + currentLang;
       button.classList.toggle("active", active);
       button.setAttribute("aria-pressed", active ? "true" : "false");
       });
+      atualizarBotaoTema();
       }
       function setLang(lang) {
       currentLang = pageI18n[lang] ? lang : "pt";
       localStorage.setItem("pythonvisual_lang", currentLang);
       applyPageLang();
       }
+      document.body.classList.toggle("tema-escuro", temaEscuro);
+      aplicarFonte();
       applyPageLang();
     </script>
   </body>

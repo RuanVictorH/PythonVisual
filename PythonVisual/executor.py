@@ -37,6 +37,7 @@ ARQUIVO_USUARIO = "<codigo_usuario>"
 referencias_objetos = {}
 proxima_referencia_objeto = 1
 ordem_importacoes = {}
+SEM_RETORNO = object()
 
 
 class LimiteDePassos(Exception):
@@ -344,7 +345,7 @@ indice_entrada = 0
 controle_interno_em_desenrolamento = False
 
 
-def registrar_passo(frame, evento, erro_ocorrido=None):
+def registrar_passo(frame, evento, erro_ocorrido=None, valor_retorno=SEM_RETORNO):
     global controle_interno_em_desenrolamento
     if frame.f_code.co_filename != ARQUIVO_USUARIO:
         return
@@ -368,29 +369,36 @@ def registrar_passo(frame, evento, erro_ocorrido=None):
     }
     if erro_ocorrido:
         passo["erro_ocorrido"] = erro_ocorrido
+    if valor_retorno is not SEM_RETORNO and escopo != "<module>":
+        passo["valor_retorno"] = repr_seguro(valor_retorno)
     execucoes.append(passo)
 
 
 erros_em_propagacao = set()
+excecao_real_em_desenrolamento = False
 
 
 def tracer(frame, event, arg):
+    global excecao_real_em_desenrolamento
     if frame.f_code.co_filename != ARQUIVO_USUARIO:
         return tracer
 
     if event == "line":
         erros_em_propagacao.clear()
+        excecao_real_em_desenrolamento = False
         registrar_passo(frame, event)
     elif event == "return":
         if controle_interno_em_desenrolamento:
             return tracer
-        registrar_passo(frame, event)
+        valor_retorno = SEM_RETORNO if excecao_real_em_desenrolamento else arg
+        registrar_passo(frame, event, valor_retorno=valor_retorno)
     elif event == "exception":
         tipo_erro, valor_erro, _ = arg
         erros_internos = (EntradaPendente, LimiteDePassos, StopIteration, GeneratorExit)
         marcador = id(valor_erro)
         if not issubclass(tipo_erro, erros_internos) and marcador not in erros_em_propagacao:
             erros_em_propagacao.add(marcador)
+            excecao_real_em_desenrolamento = True
             registrar_passo(
                 frame,
                 event,

@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/material-darker.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/display/placeholder.min.js"></script>
@@ -88,7 +89,7 @@
 
         <div class="card" id="explicacao-card" style="display:none;">
           <div class="card-header">
-            <span class="card-header-title"><i class="fa-solid fa-lightbulb"></i><span data-i18n="section.explanation">Explicação da linha atual</span></span>
+            <span class="card-header-title"><i class="fa-solid fa-lightbulb"></i><span data-i18n="section.explanation">Explicação da linha atual</span><span id="explicacao-linha-numero"></span></span>
             <button class="btn-recolher" type="button" onclick="alternarCard('explicacao-card')" aria-expanded="true" aria-controls="explicacao-corpo"><i class="fa-solid fa-chevron-up" aria-hidden="true"></i></button>
           </div>
           <div class="card-body explicacao-linha" id="explicacao-corpo"></div>
@@ -106,7 +107,7 @@
         </div>
 
         <div class="card" id="entrada-card" style="display:none;">
-          <div class="card-header"><i class="fa-solid fa-keyboard"></i><span data-i18n="section.input">Entrada solicitada</span></div>
+          <div class="card-header"><span class="card-header-title"><i class="fa-solid fa-keyboard"></i><span data-i18n="section.input">Entrada solicitada</span></span></div>
           <div class="card-body">
             <div class="entrada-linha-info">
               <span class="entrada-linha-badge" id="entrada-linha-badge">Linha -</span>
@@ -137,7 +138,7 @@
       </div>
     </div>
 
-    <script src="/static/js/app.js"></script>
+    <script type="module" src="/static/js/app.js"></script>
 
   </body>
 </html>

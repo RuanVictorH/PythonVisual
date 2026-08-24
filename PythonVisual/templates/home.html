@@ -9,45 +9,192 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <style>
-      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-      body { font-family: "Inter", Arial, sans-serif; background: #f8fafc; color: #1e293b; min-height: 100vh; }
-      header { background: #ffffff; border-bottom: 1px solid #dbe3ef; padding: 18px 32px; display: flex; align-items: center; gap: 18px; flex-wrap: wrap; box-shadow: 0 1px 4px rgba(15,23,42,0.08); }
-      .brand h1 { color: #0f172a; font-size: 1.7rem; line-height: 1.1; }
-      .brand p { color: #475569; font-size: 0.9rem; margin-top: 4px; }
-      nav { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
-      nav a { color: #17324d; text-decoration: none; font-size: 0.9rem; font-weight: 700; padding: 8px 11px; border-radius: 7px; border: 1px solid transparent; }
-      nav a:hover, nav a.ativo { background: #eef6ff; border-color: #bfdbfe; color: #1d4ed8; }
-      .language-switch { display: inline-flex; gap: 4px; padding: 3px; border: 1.5px solid #cbd5e1; border-radius: 8px; background: #f8fafc; }
-      .lang-btn { border: none; border-radius: 6px; padding: 6px 8px; background: transparent; color: #17324d; font-weight: 800; cursor: pointer; }
-      .lang-btn.active { background: #2563eb; color: white; }
-      a:focus-visible, button:focus-visible { outline: 3px solid #f59e0b; outline-offset: 2px; }
-      main { max-width: 1100px; margin: 0 auto; padding: 38px 32px; }
-      .hero { display: grid; grid-template-columns: 1.3fr 0.7fr; gap: 28px; align-items: center; }
-      .hero h2 { font-size: 2rem; color: #0f172a; margin-bottom: 12px; }
-      .hero p { color: #475569; font-size: 1rem; line-height: 1.65; margin-bottom: 18px; }
-      .cta { display: inline-block; background: #2563eb; color: white; text-decoration: none; font-weight: 700; padding: 12px 16px; border-radius: 8px; }
-      .panel { background: white; border: 1px solid #dbe3ef; border-radius: 8px; padding: 18px; box-shadow: 0 1px 4px rgba(15,23,42,0.06); }
-      .panel h3 { color: #17324d; margin-bottom: 10px; font-size: 1rem; }
-      .panel ul { padding-left: 20px; color: #475569; line-height: 1.7; }
-      .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 30px; }
-      .card { background: white; border: 1px solid #dbe3ef; border-radius: 8px; padding: 18px; }
-      .card h3 { color: #17324d; margin-bottom: 8px; font-size: 1rem; }
-      .card p { color: #475569; line-height: 1.55; font-size: 0.94rem; }
-      h2 i, h3 i, .cta i { margin-right: 8px; }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Inter", Arial, sans-serif;
+        background: #f8fafc;
+        color: #1e293b;
+        min-height: 100vh;
+      }
+      header {
+        background: #ffffff;
+        border-bottom: 1px solid #dbe3ef;
+        padding: 18px 32px;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        flex-wrap: wrap;
+        box-shadow: 0 1px 4px rgba(15, 23, 42, 0.08);
+      }
+      .brand h1 {
+        color: #0f172a;
+        font-size: 1.7rem;
+        line-height: 1.1;
+      }
+      .brand p {
+        color: #475569;
+        font-size: 0.9rem;
+        margin-top: 4px;
+      }
+      nav {
+        margin-left: auto;
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      nav a {
+        color: #17324d;
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 700;
+        padding: 8px 11px;
+        border-radius: 7px;
+        border: 1px solid transparent;
+      }
+      nav a:hover,
+      nav a.ativo {
+        background: #eef6ff;
+        border-color: #bfdbfe;
+        color: #1d4ed8;
+      }
+      .language-switch {
+        display: inline-flex;
+        gap: 4px;
+        padding: 3px;
+        border: 1.5px solid #cbd5e1;
+        border-radius: 8px;
+        background: #f8fafc;
+      }
+      .lang-btn {
+        border: none;
+        border-radius: 6px;
+        padding: 6px 8px;
+        background: transparent;
+        color: #17324d;
+        font-weight: 800;
+        cursor: pointer;
+      }
+      .lang-btn.active {
+        background: #2563eb;
+        color: white;
+      }
+      a:focus-visible,
+      button:focus-visible {
+        outline: 3px solid #f59e0b;
+        outline-offset: 2px;
+      }
+      main {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 38px 32px;
+      }
+      .hero {
+        display: grid;
+        grid-template-columns: 1.3fr 0.7fr;
+        gap: 28px;
+        align-items: center;
+      }
+      .hero h2 {
+        font-size: 2rem;
+        color: #0f172a;
+        margin-bottom: 12px;
+      }
+      .hero p {
+        color: #475569;
+        font-size: 1rem;
+        line-height: 1.65;
+        margin-bottom: 18px;
+      }
+      .cta {
+        display: inline-block;
+        background: #2563eb;
+        color: white;
+        text-decoration: none;
+        font-weight: 700;
+        padding: 12px 16px;
+        border-radius: 8px;
+      }
+      .panel {
+        background: white;
+        border: 1px solid #dbe3ef;
+        border-radius: 8px;
+        padding: 18px;
+        box-shadow: 0 1px 4px rgba(15, 23, 42, 0.06);
+      }
+      .panel h3 {
+        color: #17324d;
+        margin-bottom: 10px;
+        font-size: 1rem;
+      }
+      .panel ul {
+        padding-left: 20px;
+        color: #475569;
+        line-height: 1.7;
+      }
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-top: 30px;
+      }
+      .card {
+        background: white;
+        border: 1px solid #dbe3ef;
+        border-radius: 8px;
+        padding: 18px;
+      }
+      .card h3 {
+        color: #17324d;
+        margin-bottom: 8px;
+        font-size: 1rem;
+      }
+      .card p {
+        color: #475569;
+        line-height: 1.55;
+        font-size: 0.94rem;
+      }
+      h2 i,
+      h3 i,
+      .cta i {
+        margin-right: 8px;
+      }
       @media (max-width: 800px) {
-      header { align-items: flex-start; }
-      nav { width: 100%; margin-left: 0; }
-      .hero, .cards { grid-template-columns: 1fr; }
-      main { padding: 24px 16px; }
+        header {
+          align-items: flex-start;
+        }
+        nav {
+          width: 100%;
+          margin-left: 0;
+        }
+        .hero,
+        .cards {
+          grid-template-columns: 1fr;
+        }
+        main {
+          padding: 24px 16px;
+        }
       }
       body.tema-escuro .hero h2,
       body.tema-escuro .panel h3,
-      body.tema-escuro .card h3 { color: #e2e8f0; }
+      body.tema-escuro .card h3 {
+        color: #e2e8f0;
+      }
       body.tema-escuro .hero p,
       body.tema-escuro .panel ul,
-      body.tema-escuro .card p { color: #cbd5e1; }
+      body.tema-escuro .card p {
+        color: #cbd5e1;
+      }
       body.tema-escuro .panel,
-      body.tema-escuro .card { background: #111827; border-color: #334155; }
+      body.tema-escuro .card {
+        background: #111827;
+        border-color: #334155;
+      }
     </style>
     <link rel="stylesheet" href="/static/css/header.css">
   </head>
@@ -102,112 +249,133 @@
     </main>
     <script>
       const pageI18n = {
-      pt: {
-      "title": "PythonVisual - Home",
-      "nav.home": "Home",
-      "nav.visualizer": "Visualizador",
-      "nav.about": "Sobre",
-      "nav.limitations": "Limitações",
-      "hero.title": "Entenda o que acontece enquanto o Python executa.",
-      "hero.text": "O PythonVisual mostra cada passo do programa, destacando a linha atual, a próxima linha, as variáveis, os objetos em memória, as funções, as importações e a saída gerada pelo código.",
-      "hero.cta": "Abrir visualizador",
-      "features.title": "Recursos principais",
-      "features.step": "Execução passo a passo.",
-      "features.memory": "Quadros de memória e objetos separados.",
-      "features.arrows": "Setas entre variáveis e objetos.",
-      "features.input": "Entrada com input() quando necessário.",
-      "features.theme": "Tema claro/escuro e ajuste de fonte.",
-      "card.study.title": "Para estudo",
-      "card.study.text": "Ajuda a visualizar atribuições, listas, dicionários, funções, classes e tratamento de erros.",
-      "card.class.title": "Para aula",
-      "card.class.text": "Facilita a explicação de escopo, memória, fluxo de execução e saída padrão.",
-      "card.debug.title": "Para depuração",
-      "card.debug.text": "Permite observar o estado do programa sem usar um depurador profissional completo.",
-      "access.fontDown": "Diminuir fonte",
-      "access.fontUp": "Aumentar fonte",
-      "access.themeToggle": "Alternar tema claro e escuro",
-      "theme.dark": "Tema escuro",
-      "theme.light": "Tema claro"
-      },
-      en: {
-      "title": "PythonVisual - Home",
-      "nav.home": "Home",
-      "nav.visualizer": "Visualizer",
-      "nav.about": "About",
-      "nav.limitations": "Limitations",
-      "hero.title": "Understand what happens while Python runs.",
-      "hero.text": "PythonVisual shows each program step, highlighting the current line, the next line, variables, objects in memory, functions, imports, and the output generated by the code.",
-      "hero.cta": "Open visualizer",
-      "features.title": "Main features",
-      "features.step": "Step-by-step execution.",
-      "features.memory": "Separate memory frames and objects.",
-      "features.arrows": "Arrows between variables and objects.",
-      "features.input": "Input with input() when needed.",
-      "features.theme": "Light/dark theme and font size control.",
-      "card.study.title": "For studying",
-      "card.study.text": "Helps visualize assignments, lists, dictionaries, functions, classes, and error handling.",
-      "card.class.title": "For teaching",
-      "card.class.text": "Makes it easier to explain scope, memory, execution flow, and standard output.",
-      "card.debug.title": "For debugging",
-      "card.debug.text": "Lets users observe program state without using a full professional debugger.",
-      "access.fontDown": "Decrease font size",
-      "access.fontUp": "Increase font size",
-      "access.themeToggle": "Toggle light and dark theme",
-      "theme.dark": "Dark theme",
-      "theme.light": "Light theme"
-      }
+        pt: {
+          title: "PythonVisual - Home",
+          "nav.home": "Home",
+          "nav.visualizer": "Visualizador",
+          "nav.about": "Sobre",
+          "nav.limitations": "Limitações",
+          "hero.title": "Entenda o que acontece enquanto o Python executa.",
+          "hero.text":
+            "O PythonVisual mostra cada passo do programa, destacando a linha atual, a próxima linha, as variáveis, os objetos em memória, as funções, as importações e a saída gerada pelo código.",
+          "hero.cta": "Abrir visualizador",
+          "features.title": "Recursos principais",
+          "features.step": "Execução passo a passo.",
+          "features.memory": "Quadros de memória e objetos separados.",
+          "features.arrows": "Setas entre variáveis e objetos.",
+          "features.input": "Entrada com input() quando necessário.",
+          "features.theme": "Tema claro/escuro e ajuste de fonte.",
+          "card.study.title": "Para estudo",
+          "card.study.text":
+            "Ajuda a visualizar atribuições, listas, dicionários, funções, classes e tratamento de erros.",
+          "card.class.title": "Para aula",
+          "card.class.text":
+            "Facilita a explicação de escopo, memória, fluxo de execução e saída padrão.",
+          "card.debug.title": "Para depuração",
+          "card.debug.text":
+            "Permite observar o estado do programa sem usar um depurador profissional completo.",
+          "access.fontDown": "Diminuir fonte",
+          "access.fontUp": "Aumentar fonte",
+          "access.themeToggle": "Alternar tema claro e escuro",
+          "theme.dark": "Tema escuro",
+          "theme.light": "Tema claro",
+        },
+        en: {
+          title: "PythonVisual - Home",
+          "nav.home": "Home",
+          "nav.visualizer": "Visualizer",
+          "nav.about": "About",
+          "nav.limitations": "Limitations",
+          "hero.title": "Understand what happens while Python runs.",
+          "hero.text":
+            "PythonVisual shows each program step, highlighting the current line, the next line, variables, objects in memory, functions, imports, and the output generated by the code.",
+          "hero.cta": "Open visualizer",
+          "features.title": "Main features",
+          "features.step": "Step-by-step execution.",
+          "features.memory": "Separate memory frames and objects.",
+          "features.arrows": "Arrows between variables and objects.",
+          "features.input": "Input with input() when needed.",
+          "features.theme": "Light/dark theme and font size control.",
+          "card.study.title": "For studying",
+          "card.study.text":
+            "Helps visualize assignments, lists, dictionaries, functions, classes, and error handling.",
+          "card.class.title": "For teaching",
+          "card.class.text":
+            "Makes it easier to explain scope, memory, execution flow, and standard output.",
+          "card.debug.title": "For debugging",
+          "card.debug.text":
+            "Lets users observe program state without using a full professional debugger.",
+          "access.fontDown": "Decrease font size",
+          "access.fontUp": "Increase font size",
+          "access.themeToggle": "Toggle light and dark theme",
+          "theme.dark": "Dark theme",
+          "theme.light": "Light theme",
+        },
       };
       let currentLang = localStorage.getItem("pythonvisual_lang") || "pt";
       if (!pageI18n[currentLang]) currentLang = "pt";
-      let escalaFonte = parseFloat(localStorage.getItem("pythonvisual_escala_fonte")) || 1;
+      let escalaFonte =
+        parseFloat(localStorage.getItem("pythonvisual_escala_fonte")) || 1;
       let temaEscuro = localStorage.getItem("pythonvisual_tema_escuro") === "1";
       function translate(key) {
-      return (pageI18n[currentLang] && pageI18n[currentLang][key]) || pageI18n.pt[key] || key;
+        return (
+          (pageI18n[currentLang] && pageI18n[currentLang][key]) ||
+          pageI18n.pt[key] ||
+          key
+        );
       }
       function aplicarFonte() {
-      document.documentElement.style.setProperty("--font-scale", escalaFonte.toFixed(2));
-      document.documentElement.classList.toggle("fonte-ampliada", escalaFonte > 1.3);
-      localStorage.setItem("pythonvisual_escala_fonte", escalaFonte.toFixed(2));
+        document.documentElement.style.setProperty(
+          "--font-scale",
+          escalaFonte.toFixed(2),
+        );
+        document.documentElement.classList.toggle(
+          "fonte-ampliada",
+          escalaFonte > 1.3,
+        );
+        localStorage.setItem("pythonvisual_escala_fonte", escalaFonte.toFixed(2));
       }
       function alterarFonte(delta) {
-      escalaFonte = Math.max(0.85, Math.min(1.8, escalaFonte + delta));
-      aplicarFonte();
+        escalaFonte = Math.max(0.6, Math.min(1.8, escalaFonte + delta));
+        aplicarFonte();
       }
       function atualizarBotaoTema() {
-      const icone = document.getElementById("tema-icone");
-      const label = document.getElementById("tema-label");
-      if (!icone || !label) return;
-      icone.className = temaEscuro ? "fa-solid fa-sun" : "fa-solid fa-moon";
-      label.textContent = temaEscuro ? translate("theme.light") : translate("theme.dark");
+        const icone = document.getElementById("tema-icone");
+        const label = document.getElementById("tema-label");
+        if (!icone || !label) return;
+        icone.className = temaEscuro ? "fa-solid fa-sun" : "fa-solid fa-moon";
+        label.textContent = temaEscuro
+          ? translate("theme.light")
+          : translate("theme.dark");
       }
       function alternarTema() {
-      temaEscuro = !temaEscuro;
-      document.body.classList.toggle("tema-escuro", temaEscuro);
-      localStorage.setItem("pythonvisual_tema_escuro", temaEscuro ? "1" : "0");
-      atualizarBotaoTema();
+        temaEscuro = !temaEscuro;
+        document.body.classList.toggle("tema-escuro", temaEscuro);
+        localStorage.setItem("pythonvisual_tema_escuro", temaEscuro ? "1" : "0");
+        atualizarBotaoTema();
       }
       function applyPageLang() {
-      document.documentElement.lang = currentLang === "en" ? "en" : "pt-br";
-      document.title = translate("title");
-      document.querySelectorAll("[data-i18n]").forEach((el) => {
-      el.textContent = translate(el.dataset.i18n);
-      });
-      document.querySelectorAll("[data-i18n-title]").forEach((el) => {
-      const texto = translate(el.dataset.i18nTitle);
-      el.title = texto;
-      el.setAttribute("aria-label", texto);
-      });
-      document.querySelectorAll(".lang-btn").forEach((button) => {
-      const active = button.id === "lang-" + currentLang;
-      button.classList.toggle("active", active);
-      button.setAttribute("aria-pressed", active ? "true" : "false");
-      });
-      atualizarBotaoTema();
+        document.documentElement.lang = currentLang === "en" ? "en" : "pt-br";
+        document.title = translate("title");
+        document.querySelectorAll("[data-i18n]").forEach((el) => {
+          el.textContent = translate(el.dataset.i18n);
+        });
+        document.querySelectorAll("[data-i18n-title]").forEach((el) => {
+          const texto = translate(el.dataset.i18nTitle);
+          el.title = texto;
+          el.setAttribute("aria-label", texto);
+        });
+        document.querySelectorAll(".lang-btn").forEach((button) => {
+          const active = button.id === "lang-" + currentLang;
+          button.classList.toggle("active", active);
+          button.setAttribute("aria-pressed", active ? "true" : "false");
+        });
+        atualizarBotaoTema();
       }
       function setLang(lang) {
-      currentLang = pageI18n[lang] ? lang : "pt";
-      localStorage.setItem("pythonvisual_lang", currentLang);
-      applyPageLang();
+        currentLang = pageI18n[lang] ? lang : "pt";
+        localStorage.setItem("pythonvisual_lang", currentLang);
+        applyPageLang();
       }
       document.body.classList.toggle("tema-escuro", temaEscuro);
       aplicarFonte();

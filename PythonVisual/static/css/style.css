@@ -470,23 +470,6 @@ button i,
   display: grid;
   gap: 10px;
 }
-.explicacao-meta {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  align-items: center;
-}
-.explicacao-chip {
-  display: inline-flex;
-  align-items: center;
-  border-radius: 999px;
-  padding: 3px 9px;
-  background: #eff6ff;
-  color: #1d4ed8;
-  border: 1px solid #bfdbfe;
-  font-size: 0.76rem;
-  font-weight: 800;
-}
 .explicacao-codigo {
   white-space: pre-wrap;
   word-break: break-word;
@@ -551,6 +534,19 @@ button i,
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
+  align-items: start;
+}
+.memoria-coluna {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+.memoria-outros {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
 }
 .painel-memoria {
   min-width: 0;
@@ -1057,6 +1053,19 @@ body.tema-escuro {
   background: #0f172a;
   color: #e2e8f0;
 }
+body.tema-escuro .exemplos-row label {
+  color: #cbd5e1;
+}
+body.tema-escuro .passo-info {
+  color: #e2e8f0;
+  border-bottom-color: #334155;
+}
+body.tema-escuro .objeto-dict-chave {
+  color: #c4b5fd;
+}
+body.tema-escuro .objeto-item-idx {
+  color: #94a3b8;
+}
 body.tema-escuro .intro-visualizador {
   background: #082f49;
   color: #bae6fd;
@@ -1119,8 +1128,11 @@ body.tema-escuro .CodeMirror-linenumber {
 body.tema-escuro .CodeMirror-cursor {
   border-left-color: #e2e8f0;
 }
+body.tema-escuro .cm-comment {
+  color: #94a3b8;
+}
 body.tema-escuro .linha-proxima {
-  background: #7f1d1d !important;
+  background: #450a0a !important;
 }
 body.tema-escuro .linha-executada {
   background: #14532d !important;
@@ -1200,11 +1212,6 @@ body.tema-escuro .objeto-titulo {
   color: #e2e8f0;
   border-bottom-color: #334155;
 }
-body.tema-escuro .explicacao-chip {
-  background: #082f49;
-  color: #bae6fd;
-  border-color: #0369a1;
-}
 body.tema-escuro .explicacao-codigo {
   background: #020617;
   color: #e2e8f0;
@@ -1223,6 +1230,11 @@ body.tema-escuro .terminal-erro .terminal-body {
 }
 body.tema-escuro .terminal-erro .terminal-body {
   background: #2b1015;
+}
+body.tema-escuro .error-box {
+  background: #2b1015;
+  border-color: #991b1b;
+  color: #fecaca;
 }
 body.tema-escuro .error-guidance {
   color: #fecaca;

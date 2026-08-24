@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask, jsonify, render_template, request
 
 from executor import executar_codigo
@@ -52,4 +54,5 @@ def executar():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    modo_debug = os.environ.get("PYTHONVISUAL_DEBUG", "false").strip().lower() == "true"
+    app.run(debug=modo_debug)

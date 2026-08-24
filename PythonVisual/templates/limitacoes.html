@@ -225,7 +225,8 @@
           <ul>
             <li data-i18n="safety.item1">A execução tem limite de tempo para evitar travamentos.</li>
             <li data-i18n="safety.item2">Loops infinitos são interrompidos por timeout ou limite de passos.</li>
-            <li data-i18n="safety.item3">A ferramenta não deve ser usada para executar código desconhecido em ambiente sensível.</li>
+            <li data-i18n="safety.item4">O código é executado dentro de um container isolado, sem acesso à rede, ao disco do servidor ou a outros processos.</li>
+            <li data-i18n="safety.item3">Ainda assim, evite depender da ferramenta para executar código de origem desconhecida em ambientes críticos.</li>
           </ul>
         </article>
 
@@ -279,8 +280,10 @@
           "safety.item1": "A execução tem limite de tempo para evitar travamentos.",
           "safety.item2":
             "Loops infinitos são interrompidos por timeout ou limite de passos.",
+          "safety.item4":
+            "O código é executado dentro de um container isolado, sem acesso à rede, ao disco do servidor ou a outros processos.",
           "safety.item3":
-            "A ferramenta não deve ser usada para executar código desconhecido em ambiente sensível.",
+            "Ainda assim, evite depender da ferramenta para executar código de origem desconhecida em ambientes críticos.",
           "memory.title": "Visualização de memória",
           "memory.item1":
             "Listas, tuplas, conjuntos, dicionários e objetos simples são representados visualmente.",
@@ -328,8 +331,10 @@
           "safety.title": "Time and safety",
           "safety.item1": "Execution has a time limit to prevent freezes.",
           "safety.item2": "Infinite loops are interrupted by timeout or step limit.",
+          "safety.item4":
+            "Code runs inside an isolated container, with no access to the network, the server's disk, or other processes.",
           "safety.item3":
-            "The tool should not be used to run unknown code in a sensitive environment.",
+            "Even so, avoid relying on the tool to run code from unknown sources in critical environments.",
           "memory.title": "Memory visualization",
           "memory.item1":
             "Lists, tuples, sets, dictionaries, and simple objects are represented visually.",

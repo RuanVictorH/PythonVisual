@@ -2,6 +2,7 @@ import json
 import subprocess
 import sys
 import tempfile
+import uuid
 
 
 from pathlib import Path
@@ -23,6 +24,13 @@ CONFIG = carregar_config()
 TEMPO_LIMITE_SEGUNDOS = int(CONFIG.get("TEMPO_LIMITE_SEGUNDOS", 3))
 LIMITE_PASSOS = int(CONFIG.get("LIMITE_PASSOS", 1000))
 TAMANHO_MAXIMO_OBJETO = int(CONFIG.get("TAMANHO_MAXIMO_OBJETO", 50))
+
+USAR_SANDBOX_DOCKER = CONFIG.get("USAR_SANDBOX_DOCKER", "true").strip().lower() != "false"
+SANDBOX_IMAGEM = CONFIG.get("SANDBOX_IMAGEM", "pythonvisual-sandbox:latest")
+SANDBOX_MEMORIA = CONFIG.get("SANDBOX_MEMORIA", "128m")
+SANDBOX_CPUS = CONFIG.get("SANDBOX_CPUS", "0.5")
+SANDBOX_PIDS = CONFIG.get("SANDBOX_PIDS", "64")
+SANDBOX_DOCKERFILE_DIR = Path(__file__).with_name("docker")
 
 
 RUNNER_CODE = r"""
@@ -499,6 +507,48 @@ print(json.dumps(execucoes, ensure_ascii=False))
 """
 
 
+_imagem_sandbox_pronta = False
+
+
+def _docker_disponivel():
+    try:
+        return (
+            subprocess.run(
+                ["docker", "version", "--format", "{{.Server.Version}}"],
+                capture_output=True,
+                text=True,
+                timeout=5,
+            ).returncode
+            == 0
+        )
+    except Exception:
+        return False
+
+
+def _garantir_imagem_sandbox():
+    global _imagem_sandbox_pronta
+    if _imagem_sandbox_pronta:
+        return True
+
+    inspecao = subprocess.run(
+        ["docker", "image", "inspect", SANDBOX_IMAGEM],
+        capture_output=True,
+        text=True,
+    )
+    if inspecao.returncode == 0:
+        _imagem_sandbox_pronta = True
+        return True
+
+    construcao = subprocess.run(
+        ["docker", "build", "-t", SANDBOX_IMAGEM, str(SANDBOX_DOCKERFILE_DIR)],
+        capture_output=True,
+        text=True,
+        timeout=300,
+    )
+    _imagem_sandbox_pronta = construcao.returncode == 0
+    return _imagem_sandbox_pronta
+
+
 def executar_codigo(
     codigo,
     entrada="",
@@ -516,17 +566,79 @@ def executar_codigo(
         ensure_ascii=False,
     )
 
+    nome_container = None
+    if USAR_SANDBOX_DOCKER:
+        if not _docker_disponivel():
+            return [
+                {
+                    "erro": (
+                        "FalhaInterna: o Docker nao esta disponivel. Inicie o Docker "
+                        "Desktop/daemon ou, apenas para desenvolvimento local, defina "
+                        "USAR_SANDBOX_DOCKER=false em env.conf."
+                    ),
+                    "saida": "",
+                }
+            ]
+        if not _garantir_imagem_sandbox():
+            return [
+                {
+                    "erro": "FalhaInterna: nao foi possivel preparar a imagem de sandbox (docker build falhou).",
+                    "saida": "",
+                }
+            ]
+
+        nome_container = "pythonvisual-sandbox-" + uuid.uuid4().hex[:12]
+        comando = [
+            "docker",
+            "run",
+            "--rm",
+            "-i",
+            "--name",
+            nome_container,
+            "--network",
+            "none",
+            "--memory",
+            SANDBOX_MEMORIA,
+            "--memory-swap",
+            SANDBOX_MEMORIA,
+            "--cpus",
+            SANDBOX_CPUS,
+            "--pids-limit",
+            SANDBOX_PIDS,
+            "--cap-drop",
+            "ALL",
+            "--security-opt",
+            "no-new-privileges",
+            "--read-only",
+            "--tmpfs",
+            "/tmp:rw,size=16m",
+            SANDBOX_IMAGEM,
+            "python",
+            "-I",
+            "-B",
+            "-c",
+            RUNNER_CODE,
+        ]
+        tempo_limite_processo = tempo_limite + 5
+    else:
+        comando = [sys.executable, "-I", "-B", "-c", RUNNER_CODE]
+        tempo_limite_processo = tempo_limite
+
     try:
         with tempfile.TemporaryDirectory(prefix="pythontutor-") as diretorio:
             resultado = subprocess.run(
-                [sys.executable, "-I", "-B", "-c", RUNNER_CODE],
+                comando,
                 input=payload,
                 text=True,
                 capture_output=True,
-                timeout=tempo_limite,
-                cwd=diretorio,
+                timeout=tempo_limite_processo,
+                cwd=diretorio if nome_container is None else None,
             )
     except subprocess.TimeoutExpired:
+        if nome_container:
+            subprocess.run(
+                ["docker", "kill", nome_container], capture_output=True, timeout=10
+            )
         return [
             {
                 "erro": f"TempoLimite: execução interrompida após {tempo_limite} segundos.",

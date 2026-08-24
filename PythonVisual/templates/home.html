@@ -94,6 +94,17 @@
         margin: 0 auto;
         padding: 38px 32px;
       }
+      .banner {
+        margin-bottom: 28px;
+      }
+      .banner-img {
+        display: block;
+        width: 100%;
+        height: auto;
+        border: 1px solid #dbe3ef;
+        border-radius: 10px;
+        box-shadow: 0 1px 4px rgba(15, 23, 42, 0.06);
+      }
       .hero {
         display: grid;
         grid-template-columns: 1.3fr 0.7fr;
@@ -195,6 +206,9 @@
         background: #111827;
         border-color: #334155;
       }
+      body.tema-escuro .banner-img {
+        border-color: #334155;
+      }
     </style>
     <link rel="stylesheet" href="/static/css/header.css">
   </head>
@@ -214,6 +228,9 @@
     </header>
 
     <main>
+      <section class="banner">
+        <img class="banner-img" src="/static/img/imagem-sistema.jpeg" alt="Ilustração representando o PythonVisual: ícone de código Python e elementos de visualização de fluxo de execução" data-i18n-alt="banner.alt">
+      </section>
       <section class="hero">
         <div>
           <h2><i class="fa-solid fa-chart-line" aria-hidden="true"></i><span data-i18n="hero.title">Entenda o que acontece enquanto o Python executa.</span></h2>
@@ -274,6 +291,8 @@
           "card.debug.title": "Para depuração",
           "card.debug.text":
             "Permite observar o estado do programa sem usar um depurador profissional completo.",
+          "banner.alt":
+            "Ilustração representando o PythonVisual: ícone de código Python e elementos de visualização de fluxo de execução",
           "access.fontDown": "Diminuir fonte",
           "access.fontUp": "Aumentar fonte",
           "access.themeToggle": "Alternar tema claro e escuro",
@@ -305,6 +324,8 @@
           "card.debug.title": "For debugging",
           "card.debug.text":
             "Lets users observe program state without using a full professional debugger.",
+          "banner.alt":
+            "Illustration representing PythonVisual: Python code icon and execution flow visualization elements",
           "access.fontDown": "Decrease font size",
           "access.fontUp": "Increase font size",
           "access.themeToggle": "Toggle light and dark theme",
@@ -364,6 +385,9 @@
           const texto = translate(el.dataset.i18nTitle);
           el.title = texto;
           el.setAttribute("aria-label", texto);
+        });
+        document.querySelectorAll("[data-i18n-alt]").forEach((el) => {
+          el.alt = translate(el.dataset.i18nAlt);
         });
         document.querySelectorAll(".lang-btn").forEach((button) => {
           const active = button.id === "lang-" + currentLang;

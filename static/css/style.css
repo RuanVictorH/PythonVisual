@@ -141,21 +141,11 @@ header img {
   margin: 0 auto;
 }
 .intro-visualizador {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: #eff6ff;
-  border: 1px solid #bfdbfe;
-  border-left: 4px solid #2563eb;
-  border-radius: 8px;
-  padding: 12px 16px;
-  color: #1d4ed8;
-  font-size: 0.92rem;
-  font-weight: 700;
+  text-align: center;
+  color: #475569;
+  font-size: 1rem;
   line-height: 1.45;
-}
-.intro-visualizador i {
-  font-size: 1.05rem;
+  padding: 20px 32px 0;
 }
 .coluna-esquerda,
 .coluna-direita {
@@ -1067,10 +1057,7 @@ body.tema-escuro .objeto-item-idx {
   color: #94a3b8;
 }
 body.tema-escuro .intro-visualizador {
-  background: #082f49;
-  color: #bae6fd;
-  border-color: #0369a1;
-  border-left-color: #38bdf8;
+  color: #94a3b8;
 }
 body.tema-escuro header,
 body.tema-escuro .card,

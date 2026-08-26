@@ -21,19 +21,34 @@ Protótipo didático inspirado no Python Tutor para visualizar a execução de c
 
 ## Como rodar
 
+1. Instale o [Docker Desktop](https://www.docker.com/products/docker-desktop/) e deixe-o em execução (o ícone da baleia precisa aparecer ativo na bandeja do sistema). É ele quem isola o código executado pelos usuários — veja [Segurança](#segurança).
+
+2. Crie o ambiente virtual e instale as dependências do Flask:
+
+   ```bash
+   python -m venv venv
+   source venv/bin/activate
+   pip install -r requirements.txt
+   ```
+
+3. Rode a aplicação:
+
+   ```bash
+   python app.py
+   ```
+
+4. Acesse:
+
+   ```text
+   http://127.0.0.1:5000/
+   ```
+
+Na primeira execução de um código, a imagem Docker do sandbox (`docker/Dockerfile`) é construída automaticamente — pode levar alguns segundos a mais nesse primeiro uso. Nas próximas vezes a imagem já vai estar pronta e a execução volta a ser rápida.
+
+Se quiser construir a imagem manualmente antes (opcional, só para conferir que está tudo certo):
+
 ```bash
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-python app.py
-```
-
-Na primeira execução de um código, a imagem Docker do sandbox (`docker/Dockerfile`) é construída automaticamente — pode levar alguns segundos a mais nesse primeiro uso.
-
-Depois acesse:
-
-```text
-http://127.0.0.1:5000/
+docker build -t pythonvisual-sandbox:latest docker/
 ```
 
 Para reativar o modo debug do Flask em desenvolvimento local (recarregamento automático):
@@ -41,6 +56,12 @@ Para reativar o modo debug do Flask em desenvolvimento local (recarregamento aut
 ```bash
 PYTHONVISUAL_DEBUG=true python app.py
 ```
+
+### Problemas comuns com o Docker
+
+- `o Docker nao esta disponivel`: o Docker Desktop não está aberto ou ainda está iniciando. Abra o Docker Desktop e espere o ícone ficar estável antes de rodar um código.
+- `docker build falhou`: confira se há espaço em disco e se há conexão com a internet na primeira execução (a imagem baixa `python:3.12-slim`).
+- Para desenvolvimento local sem Docker instalado, veja a opção `USAR_SANDBOX_DOCKER=false` em [Segurança](#segurança) — não recomendada fora da sua própria máquina.
 
 ## Segurança
 

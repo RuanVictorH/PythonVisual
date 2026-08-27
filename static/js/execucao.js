@@ -273,6 +273,11 @@ export function renderizarPasso() {
   aplicarMarcacoes();
   atualizarExplicacaoLinha();
 
+  if (estaNoPassoPendente)
+    mostrarEntradaPendente(pendenteNoFim);
+  else
+    ocultarEntradaPendente();
+
   if (p.erro) {
     corpo.innerHTML = montarCaixaErro(p.erro);
     corpoSaida.innerHTML =
@@ -354,7 +359,6 @@ export async function executarComEntradas() {
     }
 
     passos = await resp.json();
-    const pendente = entradaPendenteAtual();
     indiceAtual = ehPrimeiraExecucao ? 0 : passos.length - 1;
 
     const slider = document.getElementById("slider");
@@ -374,10 +378,6 @@ export async function executarComEntradas() {
     slider.value = indiceAtual;
     slider.disabled = false;
     renderizarPasso();
-    if (pendente)
-      mostrarEntradaPendente(pendente);
-    else
-      ocultarEntradaPendente();
   } catch (erro) {
     resetarExecucaoVisual();
     document.getElementById("saida-corpo").innerHTML =

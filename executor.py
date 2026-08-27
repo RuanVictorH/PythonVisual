@@ -630,6 +630,7 @@ def executar_codigo(
                 comando,
                 input=payload,
                 text=True,
+                encoding="utf-8",
                 capture_output=True,
                 timeout=tempo_limite_processo,
                 cwd=diretorio if nome_container is None else None,

@@ -136,10 +136,11 @@
 
 @media (min-width: 721px) {
   html.fonte-ampliada .site-header {
-    grid-template-columns: 68px 250px minmax(0, 1fr);
+    grid-template-columns: 68px minmax(0, 1fr);
     grid-template-areas:
-      "logo title controls"
-      "navigation navigation navigation";
+      "logo title"
+      "navigation navigation"
+      "controls controls";
     row-gap: 12px;
   }
 
@@ -148,6 +149,7 @@
   }
   html.fonte-ampliada .site-header .header-text {
     grid-area: title;
+    width: auto;
   }
   html.fonte-ampliada .site-header .header-controls,
   html.fonte-ampliada .site-header .accessibility-controls {

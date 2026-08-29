@@ -228,9 +228,12 @@ export function renderizarMemoria(variaveis, quadrosMemoria) {
         normalizarTipoPython(info.tipo) === "class"
       )
         classes.push({ nome, info });
-      else if (info.categoria === "funcao")
-        funcoes.push({ nome, info });
-      else if (info.categoria === "importacao") {
+      else if (info.categoria === "funcao") {
+        if (quadro.escopo === "Global")
+          funcoes.push({ nome, info });
+        else
+          variaveisQuadro.push({ nome, info });
+      } else if (info.categoria === "importacao") {
         importacoes.push({ nome, info, indice: indiceImportacao });
         indiceImportacao += 1;
       } else if (!["primitivo", "objeto"].includes(info.categoria)) {
@@ -257,6 +260,21 @@ export function renderizarMemoria(variaveis, quadrosMemoria) {
           escaparHTML(traduzir("memory.referenceTitle", { name: nome })) +
           '"></span></div>' +
           "</div>";
+      } else if (info.categoria === "funcao") {
+        const assinatura =
+          typeof info.assinatura === "string" ? info.assinatura : "()";
+        linhasQuadro +=
+          '<div class="quadro-linha">' +
+          '<div class="quadro-cel quadro-cel-nome">' +
+          escaparHTML(nome) +
+          "</div>" +
+          '<div class="quadro-cel quadro-cel-tipo"><span class="tipo-chip tipo-chip-derivado">' +
+          escaparHTML(traduzir("memory.method")) +
+          "</span></div>" +
+          '<div class="quadro-cel quadro-cel-valor">' +
+          escaparHTML(assinatura) +
+          "</div>" +
+          "</div>";
       } else {
         linhasQuadro +=
           '<div class="quadro-linha">' +
@@ -277,14 +295,15 @@ export function renderizarMemoria(variaveis, quadrosMemoria) {
       quadro.escopo === "Global"
         ? traduzir("scope.global")
         : quadro.escopo || traduzir("scope.global");
+    const tituloVariaveis =
+      quadro.escopo === "Global"
+        ? traduzir("memory.variablesGlobal")
+        : traduzir("memory.variablesLocal", { name: nomeEscopo });
     paineisQuadros.push(
       '<div class="painel-memoria">' +
-        '<div class="painel-titulo">' +
-        escaparHTML(nomeEscopo) +
-        "</div>" +
-        '<div class="quadro">' +
+        '<div class="quadro quadro-variaveis">' +
         '<div class="quadro-titulo">' +
-        escaparHTML(traduzir("memory.variables")) +
+        escaparHTML(tituloVariaveis) +
         "</div>" +
         '<div class="quadro-linhas">' +
         (linhasQuadro ||
@@ -378,10 +397,14 @@ export function renderizarMemoria(variaveis, quadrosMemoria) {
 
   const painelObjetos = objetosHTML
     ? '<div class="painel-memoria">' +
-      '<div class="painel-titulo">' +
+      '<div class="quadro quadro-objetos-lista">' +
+      '<div class="quadro-titulo">' +
       escaparHTML(traduzir("memory.objects")) +
       "</div>" +
+      '<div class="quadro-objetos-corpo">' +
       objetosHTML +
+      "</div>" +
+      "</div>" +
       "</div>"
     : "";
   const painelFuncoes =

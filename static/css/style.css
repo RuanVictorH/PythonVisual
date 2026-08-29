@@ -574,6 +574,16 @@ button i,
   font-size: 0.78rem;
   padding: 4px 8px;
 }
+.quadro-variaveis .quadro-titulo {
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.quadro-objetos-corpo {
+  padding: 8px;
+}
+.quadro-objetos-corpo .objeto-card:last-child {
+  margin-bottom: 0;
+}
 .quadro-funcoes {
   --quadro-cor: #047857;
   --quadro-fundo: #ecfdf5;

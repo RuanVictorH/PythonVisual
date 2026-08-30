@@ -23,7 +23,9 @@ CONFIG = carregar_config()
 
 TEMPO_LIMITE_SEGUNDOS = int(CONFIG.get("TEMPO_LIMITE_SEGUNDOS", 3))
 LIMITE_PASSOS = int(CONFIG.get("LIMITE_PASSOS", 1000))
+LIMITE_RECURSAO = int(CONFIG.get("LIMITE_RECURSAO", 200))
 TAMANHO_MAXIMO_OBJETO = int(CONFIG.get("TAMANHO_MAXIMO_OBJETO", 50))
+TAMANHO_MAXIMO_SAIDA = int(CONFIG.get("TAMANHO_MAXIMO_SAIDA", 20000))
 
 USAR_SANDBOX_DOCKER = CONFIG.get("USAR_SANDBOX_DOCKER", "true").strip().lower() != "false"
 SANDBOX_IMAGEM = CONFIG.get("SANDBOX_IMAGEM", "pythonvisual-sandbox:latest")
@@ -337,7 +339,19 @@ codigo = payload.get("codigo", "")
 entrada = payload.get("entrada", "")
 entradas_payload = payload.get("entradas")
 limite_passos = int(payload.get("limite_passos", 1000))
+limite_recursao = int(payload.get("limite_recursao", 200))
+tamanho_maximo_saida = int(payload.get("tamanho_maximo_saida", 20000))
 ordem_importacoes = obter_ordem_importacoes(codigo)
+
+
+def saida_truncada(texto):
+    if len(texto) <= tamanho_maximo_saida:
+        return texto
+    cortados = len(texto) - tamanho_maximo_saida
+    return (
+        texto[:tamanho_maximo_saida]
+        + f"\n... [saída truncada: {cortados} caracteres omitidos]"
+    )
 
 execucoes = []
 stdout_capture = io.StringIO()
@@ -371,8 +385,8 @@ def registrar_passo(frame, evento, erro_ocorrido=None, valor_retorno=SEM_RETORNO
         "pilha_chamadas": serializar_pilha(frame),
         "quadros_memoria": serializar_quadros_memoria(frame),
         "variaveis": variaveis,
-        "saida": stdout_capture.getvalue(),
-        "saida_erro": stderr_capture.getvalue(),
+        "saida": saida_truncada(stdout_capture.getvalue()),
+        "saida_erro": saida_truncada(stderr_capture.getvalue()),
         "evento": evento
     }
     if erro_ocorrido:
@@ -441,6 +455,8 @@ stderr_original = sys.stderr
 stdin_original = sys.stdin
 ambiente = {"__name__": "__main__", "input": input_visual}
 
+recursao_original = sys.getrecursionlimit()
+sys.setrecursionlimit(limite_recursao)
 sys.stdout = stdout_capture
 sys.stderr = stderr_capture
 sys.stdin = io.StringIO(entrada)
@@ -461,15 +477,15 @@ try:
             "variaveis": variaveis_finais
         }],
         "variaveis": variaveis_finais,
-        "saida": stdout_capture.getvalue(),
-        "saida_erro": stderr_capture.getvalue(),
+        "saida": saida_truncada(stdout_capture.getvalue()),
+        "saida_erro": saida_truncada(stderr_capture.getvalue()),
         "evento": "fim"
     })
 except LimiteDePassos:
     execucoes.append({
         "erro": f"LimiteDePassos: execução interrompida após {limite_passos} passos.",
-        "saida": stdout_capture.getvalue(),
-        "saida_erro": stderr_capture.getvalue()
+        "saida": saida_truncada(stdout_capture.getvalue()),
+        "saida_erro": saida_truncada(stderr_capture.getvalue())
     })
 except EntradaPendente as exc:
     frame = exc.frame
@@ -485,8 +501,8 @@ except EntradaPendente as exc:
         "pilha_chamadas": serializar_pilha(frame) if frame else [],
         "quadros_memoria": serializar_quadros_memoria(frame) if frame else [],
         "variaveis": variaveis,
-        "saida": stdout_capture.getvalue(),
-        "saida_erro": stderr_capture.getvalue(),
+        "saida": saida_truncada(stdout_capture.getvalue()),
+        "saida_erro": saida_truncada(stderr_capture.getvalue()),
         "evento": "input_pendente",
         "entrada_pendente": True,
         "prompt": exc.prompt,
@@ -494,11 +510,12 @@ except EntradaPendente as exc:
 except BaseException as exc:
     execucoes.append({
         "erro": f"{type(exc).__name__}: {exc}",
-        "saida": stdout_capture.getvalue(),
-        "saida_erro": stderr_capture.getvalue()
+        "saida": saida_truncada(stdout_capture.getvalue()),
+        "saida_erro": saida_truncada(stderr_capture.getvalue())
     })
 finally:
     sys.settrace(None)
+    sys.setrecursionlimit(recursao_original)
     sys.stdout = stdout_original
     sys.stderr = stderr_original
     sys.stdin = stdin_original
@@ -568,6 +585,8 @@ def executar_codigo(
     entradas=None,
     tempo_limite=TEMPO_LIMITE_SEGUNDOS,
     limite_passos=LIMITE_PASSOS,
+    limite_recursao=LIMITE_RECURSAO,
+    tamanho_maximo_saida=TAMANHO_MAXIMO_SAIDA,
 ):
     payload = json.dumps(
         {
@@ -575,6 +594,8 @@ def executar_codigo(
             "entrada": entrada,
             "entradas": entradas,
             "limite_passos": limite_passos,
+            "limite_recursao": limite_recursao,
+            "tamanho_maximo_saida": tamanho_maximo_saida,
         },
         ensure_ascii=False,
     )

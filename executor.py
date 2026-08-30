@@ -549,6 +549,19 @@ def _garantir_imagem_sandbox():
     return _imagem_sandbox_pronta
 
 
+def _container_foi_morto_por_memoria(nome_container):
+    try:
+        inspecao = subprocess.run(
+            ["docker", "inspect", "--format", "{{.State.OOMKilled}}", nome_container],
+            capture_output=True,
+            text=True,
+            timeout=10,
+        )
+    except Exception:
+        return False
+    return inspecao.returncode == 0 and inspecao.stdout.strip() == "true"
+
+
 def executar_codigo(
     codigo,
     entrada="",
@@ -591,7 +604,6 @@ def executar_codigo(
         comando = [
             "docker",
             "run",
-            "--rm",
             "-i",
             "--name",
             nome_container,
@@ -625,38 +637,60 @@ def executar_codigo(
         tempo_limite_processo = tempo_limite
 
     try:
-        with tempfile.TemporaryDirectory(prefix="pythontutor-") as diretorio:
-            resultado = subprocess.run(
-                comando,
-                input=payload,
-                text=True,
-                encoding="utf-8",
-                capture_output=True,
-                timeout=tempo_limite_processo,
-                cwd=diretorio if nome_container is None else None,
+        try:
+            with tempfile.TemporaryDirectory(prefix="pythontutor-") as diretorio:
+                resultado = subprocess.run(
+                    comando,
+                    input=payload,
+                    text=True,
+                    encoding="utf-8",
+                    capture_output=True,
+                    timeout=tempo_limite_processo,
+                    cwd=diretorio if nome_container is None else None,
+                )
+        except subprocess.TimeoutExpired:
+            if nome_container:
+                subprocess.run(
+                    ["docker", "kill", nome_container],
+                    capture_output=True,
+                    timeout=10,
+                )
+            return [
+                {
+                    "erro": f"TempoLimite: execução interrompida após {tempo_limite} segundos.",
+                    "saida": "",
+                }
+            ]
+
+        if resultado.returncode != 0:
+            if nome_container and _container_foi_morto_por_memoria(nome_container):
+                return [
+                    {
+                        "erro": (
+                            f"LimiteDeMemoria: a execução foi interrompida por "
+                            f"exceder o limite de memória do sandbox ({SANDBOX_MEMORIA})."
+                        ),
+                        "saida": "",
+                    }
+                ]
+            erro = (
+                resultado.stderr.strip() or "processo de execução encerrado sem resposta."
             )
-    except subprocess.TimeoutExpired:
+            return [{"erro": f"FalhaInterna: {erro[:500]}", "saida": ""}]
+
+        try:
+            dados = json.loads(resultado.stdout)
+        except json.JSONDecodeError:
+            return [{"erro": "FalhaInterna: resposta invalida do executor.", "saida": ""}]
+
+        if isinstance(dados, list):
+            return dados
+    finally:
         if nome_container:
             subprocess.run(
-                ["docker", "kill", nome_container], capture_output=True, timeout=10
+                ["docker", "rm", "-f", nome_container],
+                capture_output=True,
+                timeout=10,
             )
-        return [
-            {
-                "erro": f"TempoLimite: execução interrompida após {tempo_limite} segundos.",
-                "saida": "",
-            }
-        ]
-
-    if resultado.returncode != 0:
-        erro = resultado.stderr.strip() or "processo de execução encerrado sem resposta."
-        return [{"erro": f"FalhaInterna: {erro[:500]}", "saida": ""}]
-
-    try:
-        dados = json.loads(resultado.stdout)
-    except json.JSONDecodeError:
-        return [{"erro": "FalhaInterna: resposta invalida do executor.", "saida": ""}]
-
-    if isinstance(dados, list):
-        return dados
 
     return [{"erro": "FalhaInterna: resposta inesperada do executor.", "saida": ""}]

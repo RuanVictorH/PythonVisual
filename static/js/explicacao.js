@@ -259,6 +259,8 @@ export function orientarCorrecaoErro(erro) {
     return traduzir("error.guidance.timeout");
   if (tipo === "LimiteDePassos")
     return traduzir("error.guidance.stepLimit");
+  if (tipo === "LimiteDeMemoria")
+    return traduzir("error.guidance.memoryLimit");
   if (tipo === "FalhaInterna")
     return traduzir("error.guidance.internal");
   return traduzir("error.guidance.generic");

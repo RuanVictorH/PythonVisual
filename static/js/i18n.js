@@ -152,6 +152,8 @@ const i18n = {
       "A execução demorou mais do que o limite permitido. Verifique laços infinitos, condições que nunca se tornam falsas ou operações excessivamente longas.",
     "error.guidance.stepLimit":
       "O código gerou passos demais. Revise principalmente as condições dos laços e da recursão para garantir que a execução termine.",
+    "error.guidance.memoryLimit":
+      "O ambiente isolado (sandbox) encerrou a execução à força por ela ter excedido o limite de memória permitido, antes mesmo de o Python conseguir reportar um erro. Revise estruturas de dados que crescem sem controle (laços que acumulam itens indefinidamente, por exemplo).",
     "error.guidance.internal":
       "O executor encontrou uma falha interna. Tente executar novamente; se o problema continuar, simplifique o exemplo e informe o erro ao responsável pelo sistema.",
     "error.guidance.generic":
@@ -394,6 +396,8 @@ const i18n = {
       "Execution took longer than the allowed limit. Check for infinite loops, conditions that never become false, or excessively long operations.",
     "error.guidance.stepLimit":
       "The code generated too many steps. Review loop and recursion conditions to make sure execution ends.",
+    "error.guidance.memoryLimit":
+      "The isolated sandbox forcibly stopped execution because it exceeded the allowed memory limit, before Python itself could report an error. Review data structures that grow without bound (loops that accumulate items indefinitely, for example).",
     "error.guidance.internal":
       "The executor encountered an internal failure. Try again; if it continues, simplify the example and report the error to the system maintainer.",
     "error.guidance.generic":

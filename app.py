@@ -2,6 +2,7 @@ import os
 
 from flask import Flask, jsonify, render_template, request
 
+from auditoria import registrar_execucao
 from executor import executar_codigo
 
 app = Flask(__name__)
@@ -37,20 +38,20 @@ def executar():
     entradas = dados.get("entradas")
 
     if not isinstance(codigo, str) or not isinstance(entrada, str):
-        return (
-            jsonify(
-                [{"erro": "RequisicaoInvalida: codigo e entrada devem ser textos.", "saida": ""}]
-            ),
-            400,
-        )
+        execucoes = [
+            {"erro": "RequisicaoInvalida: codigo e entrada devem ser textos.", "saida": ""}
+        ]
+        registrar_execucao(request, codigo, execucoes)
+        return jsonify(execucoes), 400
 
     if entradas is not None and not isinstance(entradas, list):
-        return (
-            jsonify([{"erro": "RequisicaoInvalida: entradas deve ser uma lista.", "saida": ""}]),
-            400,
-        )
+        execucoes = [{"erro": "RequisicaoInvalida: entradas deve ser uma lista.", "saida": ""}]
+        registrar_execucao(request, codigo, execucoes)
+        return jsonify(execucoes), 400
 
-    return jsonify(executar_codigo(codigo, entrada=entrada, entradas=entradas))
+    execucoes = executar_codigo(codigo, entrada=entrada, entradas=entradas)
+    registrar_execucao(request, codigo, execucoes)
+    return jsonify(execucoes)
 
 
 if __name__ == "__main__":

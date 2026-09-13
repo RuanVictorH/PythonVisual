@@ -358,8 +358,15 @@ export async function executarComEntradas() {
       throw new Error(texto || resp.statusText);
     }
 
+    const comprimentoAnterior = passos.length;
     passos = await resp.json();
-    indiceAtual = ehPrimeiraExecucao ? 0 : passos.length - 1;
+    // Pousa no primeiro passo novo revelado (não no fim do novo trace), pra não pular
+    // visualmente as linhas entre o input anterior e o próximo ponto de pausa. O último
+    // elemento do array anterior era sempre o "input_pendente" (não conta como passo
+    // real), então o primeiro passo novo ocupa o índice comprimentoAnterior - 1.
+    indiceAtual = ehPrimeiraExecucao
+      ? 0
+      : Math.min(comprimentoAnterior - 1, passos.length - 1);
 
     const slider = document.getElementById("slider");
 

@@ -289,7 +289,7 @@ export function renderizarPasso() {
   if (p.erro) {
     corpo.innerHTML = montarCaixaErro(p.erro);
     corpoSaida.innerHTML =
-      '<div class="section-label"><i class="fa-solid fa-square-terminal" aria-hidden="true"></i>' +
+      '<div class="section-label"><i class="fa-solid fa-print" aria-hidden="true"></i>' +
       escaparHTML(traduzir("output.errorUntil")) +
       "</div>" +
       montarTerminalSaida(p.saida, "output.none") +

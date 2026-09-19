@@ -13,6 +13,7 @@ Protótipo didático inspirado no Python Tutor para visualizar a execução de c
 - Tema claro no editor, nos painéis e na saída.
 - Organização da memória em Variáveis, Objetos, Funções e Importações.
 - Serialização mais segura de valores grandes ou com `repr()` problemático.
+- Fluxograma automático do código, com o bloco em execução destacado a cada passo (veja [Fluxograma](#fluxograma)).
 
 ## Requisitos
 
@@ -62,6 +63,30 @@ PYTHONVISUAL_DEBUG=true python app.py
 - `o Docker nao esta disponivel`: o Docker Desktop não está aberto ou ainda está iniciando. Abra o Docker Desktop e espere o ícone ficar estável antes de rodar um código.
 - `docker build falhou`: confira se há espaço em disco e se há conexão com a internet na primeira execução (a imagem baixa `python:3.12-slim`).
 - Para desenvolvimento local sem Docker instalado, veja a opção `USAR_SANDBOX_DOCKER=false` em [Segurança](#segurança) — não recomendada fora da sua própria máquina.
+
+## Fluxograma
+
+Ao executar um código, o card **Fluxograma** desenha o fluxo do programa a partir do próprio código do editor (não há outra caixa de texto). Cada linha executável vira um bloco (terminal, retângulo, losango ou paralelogramo) e, ao navegar pelos passos, o bloco da próxima linha fica em vermelho e o da linha já executada em verde, como no editor.
+
+- Cada função, método e classe ganha um fluxograma próprio. Por padrão o card acompanha a função em execução; escolher outro no seletor (ou clicar num bloco de definição) fixa o gráfico, e o botão **Seguir execução** volta a acompanhar.
+- A estrutura é montada com o módulo `ast` dentro do sandbox (`fluxo_builder.py`), então o código do usuário nunca é interpretado fora do container. A resposta de `/executar` continua sendo uma lista de passos; o fluxograma vai na chave `fluxo` do primeiro elemento.
+- `match`, `async` e geradores aparecem simplificados, como um único bloco. Programas grandes têm o fluxograma resumido, e execuções interrompidas por timeout ou com erro de sintaxe não exibem o card.
+
+Configuração em `env.conf`:
+
+| Chave | Padrão | Efeito |
+| --- | --- | --- |
+| `USAR_FLUXOGRAMA` | `true` | Liga ou desliga o fluxograma. |
+| `FLUXO_MAXIMO_NOS` | `150` | Máximo de blocos desenhados (o restante vira um bloco "resumido"). |
+| `FLUXO_TAMANHO_MAXIMO_TEXTO` | `100` | Máximo de caracteres do texto de cada bloco no dado enviado ao navegador. |
+
+## Testes
+
+Os testes usam apenas a biblioteca padrão. Os que exercitam o sandbox são pulados automaticamente se o Docker não estiver disponível:
+
+```bash
+python -m unittest discover -s tests -t . -v
+```
 
 ## Segurança
 

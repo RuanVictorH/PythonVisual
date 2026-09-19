@@ -225,9 +225,9 @@
       {% include "_navigation.html" %}
       <div class="header-controls">
         {% include "_language_switch.html" %}
-        <button class="btn-access" type="button" onclick="alterarFonte(-0.1)" title="Diminuir fonte" data-i18n-title="access.fontDown"><i class="fa-solid fa-magnifying-glass-minus"></i><span>A-</span></button>
-        <button class="btn-access" type="button" onclick="alterarFonte(0.1)" title="Aumentar fonte" data-i18n-title="access.fontUp"><i class="fa-solid fa-magnifying-glass-plus"></i><span>A+</span></button>
-        <button class="btn-access" type="button" id="btn-tema" onclick="alternarTema()" title="Alternar tema claro e escuro" data-i18n-title="access.themeToggle"><i class="fa-solid fa-moon" id="tema-icone"></i><span id="tema-label">Tema escuro</span></button>
+        <button class="btn-access" type="button" onclick="alterarFonte(-0.1)" aria-label="Diminuir fonte" data-i18n-aria="access.fontDown" data-tip="fontDown"><i class="fa-solid fa-magnifying-glass-minus"></i><span>A-</span></button>
+        <button class="btn-access" type="button" onclick="alterarFonte(0.1)" aria-label="Aumentar fonte" data-i18n-aria="access.fontUp" data-tip="fontUp"><i class="fa-solid fa-magnifying-glass-plus"></i><span>A+</span></button>
+        <button class="btn-access" type="button" id="btn-tema" onclick="alternarTema()" data-tip="theme"><i class="fa-solid fa-moon" id="tema-icone"></i><span id="tema-label">Tema escuro</span></button>
       </div>
     </header>
 
@@ -305,7 +305,6 @@
           "credits.logoAlt": "Logo da Universidade Federal de Lavras",
           "access.fontDown": "Diminuir fonte",
           "access.fontUp": "Aumentar fonte",
-          "access.themeToggle": "Alternar tema claro e escuro",
           "theme.dark": "Tema escuro",
           "theme.light": "Tema claro",
         },
@@ -339,7 +338,6 @@
           "credits.logoAlt": "Federal University of Lavras logo",
           "access.fontDown": "Decrease font size",
           "access.fontUp": "Increase font size",
-          "access.themeToggle": "Toggle light and dark theme",
           "theme.dark": "Dark theme",
           "theme.light": "Light theme",
         },
@@ -395,10 +393,8 @@
         document.querySelectorAll("[data-i18n-alt]").forEach((el) => {
           el.alt = translate(el.dataset.i18nAlt);
         });
-        document.querySelectorAll("[data-i18n-title]").forEach((el) => {
-          const texto = translate(el.dataset.i18nTitle);
-          el.title = texto;
-          el.setAttribute("aria-label", texto);
+        document.querySelectorAll("[data-i18n-aria]").forEach((el) => {
+          el.setAttribute("aria-label", translate(el.dataset.i18nAria));
         });
         document.querySelectorAll(".lang-btn").forEach((button) => {
           const active = button.id === "lang-" + currentLang;
@@ -416,5 +412,6 @@
       aplicarFonte();
       applyPageLang();
     </script>
+    <script src="/static/js/tooltip.js" defer></script>
   </body>
 </html>

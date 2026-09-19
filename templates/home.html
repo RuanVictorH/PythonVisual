@@ -221,9 +221,9 @@
       {% include "_navigation.html" %}
       <div class="header-controls">
         {% include "_language_switch.html" %}
-        <button class="btn-access" type="button" onclick="alterarFonte(-0.1)" title="Diminuir fonte" data-i18n-title="access.fontDown"><i class="fa-solid fa-magnifying-glass-minus"></i><span>A-</span></button>
-        <button class="btn-access" type="button" onclick="alterarFonte(0.1)" title="Aumentar fonte" data-i18n-title="access.fontUp"><i class="fa-solid fa-magnifying-glass-plus"></i><span>A+</span></button>
-        <button class="btn-access" type="button" id="btn-tema" onclick="alternarTema()" title="Alternar tema claro e escuro" data-i18n-title="access.themeToggle"><i class="fa-solid fa-moon" id="tema-icone"></i><span id="tema-label">Tema escuro</span></button>
+        <button class="btn-access" type="button" onclick="alterarFonte(-0.1)" aria-label="Diminuir fonte" data-i18n-aria="access.fontDown" data-tip="fontDown"><i class="fa-solid fa-magnifying-glass-minus"></i><span>A-</span></button>
+        <button class="btn-access" type="button" onclick="alterarFonte(0.1)" aria-label="Aumentar fonte" data-i18n-aria="access.fontUp" data-tip="fontUp"><i class="fa-solid fa-magnifying-glass-plus"></i><span>A+</span></button>
+        <button class="btn-access" type="button" id="btn-tema" onclick="alternarTema()" data-tip="theme"><i class="fa-solid fa-moon" id="tema-icone"></i><span id="tema-label">Tema escuro</span></button>
       </div>
     </header>
 
@@ -235,7 +235,7 @@
         <div>
           <h2><i class="fa-solid fa-chart-line" aria-hidden="true"></i><span data-i18n="hero.title">Entenda o que acontece enquanto o Python executa.</span></h2>
           <p data-i18n="hero.text">O PythonVisual mostra cada passo do programa, destacando a linha atual, a próxima linha, as variáveis, os objetos em memória, as funções, as importações e a saída gerada pelo código.</p>
-          <a class="cta" href="/visualizador"><i class="fa-solid fa-play" aria-hidden="true"></i><span data-i18n="hero.cta">Abrir visualizador</span></a>
+          <a class="cta" href="/visualizador" data-tip="ctaOpen"><i class="fa-solid fa-play" aria-hidden="true"></i><span data-i18n="hero.cta">Abrir visualizador</span></a>
         </div>
         <aside class="panel">
           <h3><i class="fa-solid fa-list-check" aria-hidden="true"></i><span data-i18n="features.title">Recursos principais</span></h3>
@@ -295,7 +295,6 @@
             "Ilustração representando o PythonVisual: ícone de código Python e elementos de visualização de fluxo de execução",
           "access.fontDown": "Diminuir fonte",
           "access.fontUp": "Aumentar fonte",
-          "access.themeToggle": "Alternar tema claro e escuro",
           "theme.dark": "Tema escuro",
           "theme.light": "Tema claro",
         },
@@ -328,7 +327,6 @@
             "Illustration representing PythonVisual: Python code icon and execution flow visualization elements",
           "access.fontDown": "Decrease font size",
           "access.fontUp": "Increase font size",
-          "access.themeToggle": "Toggle light and dark theme",
           "theme.dark": "Dark theme",
           "theme.light": "Light theme",
         },
@@ -381,10 +379,8 @@
         document.querySelectorAll("[data-i18n]").forEach((el) => {
           el.textContent = translate(el.dataset.i18n);
         });
-        document.querySelectorAll("[data-i18n-title]").forEach((el) => {
-          const texto = translate(el.dataset.i18nTitle);
-          el.title = texto;
-          el.setAttribute("aria-label", texto);
+        document.querySelectorAll("[data-i18n-aria]").forEach((el) => {
+          el.setAttribute("aria-label", translate(el.dataset.i18nAria));
         });
         document.querySelectorAll("[data-i18n-alt]").forEach((el) => {
           el.alt = translate(el.dataset.i18nAlt);
@@ -405,5 +401,6 @@
       aplicarFonte();
       applyPageLang();
     </script>
+    <script src="/static/js/tooltip.js" defer></script>
   </body>
 </html>

@@ -41,11 +41,6 @@ function aplicarIdioma() {
   document.querySelectorAll("[data-i18n]").forEach((el) => {
     el.textContent = traduzir(el.dataset.i18n);
   });
-  document.querySelectorAll("[data-i18n-title]").forEach((el) => {
-    const texto = traduzir(el.dataset.i18nTitle);
-    el.title = texto;
-    el.setAttribute("aria-label", texto);
-  });
   document.querySelectorAll("[data-i18n-aria]").forEach((el) => {
     el.setAttribute("aria-label", traduzir(el.dataset.i18nAria));
   });
@@ -144,7 +139,6 @@ function atualizarBotaoRecolher(botao) {
   const icone = botao.querySelector("i");
   botao.setAttribute("aria-expanded", recolhido ? "false" : "true");
   botao.setAttribute("aria-label", texto);
-  botao.title = texto;
   if (icone)
     icone.className = recolhido
       ? "fa-solid fa-chevron-down"

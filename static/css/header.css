@@ -281,3 +281,42 @@ body.tema-escuro .site-header .lang-btn.active {
   background: #60a5fa;
   color: #0b1120;
 }
+
+/* Tooltip dos botões (static/js/tooltip.js) */
+.tooltip-pv {
+  position: fixed;
+  z-index: 10000;
+  display: none;
+  box-sizing: border-box;
+  max-width: min(18rem, calc(100vw - 16px));
+  padding: 6px 10px;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  background: #0f172a;
+  color: #f8fafc;
+  font-family: "Inter", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.28);
+  opacity: 0;
+  transition: opacity 0.12s;
+}
+
+.tooltip-pv.visivel {
+  opacity: 1;
+}
+
+body.tema-escuro .tooltip-pv {
+  border-color: #94a3b8;
+  background: #e2e8f0;
+  color: #0f172a;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tooltip-pv {
+    transition: none;
+  }
+}

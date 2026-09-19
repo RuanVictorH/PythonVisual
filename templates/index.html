@@ -26,9 +26,9 @@
       {% include "_navigation.html" %}
       <div class="accessibility-controls" aria-label="Controles de acessibilidade">
         {% include "_language_switch.html" %}
-        <button class="btn-access" type="button" onclick="alterarFonte(-0.1)" title="Diminuir fonte" data-i18n-title="access.fontDown"><i class="fa-solid fa-magnifying-glass-minus"></i><span>A-</span></button>
-        <button class="btn-access" type="button" onclick="alterarFonte(0.1)" title="Aumentar fonte" data-i18n-title="access.fontUp"><i class="fa-solid fa-magnifying-glass-plus"></i><span>A+</span></button>
-        <button class="btn-access" type="button" id="btn-tema" onclick="alternarTema()" title="Alternar tema claro e escuro" data-i18n-title="access.themeToggle"><i class="fa-solid fa-moon" id="tema-icone"></i><span id="tema-label">Tema escuro</span></button>
+        <button class="btn-access" type="button" onclick="alterarFonte(-0.1)" aria-label="Diminuir fonte" data-i18n-aria="access.fontDown" data-tip="fontDown"><i class="fa-solid fa-magnifying-glass-minus"></i><span>A-</span></button>
+        <button class="btn-access" type="button" onclick="alterarFonte(0.1)" aria-label="Aumentar fonte" data-i18n-aria="access.fontUp" data-tip="fontUp"><i class="fa-solid fa-magnifying-glass-plus"></i><span>A+</span></button>
+        <button class="btn-access" type="button" id="btn-tema" onclick="alternarTema()" data-tip="theme"><i class="fa-solid fa-moon" id="tema-icone"></i><span id="tema-label">Tema escuro</span></button>
       </div>
     </header>
 
@@ -39,12 +39,12 @@
         <div class="card" id="codigo-card">
           <div class="card-header">
             <span class="card-header-title"><i class="fa-solid fa-terminal"></i><span data-i18n="section.code">Código</span></span>
-            <button class="btn-recolher" type="button" onclick="alternarCard('codigo-card')" aria-expanded="true" aria-controls="codigo-corpo"><i class="fa-solid fa-chevron-up" aria-hidden="true"></i></button>
+            <button class="btn-recolher" type="button" data-tip="collapse" onclick="alternarCard('codigo-card')" aria-expanded="true" aria-controls="codigo-corpo"><i class="fa-solid fa-chevron-up" aria-hidden="true"></i></button>
           </div>
           <div class="card-body" id="codigo-corpo" style="padding: 12px 16px 10px;">
             <div class="exemplos-row">
               <label for="exemplos" data-i18n="examples.label">Exemplo:</label>
-              <select id="exemplos" onchange="carregarExemplo()">
+              <select id="exemplos" onchange="carregarExemplo()" data-tip="examples">
                 <option value="" data-i18n="examples.choose">-- Escolha um exemplo --</option>
                 <option value="variaveis" data-i18n="examples.variables">Variáveis e operações</option>
                 <option value="condicional" data-i18n="examples.conditional">Condicional (if/else)</option>
@@ -68,31 +68,31 @@
         </div>
 
         <div class="acoes-codigo">
-          <button class="btn-executar" id="btn-run" type="button" onclick="executar()" aria-label="Executar código" data-i18n-aria="actions.run"><i class="fa-solid fa-play"></i><span data-i18n="actions.run">Executar código</span></button>
-          <button class="btn-limpar" id="btn-clear" type="button" onclick="limparCodigo()" title="Limpar o código atual" data-i18n-title="actions.clearTitle"><i class="fa-solid fa-eraser"></i><span data-i18n="actions.clear">Limpar</span></button>
+          <button class="btn-executar" id="btn-run" type="button" onclick="executar()" aria-label="Executar código" data-i18n-aria="actions.run" data-tip="run"><i class="fa-solid fa-play"></i><span data-i18n="actions.run">Executar código</span></button>
+          <button class="btn-limpar" id="btn-clear" type="button" onclick="limparCodigo()" data-tip="clear"><i class="fa-solid fa-eraser"></i><span data-i18n="actions.clear">Limpar</span></button>
         </div>
 
         <div class="card" id="navegacao">
           <div class="card-header">
             <span class="card-header-title"><i class="fa-solid fa-route"></i><span data-i18n="section.navigation">Navegação</span></span>
-            <button class="btn-recolher" type="button" onclick="alternarCard('navegacao')" aria-expanded="true" aria-controls="navegacao-corpo"><i class="fa-solid fa-chevron-up" aria-hidden="true"></i></button>
+            <button class="btn-recolher" type="button" data-tip="collapse" onclick="alternarCard('navegacao')" aria-expanded="true" aria-controls="navegacao-corpo"><i class="fa-solid fa-chevron-up" aria-hidden="true"></i></button>
           </div>
           <div class="card-body nav-container" id="navegacao-corpo">
             <div class="nav-buttons">
-              <button class="btn-nav" id="btn-primeiro" type="button" onclick="irParaPrimeiro()"><i class="fa-solid fa-backward-fast"></i><span data-i18n="navSteps.first">Início</span></button>
-              <button class="btn-nav" id="btn-anterior" type="button" onclick="passo(-1)"><i class="fa-solid fa-chevron-left"></i><span data-i18n="navSteps.previous">Anterior</span></button>
+              <button class="btn-nav" id="btn-primeiro" type="button" onclick="irParaPrimeiro()" data-tip="stepFirst"><i class="fa-solid fa-backward-fast"></i><span data-i18n="navSteps.first">Início</span></button>
+              <button class="btn-nav" id="btn-anterior" type="button" onclick="passo(-1)" data-tip="stepPrev"><i class="fa-solid fa-chevron-left"></i><span data-i18n="navSteps.previous">Anterior</span></button>
               <div class="contador" id="contador"></div>
-              <button class="btn-nav" id="btn-proximo" type="button" onclick="passo(1)"><span data-i18n="navSteps.next">Próximo</span><i class="fa-solid fa-chevron-right" style="margin-left:6px;margin-right:0;"></i></button>
-              <button class="btn-nav" id="btn-ultimo" type="button" onclick="irParaUltimo()"><span data-i18n="navSteps.last">Fim</span><i class="fa-solid fa-forward-fast" style="margin-left:6px;margin-right:0;"></i></button>
+              <button class="btn-nav" id="btn-proximo" type="button" onclick="passo(1)" data-tip="stepNext"><span data-i18n="navSteps.next">Próximo</span><i class="fa-solid fa-chevron-right" style="margin-left:6px;margin-right:0;"></i></button>
+              <button class="btn-nav" id="btn-ultimo" type="button" onclick="irParaUltimo()" data-tip="stepLast"><span data-i18n="navSteps.last">Fim</span><i class="fa-solid fa-forward-fast" style="margin-left:6px;margin-right:0;"></i></button>
             </div>
-            <input type="range" id="slider" min="0" value="0" oninput="irPara(this.value)">
+            <input type="range" id="slider" min="0" value="0" oninput="irPara(this.value)" data-tip="slider">
           </div>
         </div>
 
         <div class="card" id="explicacao-card" style="display:none;">
           <div class="card-header">
             <span class="card-header-title"><i class="fa-solid fa-lightbulb"></i><span data-i18n="section.explanation">Explicação da linha atual</span><span id="explicacao-linha-numero"></span></span>
-            <button class="btn-recolher" type="button" onclick="alternarCard('explicacao-card')" aria-expanded="true" aria-controls="explicacao-corpo"><i class="fa-solid fa-chevron-up" aria-hidden="true"></i></button>
+            <button class="btn-recolher" type="button" data-tip="collapse" onclick="alternarCard('explicacao-card')" aria-expanded="true" aria-controls="explicacao-corpo"><i class="fa-solid fa-chevron-up" aria-hidden="true"></i></button>
           </div>
           <div class="card-body explicacao-linha" id="explicacao-corpo"></div>
         </div>
@@ -103,7 +103,7 @@
         <div class="card" id="saida" style="display:none;">
           <div class="card-header">
             <span class="card-header-title"><i class="fa-solid fa-diagram-project"></i><span data-i18n="section.visualization">Visualização</span></span>
-            <button class="btn-recolher" type="button" onclick="alternarCard('saida')" aria-expanded="true" aria-controls="saida-corpo"><i class="fa-solid fa-chevron-up" aria-hidden="true"></i></button>
+            <button class="btn-recolher" type="button" data-tip="collapse" onclick="alternarCard('saida')" aria-expanded="true" aria-controls="saida-corpo"><i class="fa-solid fa-chevron-up" aria-hidden="true"></i></button>
           </div>
           <div class="card-body" id="saida-corpo"></div>
         </div>
@@ -117,7 +117,7 @@
             </div>
             <div class="entrada-form">
               <input id="entrada" class="entrada-area" type="text" autocomplete="off" placeholder="Digite o valor para esta linha" data-i18n-placeholder="input.placeholder">
-              <button class="btn-entrada" type="button" onclick="enviarEntradaPendente()"><i class="fa-solid fa-paper-plane"></i><span data-i18n="input.send">Enviar</span></button>
+              <button class="btn-entrada" type="button" onclick="enviarEntradaPendente()" data-tip="sendInput"><i class="fa-solid fa-paper-plane"></i><span data-i18n="input.send">Enviar</span></button>
             </div>
           </div>
         </div>
@@ -125,7 +125,7 @@
         <div class="card" id="saida-card" style="display:none;">
           <div class="card-header">
             <span class="card-header-title"><i class="fa-solid fa-print"></i><span data-i18n="output.section">Saída</span></span>
-            <button class="btn-recolher" type="button" onclick="alternarCard('saida-card')" aria-expanded="true" aria-controls="saida-programa-corpo"><i class="fa-solid fa-chevron-up" aria-hidden="true"></i></button>
+            <button class="btn-recolher" type="button" data-tip="collapse" onclick="alternarCard('saida-card')" aria-expanded="true" aria-controls="saida-programa-corpo"><i class="fa-solid fa-chevron-up" aria-hidden="true"></i></button>
           </div>
           <div class="card-body" id="saida-programa-corpo"></div>
         </div>
@@ -133,7 +133,7 @@
         <div class="card" id="pilha-card" style="display:none;">
           <div class="card-header">
             <span class="card-header-title"><i class="fa-solid fa-layer-group"></i><span data-i18n="stack.title">Pilha de chamadas</span></span>
-            <button class="btn-recolher" type="button" onclick="alternarCard('pilha-card')" aria-expanded="true" aria-controls="pilha-corpo"><i class="fa-solid fa-chevron-up" aria-hidden="true"></i></button>
+            <button class="btn-recolher" type="button" data-tip="collapse" onclick="alternarCard('pilha-card')" aria-expanded="true" aria-controls="pilha-corpo"><i class="fa-solid fa-chevron-up" aria-hidden="true"></i></button>
           </div>
           <div class="card-body" id="pilha-corpo"></div>
         </div>
@@ -142,13 +142,13 @@
       <div class="card fluxo-card" id="fluxo-card" style="display:none;">
         <div class="card-header">
           <span class="card-header-title"><i class="fa-solid fa-code-branch" aria-hidden="true"></i><span data-i18n="section.flowchart">Fluxograma</span></span>
-          <button class="btn-recolher" type="button" onclick="alternarCard('fluxo-card')" aria-expanded="true" aria-controls="fluxo-corpo"><i class="fa-solid fa-chevron-up" aria-hidden="true"></i></button>
+          <button class="btn-recolher" type="button" data-tip="collapse" onclick="alternarCard('fluxo-card')" aria-expanded="true" aria-controls="fluxo-corpo"><i class="fa-solid fa-chevron-up" aria-hidden="true"></i></button>
         </div>
         <div class="card-body" id="fluxo-corpo">
           <div class="fluxo-barra" id="fluxo-barra" hidden>
             <label for="fluxo-select" data-i18n="flow.chartLabel">Fluxograma de:</label>
-            <select id="fluxo-select" class="fluxo-select"></select>
-            <button type="button" id="fluxo-seguir" class="btn-fluxo-seguir" aria-pressed="true" title="Seguir execução: voltar a acompanhar a função em execução" data-i18n-title="flow.followHint"><i class="fa-solid fa-location-crosshairs" aria-hidden="true"></i><span data-i18n="flow.follow">Seguir execução</span></button>
+            <select id="fluxo-select" class="fluxo-select" data-tip="flowSelect"></select>
+            <button type="button" id="fluxo-seguir" class="btn-fluxo-seguir" aria-pressed="true" data-tip="follow"><i class="fa-solid fa-location-crosshairs" aria-hidden="true"></i><span data-i18n="flow.follow">Seguir execução</span></button>
             <span class="fluxo-status" id="fluxo-status"></span>
           </div>
           <p class="fluxo-aviso" id="fluxo-aviso" hidden></p>
@@ -168,6 +168,7 @@
       </div>
     </div>
 
+    <script src="/static/js/tooltip.js" defer></script>
     <script type="module" src="/static/js/app.js"></script>
 
   </body>

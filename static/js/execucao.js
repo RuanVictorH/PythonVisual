@@ -10,6 +10,7 @@ import {
 } from "./renderizar-memoria.js";
 import {
   explicarComandoPython,
+  linhaEstaEmClasse,
   montarCaixaErro,
   obterBlocoAspasTriplas,
 } from "./explicacao.js";
@@ -242,7 +243,13 @@ function atualizarExplicacaoLinha() {
     escaparHTML(codigoExplicado || traduzir("line.empty")) +
     "</pre>" +
     '<p class="explicacao-texto">' +
-    escaparHTML(explicarComandoPython(linhaCodigo, blocoAspasTriplas)) +
+    escaparHTML(
+      explicarComandoPython(
+        linhaCodigo,
+        blocoAspasTriplas,
+        linhaEstaEmClasse(alvo.indice),
+      ),
+    ) +
     "</p>";
 }
 

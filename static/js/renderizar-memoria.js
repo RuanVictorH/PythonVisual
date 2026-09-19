@@ -106,6 +106,79 @@ function renderizarQuadroFuncoes(funcoes, vazio) {
   );
 }
 
+function rotuloDeMetodo(metodo) {
+  if (metodo === "estatico")
+    return traduzir("memory.staticMethod");
+  if (metodo === "classe")
+    return traduzir("memory.classMethod");
+  return traduzir("memory.method");
+}
+
+function linhaDeMetodo(conteudo, chip) {
+  return (
+    '<div class="quadro-linha quadro-linha-metodo">' +
+    '<div class="quadro-cel quadro-cel-metodo">' +
+    conteudo +
+    "</div>" +
+    '<div class="quadro-cel quadro-cel-tipo">' +
+    chip +
+    "</div>" +
+    "</div>"
+  );
+}
+
+function linhasDeMetodos(info) {
+  if (!info || !Array.isArray(info.metodos))
+    return "";
+  if (info.metodos.length === 0) {
+    return linhaDeMetodo(
+      '<span class="empty">' +
+        escaparHTML(traduzir("memory.classNoMethods")) +
+        "</span>",
+      "",
+    );
+  }
+  const linhas = info.metodos
+    .map((m) =>
+      linhaDeMetodo(
+        escaparHTML(m.nome + (typeof m.assinatura === "string" ? m.assinatura : "()")),
+        '<span class="tipo-chip tipo-chip-derivado">' +
+          escaparHTML(rotuloDeMetodo(m.tipo)) +
+          "</span>",
+      ),
+    )
+    .join("");
+  return info.metodos_truncado ? linhas + linhaDeMetodo("...", "") : linhas;
+}
+
+function tituloDoQuadro(quadro, variaveisQuadro) {
+  if (quadro.escopo === "Global")
+    return traduzir("memory.variablesGlobal");
+  if (quadro.tipo_escopo === "classe") {
+    const temMetodos = variaveisQuadro.some(
+      ({ info }) => info.categoria === "funcao",
+    );
+    const temAtributos = variaveisQuadro.some(
+      ({ info }) => info.categoria !== "funcao",
+    );
+    let chave = "memory.classMethods";
+    if (temMetodos && temAtributos)
+      chave = "memory.classMembers";
+    else if (temAtributos)
+      chave = "memory.classAttributes";
+    return traduzir(chave, { name: quadro.classe || quadro.escopo });
+  }
+  if (quadro.tipo_escopo === "metodo") {
+    const nome = quadro.classe
+      ? quadro.classe + "." + quadro.escopo
+      : quadro.escopo;
+    return traduzir("memory.variablesLocalMethod", { name: nome });
+  }
+  return traduzir("memory.variablesLocal", {
+    name: quadro.escopo || traduzir("scope.global"),
+  });
+}
+
 function renderizarQuadroClasses(classes, vazio) {
   const linhas =
     classes.length === 0
@@ -114,13 +187,14 @@ function renderizarQuadroClasses(classes, vazio) {
         "</span></div></div>"
       : classes
           .map(
-            ({ nome }) =>
+            ({ nome, info }) =>
               '<div class="quadro-linha">' +
               '<div class="quadro-cel quadro-cel-nome">' +
               escaparHTML(nome) +
               "</div>" +
               '<div class="quadro-cel quadro-cel-tipo"><span class="tipo-chip tipo-chip-classe">class</span></div>' +
-              "</div>",
+              "</div>" +
+              linhasDeMetodos(info),
           )
           .join("");
 
@@ -269,7 +343,11 @@ export function renderizarMemoria(variaveis, quadrosMemoria) {
           escaparHTML(nome) +
           "</div>" +
           '<div class="quadro-cel quadro-cel-tipo"><span class="tipo-chip tipo-chip-derivado">' +
-          escaparHTML(traduzir("memory.method")) +
+          escaparHTML(
+            quadro.tipo_escopo === "classe"
+              ? rotuloDeMetodo(info.metodo)
+              : traduzir("memory.functionChip"),
+          ) +
           "</span></div>" +
           '<div class="quadro-cel quadro-cel-valor">' +
           escaparHTML(assinatura) +
@@ -291,14 +369,7 @@ export function renderizarMemoria(variaveis, quadrosMemoria) {
       }
     }
 
-    const nomeEscopo =
-      quadro.escopo === "Global"
-        ? traduzir("scope.global")
-        : quadro.escopo || traduzir("scope.global");
-    const tituloVariaveis =
-      quadro.escopo === "Global"
-        ? traduzir("memory.variablesGlobal")
-        : traduzir("memory.variablesLocal", { name: nomeEscopo });
+    const tituloVariaveis = tituloDoQuadro(quadro, variaveisQuadro);
     paineisQuadros.push(
       '<div class="painel-memoria">' +
         '<div class="quadro quadro-variaveis">' +
@@ -530,6 +601,11 @@ export function desenharSetasMemoria() {
 function formatarChamadaPilha(item) {
   if (!item || item.escopo === "Global")
     return traduzir("scope.global");
+  if (item.tipo_escopo === "classe") {
+    return escaparHTML(
+      traduzir("stack.classBody", { name: item.classe || item.escopo }),
+    );
+  }
   const argumentos = Array.isArray(item.argumentos) ? item.argumentos : [];
   const textoArgumentos = argumentos
     .map((arg) => {
@@ -539,7 +615,11 @@ function formatarChamadaPilha(item) {
         : nome + "=" + escaparHTML(arg.valor);
     })
     .join(", ");
-  return escaparHTML(item.escopo) + "(" + textoArgumentos + ")";
+  const nome =
+    item.tipo_escopo === "metodo" && item.classe
+      ? item.classe + "." + item.escopo
+      : item.escopo;
+  return escaparHTML(nome) + "(" + textoArgumentos + ")";
 }
 
 export function renderizarPilhaChamadas(pilha, passoAtual) {
@@ -550,7 +630,8 @@ export function renderizarPilhaChamadas(pilha, passoAtual) {
   const mostrarRetorno =
     passoAtual &&
     passoAtual.evento === "return" &&
-    passoAtual.valor_retorno !== undefined;
+    passoAtual.valor_retorno !== undefined &&
+    pilha[ultimoIndice].tipo_escopo !== "classe";
 
   const itens = pilha
     .map((item, indice) => {
@@ -572,7 +653,13 @@ export function renderizarPilhaChamadas(pilha, passoAtual) {
       const conectorHTML =
         indice < ultimoIndice
           ? '<div class="pilha-conector"><i class="fa-solid fa-arrow-down" aria-hidden="true"></i>' +
-            escaparHTML(traduzir("stack.calls")) +
+            escaparHTML(
+              traduzir(
+                pilha[indice + 1].tipo_escopo === "classe"
+                  ? "stack.defines"
+                  : "stack.calls",
+              ),
+            ) +
             "</div>"
           : "";
       return (

@@ -143,12 +143,22 @@ function validar(fluxo) {
   return true;
 }
 
+function ehMetodo(g) {
+  if (g.tipo !== "funcao" || !estado.fluxo)
+    return false;
+  const pai = estado.fluxo.graficos.find((outro) => outro.id === g.pai);
+  return !!pai && pai.tipo === "classe";
+}
+
 function rotuloDoGrafico(g) {
   if (g.tipo === "principal")
     return traduzir("flow.main");
-  return traduzir(g.tipo === "classe" ? "flow.classOption" : "flow.functionOption", {
-    name: g.nome || g.escopo,
-  });
+  let chave = "flow.functionOption";
+  if (g.tipo === "classe")
+    chave = "flow.classOption";
+  else if (ehMetodo(g))
+    chave = "flow.methodOption";
+  return traduzir(chave, { name: g.nome || g.escopo });
 }
 
 function formaSvg(f) {

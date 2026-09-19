@@ -150,6 +150,28 @@ def obter_ordem_importacoes(codigo):
     return resultado
 
 
+def listar_metodos_classe(classe, limite=50):
+    metodos = []
+    for nome, item in list(vars(classe).items()):
+        tipo_metodo = "metodo"
+        if isinstance(item, staticmethod):
+            tipo_metodo = "estatico"
+            item = item.__func__
+        elif isinstance(item, classmethod):
+            tipo_metodo = "classe"
+            item = item.__func__
+        if not isinstance(item, types.FunctionType):
+            continue
+        if len(metodos) >= limite:
+            return metodos, True
+        metodos.append({
+            "nome": nome,
+            "assinatura": obter_assinatura_funcao(item),
+            "tipo": tipo_metodo
+        })
+    return metodos, False
+
+
 def adicionar_ordem_importacao(dados, nome_variavel):
     if nome_variavel in ordem_importacoes:
         dados["ordem_importacao"] = ordem_importacoes[nome_variavel]
@@ -183,14 +205,26 @@ def serializar_variavel(valor, nome_variavel=None):
             "assinatura": obter_assinatura_funcao(valor)
         }
 
+    if isinstance(valor, (staticmethod, classmethod)) and isinstance(valor.__func__, types.FunctionType):
+        return {
+            "categoria": "funcao",
+            "tipo": "function",
+            "nome": getattr(valor.__func__, "__name__", tipo),
+            "assinatura": obter_assinatura_funcao(valor.__func__),
+            "metodo": "estatico" if isinstance(valor, staticmethod) else "classe"
+        }
+
     if isinstance(valor, type):
         modulo = getattr(valor, "__module__", "builtins")
         if modulo == "__main__":
+            metodos, truncado = listar_metodos_classe(valor)
             return {
                 "categoria": "classe",
                 "tipo": "class",
                 "nome": getattr(valor, "__name__", tipo),
-                "repr": repr_seguro(valor)
+                "repr": repr_seguro(valor),
+                "metodos": metodos,
+                "metodos_truncado": truncado
             }
         if modulo != "builtins":
             return adicionar_ordem_importacao({
@@ -284,8 +318,27 @@ def serializar_variavel(valor, nome_variavel=None):
 
 def variavel_interna(nome, valor):
     if nome.startswith("__") and nome.endswith("__"):
-        return True
+        if isinstance(valor, (staticmethod, classmethod)):
+            valor = valor.__func__
+        return not (isinstance(valor, types.FunctionType) and valor.__code__.co_filename == ARQUIVO_USUARIO)
     return nome == "input" and valor is input_visual
+
+
+def descrever_escopo(frame):
+    codigo = frame.f_code
+    if codigo.co_name == "<module>":
+        return {"tipo_escopo": "global"}
+    if not codigo.co_flags & inspect.CO_NEWLOCALS:
+        return {"tipo_escopo": "classe", "classe": codigo.co_name}
+    qualname = getattr(codigo, "co_qualname", None)
+    if qualname:
+        partes = qualname.split(".")
+        if len(partes) >= 2 and partes[-2] != "<locals>":
+            return {"tipo_escopo": "metodo", "classe": partes[-2]}
+        return {"tipo_escopo": "funcao"}
+    if codigo.co_argcount and codigo.co_varnames[0] in ("self", "cls"):
+        return {"tipo_escopo": "metodo"}
+    return {"tipo_escopo": "funcao"}
 
 
 def serializar_mapeamento_variaveis(mapeamento):
@@ -311,6 +364,7 @@ def serializar_quadros_memoria(frame):
         escopo = frame_atual.f_code.co_name
         quadros.append({
             "escopo": escopo if escopo != "<module>" else "Global",
+            **descrever_escopo(frame_atual),
             "atual": indice == len(frames) - 1,
             "variaveis": serializar_mapeamento_variaveis(frame_atual.f_locals)
         })
@@ -336,6 +390,7 @@ def serializar_pilha(frame):
                     argumentos.append(argumento)
             pilha.append({
                 "escopo": escopo if escopo != "<module>" else "Global",
+                **descrever_escopo(atual),
                 "linha": atual.f_lineno,
                 "argumentos": argumentos,
                 "atual": False
@@ -505,6 +560,7 @@ try:
         "pilha_chamadas": [],
         "quadros_memoria": [{
             "escopo": "Global",
+            "tipo_escopo": "global",
             "atual": True,
             "variaveis": variaveis_finais
         }],

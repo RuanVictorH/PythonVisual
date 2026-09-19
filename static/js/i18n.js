@@ -167,13 +167,17 @@ const i18n = {
     "stack.subtitle":
       "Mostra a sequência dinâmica de funções ativas neste passo.",
     "stack.currentScope": "escopo atual",
-    "stack.empty": "Nenhuma função ativa além do escopo global neste passo.",
+    "stack.empty":
+      "Nenhuma função ou método ativo além do escopo global neste passo.",
     "stack.calls": "chama",
+    "stack.defines": "define",
+    "stack.classBody": "Definição da classe {name}",
     "stack.returns": "retorna",
     "section.flowchart": "Fluxograma",
     "flow.chartLabel": "Fluxograma de:",
     "flow.main": "Programa principal",
     "flow.functionOption": "Função {name}",
+    "flow.methodOption": "Método {name}",
     "flow.classOption": "Classe {name}",
     "flow.start": "Início",
     "flow.end": "Fim",
@@ -221,6 +225,14 @@ const i18n = {
     "memory.functions": "Funções",
     "memory.noFunctions": "Nenhuma função definida neste passo.",
     "memory.method": "método",
+    "memory.staticMethod": "método estático",
+    "memory.classMethod": "método de classe",
+    "memory.functionChip": "função",
+    "memory.classMethods": "Classe {name} - métodos",
+    "memory.classAttributes": "Classe {name} - atributos",
+    "memory.classMembers": "Classe {name} - atributos e métodos",
+    "memory.variablesLocalMethod": "Variáveis locais do método {name}",
+    "memory.classNoMethods": "sem métodos",
     "memory.classes": "Classes",
     "memory.noClasses": "Nenhuma classe definida neste passo.",
     "memory.imports": "Importações",
@@ -245,6 +257,8 @@ const i18n = {
       "Bloco de texto delimitado por aspas triplas. Quando está isolado, costuma ser usado como comentário de múltiplas linhas; tecnicamente, o Python o trata como uma string. No início de um módulo, função ou classe, ele pode ser uma docstring.",
     "explain.def":
       "Define uma função. O bloco indentado abaixo só será executado quando essa função for chamada.",
+    "explain.defMethod":
+      "Define um método da classe. O bloco indentado abaixo só será executado quando o método for chamado em um objeto.",
     "explain.class":
       "Define uma classe, que funciona como um modelo para criar objetos.",
     "explain.return":
@@ -452,13 +466,16 @@ const i18n = {
       "Shows the dynamic sequence of active functions in this step.",
     "stack.currentScope": "current scope",
     "stack.empty":
-      "No function is active beyond the global scope in this step.",
+      "No function or method is active beyond the global scope in this step.",
     "stack.calls": "calls",
+    "stack.defines": "defines",
+    "stack.classBody": "Definition of class {name}",
     "stack.returns": "returns",
     "section.flowchart": "Flowchart",
     "flow.chartLabel": "Flowchart of:",
     "flow.main": "Main program",
     "flow.functionOption": "Function {name}",
+    "flow.methodOption": "Method {name}",
     "flow.classOption": "Class {name}",
     "flow.start": "Start",
     "flow.end": "End",
@@ -506,6 +523,14 @@ const i18n = {
     "memory.functions": "Functions",
     "memory.noFunctions": "No function defined in this step.",
     "memory.method": "method",
+    "memory.staticMethod": "static method",
+    "memory.classMethod": "class method",
+    "memory.functionChip": "function",
+    "memory.classMethods": "Class {name} - methods",
+    "memory.classAttributes": "Class {name} - attributes",
+    "memory.classMembers": "Class {name} - attributes and methods",
+    "memory.variablesLocalMethod": "Local variables of method {name}",
+    "memory.classNoMethods": "no methods",
     "memory.classes": "Classes",
     "memory.noClasses": "No class defined in this step.",
     "memory.imports": "Imports",
@@ -530,6 +555,8 @@ const i18n = {
       "Text block delimited by triple quotes. When it stands alone, it is commonly used as a multiline comment; technically, Python treats it as a string. At the beginning of a module, function, or class, it can be a docstring.",
     "explain.def":
       "Defines a function. The indented block below runs only when this function is called.",
+    "explain.defMethod":
+      "Defines a method of the class. The indented block below runs only when the method is called on an object.",
     "explain.class":
       "Defines a class, which works as a template for creating objects.",
     "explain.return":

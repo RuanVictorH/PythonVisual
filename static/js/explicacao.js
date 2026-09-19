@@ -42,7 +42,26 @@ export function obterBlocoAspasTriplas(indiceInicial) {
   };
 }
 
-export function explicarComandoPython(linha, blocoAspasTriplas = null) {
+export function linhaEstaEmClasse(indiceLinha) {
+  const linha = editor.getLine(indiceLinha) || "";
+  const recuo = linha.match(/^\s*/)[0].length;
+  if (recuo === 0)
+    return false;
+  for (let indice = indiceLinha - 1; indice >= 0; indice--) {
+    const anterior = editor.getLine(indice) || "";
+    if (!anterior.trim() || /^\s*#/.test(anterior))
+      continue;
+    if (anterior.match(/^\s*/)[0].length < recuo)
+      return /^\s*class\s+\w+/.test(anterior);
+  }
+  return false;
+}
+
+export function explicarComandoPython(
+  linha,
+  blocoAspasTriplas = null,
+  emClasse = false,
+) {
   const texto = String(linha || "").trim();
   if (!texto)
     return traduzir("explain.empty");
@@ -51,7 +70,7 @@ export function explicarComandoPython(linha, blocoAspasTriplas = null) {
   if (/^#/.test(texto))
     return traduzir("explain.comment");
   if (/^def\s+\w+\s*\(/.test(texto))
-    return traduzir("explain.def");
+    return traduzir(emClasse ? "explain.defMethod" : "explain.def");
   if (/^class\s+\w+/.test(texto))
     return traduzir("explain.class");
   if (/^return\b/.test(texto))

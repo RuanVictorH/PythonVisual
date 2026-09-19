@@ -675,6 +675,13 @@ button i,
   font-weight: 700;
   word-break: break-word;
 }
+.quadro-cel-metodo {
+  padding-left: 22px;
+  font-family: "Fira Mono", "Courier New", monospace;
+  font-weight: 500;
+  color: #0f172a;
+  word-break: break-word;
+}
 .quadro-cel-detalhe {
   color: #64748b;
   font-family: "Fira Mono", "Courier New", monospace;
@@ -1151,6 +1158,9 @@ body.tema-escuro .quadro-cel-funcao {
 }
 body.tema-escuro .quadro-cel-detalhe {
   color: #94a3b8;
+}
+body.tema-escuro .quadro-cel-metodo {
+  color: #e2e8f0;
 }
 body.tema-escuro .quadro-cel-nome,
 body.tema-escuro .lista-item strong,

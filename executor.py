@@ -34,8 +34,22 @@ SANDBOX_CPUS = CONFIG.get("SANDBOX_CPUS", "0.5")
 SANDBOX_PIDS = CONFIG.get("SANDBOX_PIDS", "64")
 SANDBOX_DOCKERFILE_DIR = Path(__file__).with_name("docker")
 
+USAR_FLUXOGRAMA = CONFIG.get("USAR_FLUXOGRAMA", "true").strip().lower() != "false"
+FLUXO_MAXIMO_NOS = int(CONFIG.get("FLUXO_MAXIMO_NOS", 150))
+FLUXO_TAMANHO_MAXIMO_TEXTO = int(CONFIG.get("FLUXO_TAMANHO_MAXIMO_TEXTO", 100))
 
-RUNNER_CODE = r"""
+
+def _carregar_fluxo_fonte():
+    # O container so recebe o texto do RUNNER_CODE (sem arquivos do projeto), entao o
+    # construtor do fluxograma e embutido aqui. Linhas em branco e comentarios saem para
+    # economizar espaco: no Windows a linha de comando do docker run tem limite de 32767.
+    arquivo = Path(__file__).with_name("fluxo_builder.py")
+    linhas = arquivo.read_text(encoding="utf-8").splitlines()
+    uteis = [l for l in linhas if l.strip() and not l.strip().startswith("#")]
+    return "\n".join(uteis) + "\n"
+
+
+_CORPO_RUNNER = r"""
 import ast
 import io
 import inspect
@@ -111,7 +125,7 @@ def obter_assinatura_funcao(funcao):
 def obter_ordem_importacoes(codigo):
     try:
         arvore = ast.parse(codigo)
-    except SyntaxError:
+    except Exception:
         return {}
 
     nos = [
@@ -343,6 +357,24 @@ limite_recursao = int(payload.get("limite_recursao", 200))
 tamanho_maximo_saida = int(payload.get("tamanho_maximo_saida", 20000))
 ordem_importacoes = obter_ordem_importacoes(codigo)
 
+# Fluxograma: montado antes de rodar o codigo do usuario. Sem chave = codigo invalido;
+# chave com null = o construtor falhou (a execucao segue normalmente).
+fluxo_anexar = False
+fluxo_gerado = None
+if payload.get("gerar_fluxo", True):
+    try:
+        fluxo_gerado = construir_fluxo(
+            codigo,
+            int(payload.get("fluxo_maximo_nos", 150)),
+            int(payload.get("fluxo_tamanho_maximo_texto", 100)),
+        )
+        if fluxo_gerado is not None:
+            json.dumps(fluxo_gerado)
+            fluxo_anexar = True
+    except Exception:
+        fluxo_gerado = None
+        fluxo_anexar = True
+
 
 def saida_truncada(texto):
     if len(texto) <= tamanho_maximo_saida:
@@ -520,8 +552,13 @@ finally:
     sys.stderr = stderr_original
     sys.stdin = stdin_original
 
+if fluxo_anexar and execucoes and isinstance(execucoes[0], dict):
+    execucoes[0]["fluxo"] = fluxo_gerado
+
 print(json.dumps(execucoes, ensure_ascii=False))
 """
+
+RUNNER_CODE = _carregar_fluxo_fonte() + _CORPO_RUNNER
 
 
 _imagem_sandbox_pronta = False
@@ -587,6 +624,9 @@ def executar_codigo(
     limite_passos=LIMITE_PASSOS,
     limite_recursao=LIMITE_RECURSAO,
     tamanho_maximo_saida=TAMANHO_MAXIMO_SAIDA,
+    gerar_fluxo=USAR_FLUXOGRAMA,
+    fluxo_maximo_nos=FLUXO_MAXIMO_NOS,
+    fluxo_tamanho_maximo_texto=FLUXO_TAMANHO_MAXIMO_TEXTO,
 ):
     payload = json.dumps(
         {
@@ -596,6 +636,9 @@ def executar_codigo(
             "limite_passos": limite_passos,
             "limite_recursao": limite_recursao,
             "tamanho_maximo_saida": tamanho_maximo_saida,
+            "gerar_fluxo": gerar_fluxo,
+            "fluxo_maximo_nos": fluxo_maximo_nos,
+            "fluxo_tamanho_maximo_texto": fluxo_tamanho_maximo_texto,
         },
         ensure_ascii=False,
     )

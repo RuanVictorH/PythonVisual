@@ -103,6 +103,9 @@ header img {
 .top-nav a:focus-visible,
 .exemplos-row select:focus-visible,
 .entrada-area:focus-visible,
+.fluxo-rolagem:focus-visible,
+.fluxo-select:focus-visible,
+.btn-fluxo-seguir:focus-visible,
 #slider:focus-visible {
   outline: 3px solid #f59e0b;
   outline-offset: 2px;
@@ -1373,4 +1376,350 @@ body {
   .card {
     padding: 10px !important;
   }
+}
+
+/* ===== Fluxograma ===== */
+.fluxo-card {
+  grid-column: 1 / -1;
+  --fluxo-aresta: #475569;
+  --fluxo-texto: #0f172a;
+  --fluxo-rotulo: #334155;
+  --fluxo-terminal-fundo: #334155;
+  --fluxo-terminal-borda: #334155;
+  --fluxo-terminal-texto: #ffffff;
+  --fluxo-processo-fundo: #dbeafe;
+  --fluxo-processo-borda: #1d4ed8;
+  --fluxo-processo-texto: #0f172a;
+  --fluxo-decisao-fundo: #fef3c7;
+  --fluxo-decisao-borda: #b45309;
+  --fluxo-decisao-texto: #451a03;
+  --fluxo-es-fundo: #ede9fe;
+  --fluxo-es-borda: #6d28d9;
+  --fluxo-es-texto: #2e1065;
+  --fluxo-definicao-fundo: #e0e7ff;
+  --fluxo-definicao-borda: #4338ca;
+  --fluxo-definicao-texto: #1e1b4b;
+  --fluxo-salto-fundo: #e7e5e4;
+  --fluxo-salto-borda: #57534e;
+  --fluxo-salto-texto: #1c1917;
+  --fluxo-proximo-fundo: #fee2e2;
+  --fluxo-proximo-borda: #dc2626;
+  --fluxo-proximo-texto: #450a0a;
+  --fluxo-executado-fundo: #dcfce7;
+  --fluxo-executado-borda: #047857;
+  --fluxo-executado-texto: #052e16;
+  --fluxo-visitado-marca: #047857;
+}
+body.tema-escuro .fluxo-card {
+  --fluxo-aresta: #94a3b8;
+  --fluxo-texto: #e2e8f0;
+  --fluxo-rotulo: #cbd5e1;
+  --fluxo-terminal-fundo: #475569;
+  --fluxo-terminal-borda: #94a3b8;
+  --fluxo-terminal-texto: #f8fafc;
+  --fluxo-processo-fundo: #1e3a5f;
+  --fluxo-processo-borda: #60a5fa;
+  --fluxo-processo-texto: #e2e8f0;
+  --fluxo-decisao-fundo: #422006;
+  --fluxo-decisao-borda: #fbbf24;
+  --fluxo-decisao-texto: #fef3c7;
+  --fluxo-es-fundo: #2e1065;
+  --fluxo-es-borda: #a78bfa;
+  --fluxo-es-texto: #ede9fe;
+  --fluxo-definicao-fundo: #1e1b4b;
+  --fluxo-definicao-borda: #818cf8;
+  --fluxo-definicao-texto: #e0e7ff;
+  --fluxo-salto-fundo: #292524;
+  --fluxo-salto-borda: #a8a29e;
+  --fluxo-salto-texto: #f5f5f4;
+  --fluxo-proximo-fundo: #450a0a;
+  --fluxo-proximo-borda: #f87171;
+  --fluxo-proximo-texto: #fee2e2;
+  --fluxo-executado-fundo: #14532d;
+  --fluxo-executado-borda: #34d399;
+  --fluxo-executado-texto: #dcfce7;
+  --fluxo-visitado-marca: #34d399;
+}
+.fluxo-barra {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  font-size: 0.85rem;
+  color: #17324d;
+}
+.fluxo-barra[hidden],
+.fluxo-aviso[hidden],
+.fluxo-legenda[hidden] {
+  display: none;
+}
+.fluxo-barra label {
+  font-weight: 600;
+  white-space: nowrap;
+}
+.fluxo-select {
+  max-width: 100%;
+  padding: 6px 10px;
+  border-radius: 7px;
+  border: 1.5px solid #cbd5e1;
+  font-family: "Inter", sans-serif;
+  font-size: 0.85rem;
+  color: #1e293b;
+  background: #f8fafc;
+  cursor: pointer;
+}
+.btn-fluxo-seguir {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 7px;
+  background: #e2e8f0;
+  color: #17324d;
+  font-family: "Inter", sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.btn-fluxo-seguir:hover {
+  background: #dbeafe;
+  border-color: #2563eb;
+}
+.btn-fluxo-seguir.ativo {
+  background: #dbeafe;
+  border-color: #1d4ed8;
+  color: #1e3a8a;
+}
+.fluxo-status {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #475569;
+}
+.fluxo-aviso {
+  margin: 0 0 10px;
+  padding: 8px 12px;
+  border: 1px solid #b45309;
+  border-radius: 7px;
+  background: #fef3c7;
+  color: #451a03;
+  font-size: 0.84rem;
+}
+.fluxo-rolagem {
+  overflow: auto;
+  max-height: min(32rem, 75vh);
+  resize: vertical;
+  border: 1px solid #dbe3ef;
+  border-radius: 8px;
+  background: #f8fafc;
+}
+.fluxo-svg {
+  display: block;
+  max-width: none;
+  margin: 0 auto;
+}
+.fluxo-legenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.78rem;
+  color: #334155;
+}
+.fluxo-legenda li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.fluxo-legenda-icone {
+  flex: none;
+  width: 1.75rem;
+  height: 1rem;
+}
+.fluxo-legenda-icone.proximo,
+.fluxo-legenda-icone.executado,
+.fluxo-legenda-icone.visitado {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.fluxo-aresta {
+  fill: none;
+  stroke: var(--fluxo-aresta);
+  stroke-width: 1.6;
+}
+.fluxo-seta,
+.fluxo-juncao {
+  fill: var(--fluxo-aresta);
+}
+.fluxo-rotulo {
+  fill: var(--fluxo-rotulo);
+  font: 600 11px "Inter", Arial, sans-serif;
+}
+.fluxo-texto {
+  fill: var(--fluxo-texto);
+  font:
+    13px ui-monospace,
+    "Cascadia Mono",
+    Consolas,
+    "Liberation Mono",
+    "Courier New",
+    monospace;
+  pointer-events: none;
+}
+.fluxo-forma {
+  stroke-width: 1.5;
+}
+.fluxo-no-terminal .fluxo-forma {
+  fill: var(--fluxo-terminal-fundo);
+  stroke: var(--fluxo-terminal-borda);
+}
+.fluxo-no-terminal .fluxo-texto {
+  fill: var(--fluxo-terminal-texto);
+}
+.fluxo-no-processo .fluxo-forma {
+  fill: var(--fluxo-processo-fundo);
+  stroke: var(--fluxo-processo-borda);
+}
+.fluxo-no-processo .fluxo-texto {
+  fill: var(--fluxo-processo-texto);
+}
+.fluxo-no-decisao .fluxo-forma {
+  fill: var(--fluxo-decisao-fundo);
+  stroke: var(--fluxo-decisao-borda);
+}
+.fluxo-no-decisao .fluxo-texto {
+  fill: var(--fluxo-decisao-texto);
+}
+.fluxo-no-es .fluxo-forma {
+  fill: var(--fluxo-es-fundo);
+  stroke: var(--fluxo-es-borda);
+}
+.fluxo-no-es .fluxo-texto {
+  fill: var(--fluxo-es-texto);
+}
+.fluxo-no-definicao .fluxo-forma {
+  fill: var(--fluxo-definicao-fundo);
+  stroke: var(--fluxo-definicao-borda);
+}
+.fluxo-no-definicao .fluxo-texto {
+  fill: var(--fluxo-definicao-texto);
+}
+.fluxo-forma-detalhe {
+  stroke: var(--fluxo-definicao-borda);
+  stroke-width: 1.5;
+}
+.fluxo-no-salto .fluxo-forma {
+  fill: var(--fluxo-salto-fundo);
+  stroke: var(--fluxo-salto-borda);
+}
+.fluxo-no-salto .fluxo-texto {
+  fill: var(--fluxo-salto-texto);
+}
+.fluxo-no-omitido .fluxo-forma {
+  fill: transparent;
+  stroke: var(--fluxo-salto-borda);
+  stroke-dasharray: 5 4;
+}
+.fluxo-clicavel {
+  cursor: pointer;
+}
+.fluxo-clicavel:hover .fluxo-forma {
+  stroke-width: 2.5;
+}
+
+.fluxo-no.executado .fluxo-forma {
+  fill: var(--fluxo-executado-fundo);
+  stroke: var(--fluxo-executado-borda);
+  stroke-width: 3;
+}
+.fluxo-no.executado .fluxo-texto {
+  fill: var(--fluxo-executado-texto);
+}
+.fluxo-no.proximo .fluxo-forma {
+  fill: var(--fluxo-proximo-fundo);
+  stroke: var(--fluxo-proximo-borda);
+  stroke-width: 3;
+}
+.fluxo-no.proximo .fluxo-texto {
+  fill: var(--fluxo-proximo-texto);
+}
+.fluxo-marca {
+  display: none;
+  pointer-events: none;
+}
+.fluxo-no.proximo .fluxo-marca,
+.fluxo-no.executado .fluxo-marca,
+.fluxo-no.visitado .fluxo-marca {
+  display: inline;
+}
+.fluxo-marca-fundo {
+  fill: #047857;
+  stroke: #ffffff;
+  stroke-width: 1.5;
+}
+.fluxo-no.proximo .fluxo-marca-fundo {
+  fill: #dc2626;
+}
+.fluxo-no.visitado .fluxo-marca-fundo {
+  fill: transparent;
+  stroke: none;
+}
+.fluxo-glifo-seta,
+.fluxo-glifo-check {
+  display: none;
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.fluxo-no.proximo .fluxo-glifo-seta,
+.fluxo-no.executado .fluxo-glifo-check {
+  display: inline;
+}
+.fluxo-no.visitado .fluxo-glifo-check {
+  display: inline;
+  stroke: var(--fluxo-visitado-marca);
+}
+.fluxo-no-terminal.visitado .fluxo-glifo-check {
+  stroke: #86efac;
+}
+
+body.tema-escuro .fluxo-barra,
+body.tema-escuro .fluxo-legenda {
+  color: #cbd5e1;
+}
+body.tema-escuro .fluxo-select {
+  background: #0b1120;
+  color: #e2e8f0;
+  border-color: #475569;
+}
+body.tema-escuro .btn-fluxo-seguir {
+  background: #1e293b;
+  color: #dbeafe;
+  border-color: #475569;
+}
+body.tema-escuro .btn-fluxo-seguir:hover {
+  background: #334155;
+  border-color: #60a5fa;
+}
+body.tema-escuro .btn-fluxo-seguir.ativo {
+  background: #1e3a5f;
+  border-color: #60a5fa;
+  color: #dbeafe;
+}
+body.tema-escuro .fluxo-status {
+  color: #cbd5e1;
+}
+body.tema-escuro .fluxo-aviso {
+  background: #422006;
+  border-color: #fbbf24;
+  color: #fef3c7;
+}
+body.tema-escuro .fluxo-rolagem {
+  background: #0b1120;
+  border-color: #334155;
 }

@@ -138,6 +138,34 @@
           <div class="card-body" id="pilha-corpo"></div>
         </div>
       </div>
+
+      <div class="card fluxo-card" id="fluxo-card" style="display:none;">
+        <div class="card-header">
+          <span class="card-header-title"><i class="fa-solid fa-code-branch" aria-hidden="true"></i><span data-i18n="section.flowchart">Fluxograma</span></span>
+          <button class="btn-recolher" type="button" onclick="alternarCard('fluxo-card')" aria-expanded="true" aria-controls="fluxo-corpo"><i class="fa-solid fa-chevron-up" aria-hidden="true"></i></button>
+        </div>
+        <div class="card-body" id="fluxo-corpo">
+          <div class="fluxo-barra" id="fluxo-barra" hidden>
+            <label for="fluxo-select" data-i18n="flow.chartLabel">Fluxograma de:</label>
+            <select id="fluxo-select" class="fluxo-select"></select>
+            <button type="button" id="fluxo-seguir" class="btn-fluxo-seguir" aria-pressed="true" title="Seguir execução: voltar a acompanhar a função em execução" data-i18n-title="flow.followHint"><i class="fa-solid fa-location-crosshairs" aria-hidden="true"></i><span data-i18n="flow.follow">Seguir execução</span></button>
+            <span class="fluxo-status" id="fluxo-status"></span>
+          </div>
+          <p class="fluxo-aviso" id="fluxo-aviso" hidden></p>
+          <div class="fluxo-rolagem" id="fluxo-rolagem" tabindex="0" role="region" aria-label="Fluxograma" data-i18n-aria="section.flowchart"></div>
+          <ul class="fluxo-legenda" id="fluxo-legenda">
+            <li><svg class="fluxo-legenda-icone fluxo-no fluxo-no-terminal" viewBox="0 0 28 16" aria-hidden="true"><rect class="fluxo-forma" x="1" y="2" width="26" height="12" rx="6"></rect></svg><span data-i18n="flow.legend.terminal">Início / fim</span></li>
+            <li><svg class="fluxo-legenda-icone fluxo-no fluxo-no-processo" viewBox="0 0 28 16" aria-hidden="true"><rect class="fluxo-forma" x="1" y="2" width="26" height="12" rx="2"></rect></svg><span data-i18n="flow.legend.process">Instrução</span></li>
+            <li><svg class="fluxo-legenda-icone fluxo-no fluxo-no-decisao" viewBox="0 0 28 16" aria-hidden="true"><polygon class="fluxo-forma" points="14,1 27,8 14,15 1,8"></polygon></svg><span data-i18n="flow.legend.decision">Decisão / laço</span></li>
+            <li><svg class="fluxo-legenda-icone fluxo-no fluxo-no-es" viewBox="0 0 28 16" aria-hidden="true"><polygon class="fluxo-forma" points="6,2 27,2 22,14 1,14"></polygon></svg><span data-i18n="flow.legend.io">Entrada / saída</span></li>
+            <li><svg class="fluxo-legenda-icone fluxo-no fluxo-no-definicao" viewBox="0 0 28 16" aria-hidden="true"><rect class="fluxo-forma" x="1" y="2" width="26" height="12" rx="2"></rect><line class="fluxo-forma-detalhe" x1="5" y1="2" x2="5" y2="14"></line><line class="fluxo-forma-detalhe" x1="23" y1="2" x2="23" y2="14"></line></svg><span data-i18n="flow.legend.definition">Definição</span></li>
+            <li><svg class="fluxo-legenda-icone fluxo-no fluxo-no-salto" viewBox="0 0 28 16" aria-hidden="true"><polygon class="fluxo-forma" points="1,1 27,1 27,9 14,15 1,9"></polygon></svg><span data-i18n="flow.legend.jump">Salto (return, break, continue)</span></li>
+            <li><svg class="fluxo-legenda-icone fluxo-no proximo" viewBox="-12 -12 24 24" aria-hidden="true"><g class="fluxo-marca"><circle class="fluxo-marca-fundo" r="9"></circle><path class="fluxo-glifo-seta" d="M-4,0 L3,0 M0,-3.5 L3.5,0 L0,3.5"></path><path class="fluxo-glifo-check" d="M-4,0.5 L-1,3.5 L4,-3"></path></g></svg><span data-i18n="status.running">Em execução</span></li>
+            <li><svg class="fluxo-legenda-icone fluxo-no executado" viewBox="-12 -12 24 24" aria-hidden="true"><g class="fluxo-marca"><circle class="fluxo-marca-fundo" r="9"></circle><path class="fluxo-glifo-seta" d="M-4,0 L3,0 M0,-3.5 L3.5,0 L0,3.5"></path><path class="fluxo-glifo-check" d="M-4,0.5 L-1,3.5 L4,-3"></path></g></svg><span data-i18n="status.executed">Executada</span></li>
+            <li><svg class="fluxo-legenda-icone fluxo-no visitado" viewBox="-12 -12 24 24" aria-hidden="true"><g class="fluxo-marca"><circle class="fluxo-marca-fundo" r="9"></circle><path class="fluxo-glifo-seta" d="M-4,0 L3,0 M0,-3.5 L3.5,0 L0,3.5"></path><path class="fluxo-glifo-check" d="M-4,0.5 L-1,3.5 L4,-3"></path></g></svg><span data-i18n="flow.legend.visited">Já executado</span></li>
+          </ul>
+        </div>
+      </div>
     </div>
 
     <script type="module" src="/static/js/app.js"></script>

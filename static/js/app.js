@@ -17,6 +17,7 @@ import {
   obterEntradaPendente,
   renderizarPasso,
 } from "./execucao.js";
+import { rolarFluxoParaNoAtivo } from "./fluxo.js";
 
 let escalaFonte = parseFloat(localStorage.getItem("pythonvisual_escala_fonte")) || 1;
 let temaEscuro = localStorage.getItem("pythonvisual_tema_escuro") === "1";
@@ -126,6 +127,7 @@ function aplicarFonte() {
   localStorage.setItem("pythonvisual_escala_fonte", escalaFonte.toFixed(2));
   editor.refresh();
   requestAnimationFrame(desenharSetasMemoria);
+  requestAnimationFrame(rolarFluxoParaNoAtivo);
 }
 
 function alterarFonte(delta) {
@@ -163,6 +165,8 @@ function alternarCard(cardId) {
     atualizarBotaoRecolher(botao);
   if (cardId === "codigo-card" && !card.classList.contains("recolhido"))
     editor.refresh();
+  if (cardId === "fluxo-card" && !card.classList.contains("recolhido"))
+    requestAnimationFrame(rolarFluxoParaNoAtivo);
   requestAnimationFrame(desenharSetasMemoria);
 }
 
@@ -184,7 +188,7 @@ function focoEmCampoDeTexto(evento) {
   const alvo = evento.target;
   if (!alvo)
     return false;
-  if (alvo.closest && alvo.closest(".CodeMirror"))
+  if (alvo.closest && alvo.closest(".CodeMirror, .fluxo-rolagem"))
     return true;
   if (alvo.isContentEditable)
     return true;

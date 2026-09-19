@@ -13,6 +13,12 @@ import {
   montarCaixaErro,
   obterBlocoAspasTriplas,
 } from "./explicacao.js";
+import {
+  definirFluxo,
+  atualizarFluxo,
+  limparFluxo,
+  limparDestaquesFluxo,
+} from "./fluxo.js";
 
 let passos = [];
 let indiceAtual = 0;
@@ -108,6 +114,7 @@ export function resetarExecucaoVisual() {
   entradasColetadas = [];
   ocultarEntradaPendente();
   limparMarcacoes();
+  limparFluxo();
   const slider = document.getElementById("slider");
   slider.max = 0;
   slider.value = 0;
@@ -271,6 +278,7 @@ export function renderizarPasso() {
       });
   atualizarBotoes();
   aplicarMarcacoes();
+  atualizarFluxo({ passos, indiceAtual, linhaProxima, linhaExecutada });
   atualizarExplicacaoLinha();
 
   if (estaNoPassoPendente)
@@ -345,6 +353,7 @@ export async function executarComEntradas() {
   document.getElementById("pilha-corpo").innerHTML =
     '<p class="empty">' + escaparHTML(traduzir("run.executing")) + "</p>";
   limparMarcacoes();
+  limparDestaquesFluxo();
 
   try {
     const resp = await fetch("/executar", {
@@ -360,6 +369,11 @@ export async function executarComEntradas() {
 
     const comprimentoAnterior = passos.length;
     passos = await resp.json();
+    // O fluxograma vem anexado como chave `fluxo` no primeiro elemento (o formato de lista
+    // da resposta não muda), então não fatie `passos` antes desta leitura.
+    definirFluxo(passos.length > 0 ? passos[0].fluxo : undefined, {
+      reiniciar: ehPrimeiraExecucao,
+    });
     // Pousa no primeiro passo novo revelado (não no fim do novo trace), pra não pular
     // visualmente as linhas entre o input anterior e o próximo ponto de pausa. O último
     // elemento do array anterior era sempre o "input_pendente" (não conta como passo

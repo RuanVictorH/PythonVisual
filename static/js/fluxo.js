@@ -4,6 +4,11 @@
 // (.visitado). O texto dos nós vem do código do usuário: entra sempre como textContent.
 import { traduzir, obterIdioma } from "./i18n.js";
 import { calcularLayout, GEOMETRIA } from "./fluxo-layout.js";
+import {
+  definirBotaoTelaCheia,
+  iniciarTelaCheia,
+  sairDaTelaCheia,
+} from "./fluxo-tela-cheia.js";
 
 const NS = "http://www.w3.org/2000/svg";
 const FONTE =
@@ -349,6 +354,9 @@ function preencherSeletor() {
 }
 
 function esconder() {
+  // o card some (display: none): em tela cheia sobraria uma tela preta
+  sairDaTelaCheia();
+  definirBotaoTelaCheia(false);
   const carta = obter("fluxo-card");
   if (carta)
     carta.style.display = "none";
@@ -394,6 +402,7 @@ export function definirFluxo(fluxo, opcoes = {}) {
     }
     const assinatura = JSON.stringify(fluxo) + "|" + obterIdioma();
     obter("fluxo-card").style.display = "block";
+    definirBotaoTelaCheia(true);
     if (assinatura !== estado.assinatura) {
       reconstruir(fluxo, assinatura);
       if (!estado.graficos.has(estado.fixadoId)) {
@@ -610,6 +619,7 @@ function atualizar(ctx) {
   atualizarControles(exibido, executando, passo);
   atualizarResumo(exibido, idProximo, idExecutado);
   rolarAte(exibido, estado.noAtivoId);
+  espelharContador();
 }
 
 export function atualizarFluxo(ctx) {
@@ -630,7 +640,22 @@ export function rolarFluxoParaNoAtivo() {
   }
 }
 
+// Em tela cheia o card Navegação fica escondido: o cabeçalho do fluxograma
+// repete o contador de passos.
+function espelharContador() {
+  const contador = obter("contador");
+  const destino = obter("fluxo-passo");
+  if (contador && destino)
+    destino.textContent = contador.textContent;
+}
+
+function aoMudarTelaCheia() {
+  espelharContador();
+  rolarFluxoParaNoAtivo();
+}
+
 function iniciarInterface() {
+  iniciarTelaCheia({ aoMudar: aoMudarTelaCheia });
   const seletor = obter("fluxo-select");
   if (seletor) {
     seletor.addEventListener("change", () => fixarGrafico(Number(seletor.value)));

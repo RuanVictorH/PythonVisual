@@ -15,6 +15,7 @@ import {
   limparFluxo,
   limparDestaquesFluxo,
 } from "./fluxo.js";
+import { sairDaTelaCheia } from "./fluxo-tela-cheia.js";
 
 let passos = [];
 let indiceAtual = 0;
@@ -57,6 +58,9 @@ export function mostrarEntradaPendente(passoAtual) {
   const campoEntrada = document.getElementById("entrada");
   campoEntrada.value = "";
   campoEntrada.focus();
+  // em tela cheia o card de entrada fica atrás do fluxograma e o navegador só
+  // aceita o foco fora dele depois que a saída termina
+  sairDaTelaCheia().then(() => campoEntrada.focus());
 }
 
 export function atualizarEntradaDinamica() {

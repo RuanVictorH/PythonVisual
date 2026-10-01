@@ -208,6 +208,9 @@ const i18n = {
     "flow.legend.definition": "Definição",
     "flow.legend.jump": "Salto (return, break, continue)",
     "flow.legend.visited": "Já executado",
+    "flow.fullscreen.label": "Tela cheia",
+    "flow.fullscreen.hint":
+      "Pressione a tecla Espaço para avançar um passo · Esc para sair da tela cheia",
     "memory.title": "Memória",
     "memory.empty": "Nenhum dado armazenado neste passo.",
     "memory.frames": "Quadros de memória",
@@ -453,6 +456,9 @@ const i18n = {
     "flow.legend.definition": "Definition",
     "flow.legend.jump": "Jump (return, break, continue)",
     "flow.legend.visited": "Already executed",
+    "flow.fullscreen.label": "Full screen",
+    "flow.fullscreen.hint":
+      "Press the Space key to go to the next step · Esc to exit full screen",
     "memory.title": "Memory",
     "memory.empty": "No data stored in this step.",
     "memory.frames": "Memory frames",

@@ -17,6 +17,7 @@ import {
   renderizarPasso,
 } from "./execucao.js";
 import { rolarFluxoParaNoAtivo } from "./fluxo.js";
+import { fluxoEmTelaCheia, sairDaTelaCheia } from "./fluxo-tela-cheia.js";
 import {
   alternarTraducaoCodigo,
   iniciarTraducaoCodigo,
@@ -196,6 +197,19 @@ function alvoAtivavel(alvo) {
   return !!(alvo && alvo.closest && alvo.closest("button, a"));
 }
 
+// Na tela cheia o Espaço avança o passo mesmo com o foco na área do diagrama
+// (um clique nela já a focaliza), mas continua sendo de botões, listas e campos.
+function espacoAvancaNaTelaCheia(evento) {
+  if (evento.key !== " " || !fluxoEmTelaCheia())
+    return false;
+  if (evento.altKey || evento.ctrlKey || evento.metaKey)
+    return false;
+  const alvo = evento.target;
+  if (alvoAtivavel(alvo))
+    return false;
+  return !["INPUT", "TEXTAREA", "SELECT"].includes(alvo.tagName);
+}
+
 editor.on("change", () => {
   limparEntradasColetadas();
   ocultarEntradaPendente();
@@ -209,8 +223,14 @@ document.getElementById("entrada").addEventListener("keydown", (evento) => {
 
 document.addEventListener("keydown", (evento) => {
   const tecla = evento.key;
+  // em tela cheia só o fluxograma está à vista: executar e limpar agiriam às cegas
+  const emTelaCheia = fluxoEmTelaCheia();
 
-  if ((evento.ctrlKey || evento.metaKey) && tecla === "Enter") {
+  if (
+    !emTelaCheia &&
+    (evento.ctrlKey || evento.metaKey) &&
+    tecla === "Enter"
+  ) {
     evento.preventDefault();
     executar();
     return;
@@ -218,7 +238,16 @@ document.addEventListener("keydown", (evento) => {
 
   if (tecla === "Escape") {
     evento.preventDefault();
-    editor.focus();
+    if (emTelaCheia)
+      sairDaTelaCheia();
+    else
+      editor.focus();
+    return;
+  }
+
+  if (espacoAvancaNaTelaCheia(evento)) {
+    evento.preventDefault();
+    passo(1);
     return;
   }
 
@@ -252,12 +281,12 @@ document.addEventListener("keydown", (evento) => {
     irParaUltimo();
     return;
   }
-  if (tecla.toLowerCase() === "r") {
+  if (tecla.toLowerCase() === "r" && !emTelaCheia) {
     evento.preventDefault();
     executar();
     return;
   }
-  if (tecla.toLowerCase() === "c") {
+  if (tecla.toLowerCase() === "c" && !emTelaCheia) {
     evento.preventDefault();
     limparCodigo();
   }

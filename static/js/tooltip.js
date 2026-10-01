@@ -37,7 +37,9 @@
       sendInput: "Enviar o valor digitado para o input() do programa (Enter)",
       flowSelect: "Escolher qual fluxograma exibir: programa principal, função, método ou classe",
       follow: "Voltar a acompanhar automaticamente a função em execução",
-      followOff: "Já está acompanhando a função em execução automaticamente"
+      followOff: "Já está acompanhando a função em execução automaticamente",
+      fullscreenEnter: "Ver o fluxograma em tela cheia",
+      fullscreenExit: "Sair da tela cheia (Esc)"
     },
     en: {
       navHome: "Go back to the home page",
@@ -71,7 +73,9 @@
       sendInput: "Send the typed value to the program's input() (Enter)",
       flowSelect: "Choose which flowchart to show: main program, function, method or class",
       follow: "Go back to automatically following the running function",
-      followOff: "Already following the running function automatically"
+      followOff: "Already following the running function automatically",
+      fullscreenEnter: "View the flowchart in full screen",
+      fullscreenExit: "Exit full screen (Esc)"
     }
   };
 
@@ -136,6 +140,12 @@
           el.getAttribute("aria-pressed") === "true"
             ? "translateDisable"
             : "translateEnable"
+        );
+      case "fullscreen":
+        return texto(
+          el.getAttribute("aria-pressed") === "true"
+            ? "fullscreenExit"
+            : "fullscreenEnter"
         );
       default:
         return texto(chave);
@@ -311,6 +321,13 @@
     });
     window.addEventListener("scroll", ocultar, { passive: true, capture: true });
     window.addEventListener("resize", ocultar);
+
+    // Em tela cheia só o elemento em tela cheia é desenhado: a dica precisa
+    // ficar dentro dele para aparecer.
+    document.addEventListener("fullscreenchange", function () {
+      ocultar();
+      (document.fullscreenElement || document.body).appendChild(dica);
+    });
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", iniciar);

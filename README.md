@@ -14,6 +14,7 @@ Protótipo didático inspirado no Python Tutor para visualizar a execução de c
 - Organização da memória em Variáveis, Objetos, Funções e Importações.
 - Serialização mais segura de valores grandes ou com `repr()` problemático.
 - Fluxograma automático do código, com o bloco em execução destacado a cada passo (veja [Fluxograma](#fluxograma)).
+- Tradução de cada linha do código ao passar o mouse sobre o editor, com botão para ligar e desligar (veja [Tradução de código](#tradução-de-código)).
 
 ## Requisitos
 
@@ -80,6 +81,16 @@ Configuração em `env.conf`:
 | `FLUXO_MAXIMO_NOS` | `150` | Máximo de blocos desenhados (o restante vira um bloco "resumido"). |
 | `FLUXO_TAMANHO_MAXIMO_TEXTO` | `100` | Máximo de caracteres do texto de cada bloco no dado enviado ao navegador. |
 
+## Tradução de código
+
+O botão **Traduzir**, ao lado de **Limpar** no card **Código**, liga e desliga a tradução das linhas do editor. Com ele ligado, passar o mouse sobre uma linha mostra, perto do ponteiro, essa linha em português simples (ou em inglês, conforme o idioma da página). Por exemplo, `if idade >= 18:` aparece como `se idade >= 18 então` e `total += valor` como `total aumenta em valor`.
+
+- O recurso vem desligado e a escolha fica salva no navegador. Ele existe só no editor do card **Código**; os demais cards não mudam.
+- A tradução é feita no navegador, uma linha por vez, sem executar o código e sem olhar as linhas vizinhas. Por isso, linhas soltas de listas, chamadas e textos de várias linhas podem ser mal interpretadas. Palavras dentro de textos entre aspas e de comentários ficam como estão.
+- Cobre os comandos mais comuns (`if`, `elif`, `else`, `for`, `while`, `def`, `class`, `return`, `break`, `continue`, `pass`, `try`, `except`, `finally`, `raise`, `import`, `from` e atribuições, inclusive `+=` e semelhantes). Nas demais linhas, o português troca só algumas palavras (`print` vira `escreva`, `len` vira `tamanho`, `and` vira `e`) e o inglês não mostra tradução.
+- Funciona só com o mouse. A caixa some ao sair do editor, rolar, editar o código, apertar `Esc` ou desligar o botão.
+- As regras ficam em `static/js/traducao-codigo.js`, sem depender do navegador, e a ligação com o editor em `static/js/traducao-editor.js`.
+
 ## Testes
 
 Os testes usam apenas a biblioteca padrão. Os que exercitam o sandbox são pulados automaticamente se o Docker não estiver disponível:
@@ -87,6 +98,8 @@ Os testes usam apenas a biblioteca padrão. Os que exercitam o sandbox são pula
 ```bash
 python -m unittest discover -s tests -t . -v
 ```
+
+Os testes da tradução de código (`tests/test_traducao_codigo.py`) executam o módulo JavaScript com o Node.js e também são pulados se ele não estiver instalado.
 
 ## Segurança
 

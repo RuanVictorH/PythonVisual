@@ -14,6 +14,7 @@ Protótipo didático inspirado no Python Tutor para visualizar a execução de c
 - Organização da memória em Variáveis, Objetos, Funções e Importações.
 - Serialização mais segura de valores grandes ou com `repr()` problemático.
 - Fluxograma automático do código, com o bloco em execução destacado a cada passo (veja [Fluxograma](#fluxograma)).
+- Fluxograma em tela cheia, com botão no cabeçalho do card; a tecla Espaço avança e Esc sai (veja [Fluxograma](#fluxograma)).
 - Tradução de cada linha do código ao passar o mouse sobre o editor, com botão para ligar e desligar (veja [Tradução de código](#tradução-de-código)).
 
 ## Requisitos
@@ -72,6 +73,7 @@ Ao executar um código, o card **Fluxograma** desenha o fluxo do programa a part
 - Cada função, método e classe ganha um fluxograma próprio. Por padrão o card acompanha a função em execução; escolher outro no seletor (ou clicar num bloco de definição) fixa o gráfico, e o botão **Seguir execução** volta a acompanhar.
 - A estrutura é montada com o módulo `ast` dentro do sandbox (`fluxo_builder.py`), então o código do usuário nunca é interpretado fora do container. A resposta de `/executar` continua sendo uma lista de passos; o fluxograma vai na chave `fluxo` do primeiro elemento.
 - `match`, `async` e geradores aparecem simplificados, como um único bloco. Programas grandes têm o fluxograma resumido, e execuções interrompidas por timeout ou com erro de sintaxe não exibem o card.
+- O botão de tela cheia, no cabeçalho do card, abre o fluxograma ocupando a tela inteira, o que ajuda em códigos que crescem na horizontal. Lá dentro, **Espaço** avança um passo, **Esc** (ou o mesmo botão) sai, e o cabeçalho mostra o passo atual. Se a execução chegar a um `input()`, a tela cheia fecha sozinha para você digitar o valor. A lógica fica em `static/js/fluxo-tela-cheia.js`, e o botão não aparece em navegadores sem suporte a tela cheia (como o Safari do iPhone).
 
 Configuração em `env.conf`:
 

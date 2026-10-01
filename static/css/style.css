@@ -1418,7 +1418,7 @@ body {
   --fluxo-executado-fundo: #dcfce7;
   --fluxo-executado-borda: #047857;
   --fluxo-executado-texto: #052e16;
-  --fluxo-visitado-marca: #047857;
+  --fluxo-visitado-marca: #1d4ed8;
 }
 body.tema-escuro .fluxo-card {
   --fluxo-aresta: #94a3b8;
@@ -1448,7 +1448,7 @@ body.tema-escuro .fluxo-card {
   --fluxo-executado-fundo: #14532d;
   --fluxo-executado-borda: #34d399;
   --fluxo-executado-texto: #dcfce7;
-  --fluxo-visitado-marca: #34d399;
+  --fluxo-visitado-marca: #60a5fa;
 }
 .fluxo-barra {
   display: flex;
@@ -1549,10 +1549,16 @@ body.tema-escuro .fluxo-card {
   height: 1rem;
 }
 .fluxo-legenda-icone.proximo,
-.fluxo-legenda-icone.executado,
-.fluxo-legenda-icone.visitado {
+.fluxo-legenda-icone.executado {
   width: 1.25rem;
   height: 1.25rem;
+}
+.fluxo-legenda-icone-visitado {
+  flex: none;
+  width: 1.25rem;
+  font-size: 1.1rem;
+  text-align: center;
+  color: var(--fluxo-visitado-marca);
 }
 
 .fluxo-aresta {
@@ -1674,8 +1680,9 @@ body.tema-escuro .fluxo-card {
   fill: #dc2626;
 }
 .fluxo-no.visitado .fluxo-marca-fundo {
-  fill: transparent;
-  stroke: none;
+  fill: var(--fluxo-visitado-marca);
+  stroke: #ffffff;
+  stroke-width: 1.5;
 }
 .fluxo-glifo-seta,
 .fluxo-glifo-check {
@@ -1692,10 +1699,6 @@ body.tema-escuro .fluxo-card {
 }
 .fluxo-no.visitado .fluxo-glifo-check {
   display: inline;
-  stroke: var(--fluxo-visitado-marca);
-}
-.fluxo-no-terminal.visitado .fluxo-glifo-check {
-  stroke: #86efac;
 }
 
 body.tema-escuro .fluxo-barra,

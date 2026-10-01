@@ -10,7 +10,6 @@ import {
   irParaUltimo,
   resetarExecucaoVisual,
   ocultarEntradaPendente,
-  ocultarExplicacaoLinha,
   atualizarEntradaDinamica,
   limparEntradasColetadas,
   obterPassos,
@@ -200,7 +199,6 @@ function alvoAtivavel(alvo) {
 editor.on("change", () => {
   limparEntradasColetadas();
   ocultarEntradaPendente();
-  ocultarExplicacaoLinha();
 });
 document.getElementById("entrada").addEventListener("keydown", (evento) => {
   if (evento.key === "Enter") {

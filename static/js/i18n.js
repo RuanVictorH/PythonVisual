@@ -14,7 +14,6 @@ const i18n = {
     "theme.light": "Tema claro",
     "section.code": "Código",
     "section.navigation": "Navegação",
-    "section.explanation": "Explicação da linha atual",
     "section.input": "Entrada solicitada",
     "section.visualization": "Visualização",
     "examples.label": "Exemplo:",
@@ -157,9 +156,6 @@ const i18n = {
       "O executor encontrou uma falha interna. Tente executar novamente; se o problema continuar, simplifique o exemplo e informe o erro ao responsável pelo sistema.",
     "error.guidance.generic":
       "Leia a mensagem técnica, localize a linha indicada e confira os valores e a instrução usados nela. Corrija esse ponto e execute o código novamente.",
-    "line.empty": "(linha vazia)",
-    "line.finishedExplain":
-      "Execução finalizada. Não há uma próxima linha de código para explicar neste passo.",
     "marker.running": "Linha em execução",
     "marker.executed": "Linha executada",
     "stack.title": "Pilha de chamadas",
@@ -247,53 +243,6 @@ const i18n = {
     "type.tuple": "tuple",
     "type.set": "set",
     "type.dict": "dict",
-    "explain.empty":
-      "Esta linha está vazia. Ela apenas separa visualmente partes do código.",
-    "explain.comment":
-      "Comentário: serve para documentar o código e não é executado pelo Python.",
-    "explain.multilineComment":
-      "Bloco de texto delimitado por aspas triplas. Quando está isolado, costuma ser usado como comentário de múltiplas linhas; tecnicamente, o Python o trata como uma string. No início de um módulo, função ou classe, ele pode ser uma docstring.",
-    "explain.def":
-      "Define uma função. O bloco indentado abaixo só será executado quando essa função for chamada.",
-    "explain.defMethod":
-      "Define um método da classe. O bloco indentado abaixo só será executado quando o método for chamado em um objeto.",
-    "explain.class":
-      "Define uma classe, que funciona como um modelo para criar objetos.",
-    "explain.return":
-      "Retorna um valor para quem chamou a função e encerra aquela chamada.",
-    "explain.if":
-      "Testa uma condição. Se ela for verdadeira, o Python executa o bloco indentado abaixo.",
-    "explain.elif":
-      "Testa uma nova condição quando os testes anteriores do mesmo if não foram verdadeiros.",
-    "explain.else":
-      "Executa este bloco quando nenhuma condição anterior do mesmo if foi verdadeira.",
-    "explain.for":
-      "Inicia uma repetição. A variável do laço recebe um valor por vez da sequência percorrida.",
-    "explain.while": "Repete o bloco enquanto a condição continuar verdadeira.",
-    "explain.try":
-      "Tenta executar um bloco que pode gerar erro, permitindo tratar esse erro depois.",
-    "explain.except": "Trata um erro ocorrido dentro do bloco try.",
-    "explain.finally": "Executa este bloco no final do try, com ou sem erro.",
-    "explain.import":
-      "Carrega recursos de outro módulo para usar neste código.",
-    "explain.print": "Mostra uma informação na saída do programa.",
-    "explain.input":
-      "Solicita uma entrada do usuário. A execução pausa até o valor ser informado.",
-    "explain.break": "Interrompe o laço atual imediatamente.",
-    "explain.continue":
-      "Pula o restante do bloco atual e avança para a próxima repetição do laço.",
-    "explain.pass":
-      "Não executa nenhuma ação. É usado como espaço reservado em blocos ainda vazios.",
-    "explain.raise": "Dispara um erro manualmente.",
-    "explain.method":
-      "Chama um método de um objeto, alterando ou consultando esse objeto.",
-    "explain.call":
-      "Chama uma função, transferindo a execução para o bloco definido por ela.",
-    "explain.update": "Atualiza uma variável usando o valor que ela já tinha.",
-    "explain.assign":
-      "Atribui um valor a uma variável, guardando essa informação na memória.",
-    "explain.generic":
-      "Executa uma instrução Python. Observe as variáveis, a pilha e a saída para ver o efeito deste passo.",
   },
   en: {
     title: "PythonVisual",
@@ -310,7 +259,6 @@ const i18n = {
     "theme.light": "Light theme",
     "section.code": "Code",
     "section.navigation": "Navigation",
-    "section.explanation": "Current line explanation",
     "section.input": "Requested input",
     "section.visualization": "Visualization",
     "examples.label": "Example:",
@@ -453,9 +401,6 @@ const i18n = {
       "The executor encountered an internal failure. Try again; if it continues, simplify the example and report the error to the system maintainer.",
     "error.guidance.generic":
       "Read the technical message, locate the indicated line, and check the values and statement used there. Correct that point and run the code again.",
-    "line.empty": "(empty line)",
-    "line.finishedExplain":
-      "Execution finished. There is no next line of code to explain in this step.",
     "marker.running": "Running line",
     "marker.executed": "Executed line",
     "stack.title": "Call stack",
@@ -543,54 +488,6 @@ const i18n = {
     "type.tuple": "tuple",
     "type.set": "set",
     "type.dict": "dict",
-    "explain.empty":
-      "This line is empty. It only visually separates parts of the code.",
-    "explain.comment":
-      "Comment: documents the code and is not executed by Python.",
-    "explain.multilineComment":
-      "Text block delimited by triple quotes. When it stands alone, it is commonly used as a multiline comment; technically, Python treats it as a string. At the beginning of a module, function, or class, it can be a docstring.",
-    "explain.def":
-      "Defines a function. The indented block below runs only when this function is called.",
-    "explain.defMethod":
-      "Defines a method of the class. The indented block below runs only when the method is called on an object.",
-    "explain.class":
-      "Defines a class, which works as a template for creating objects.",
-    "explain.return":
-      "Returns a value to the caller and ends that function call.",
-    "explain.if":
-      "Tests a condition. If it is true, Python executes the indented block below.",
-    "explain.elif":
-      "Tests a new condition when previous tests in the same if statement were not true.",
-    "explain.else":
-      "Runs this block when no previous condition in the same if statement was true.",
-    "explain.for":
-      "Starts a loop. The loop variable receives one value at a time from the sequence.",
-    "explain.while": "Repeats the block while the condition remains true.",
-    "explain.try":
-      "Tries to run a block that may raise an error, allowing that error to be handled later.",
-    "explain.except": "Handles an error raised inside the try block.",
-    "explain.finally":
-      "Runs this block at the end of the try statement, with or without an error.",
-    "explain.import":
-      "Loads resources from another module to use in this code.",
-    "explain.print": "Shows information in the program output.",
-    "explain.input":
-      "Requests user input. Execution pauses until the value is provided.",
-    "explain.break": "Stops the current loop immediately.",
-    "explain.continue":
-      "Skips the rest of the current block and moves to the next loop iteration.",
-    "explain.pass":
-      "Does nothing. It is used as a placeholder in blocks that are still empty.",
-    "explain.raise": "Raises an error manually.",
-    "explain.method":
-      "Calls an object method, changing or checking that object.",
-    "explain.call":
-      "Calls a function, transferring execution to the block defined by it.",
-    "explain.update": "Updates a variable using the value it already had.",
-    "explain.assign":
-      "Assigns a value to a variable, storing that information in memory.",
-    "explain.generic":
-      "Runs a Python statement. Watch the variables, stack, and output to see this step's effect.",
   },
 };
 

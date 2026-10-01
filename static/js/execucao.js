@@ -8,12 +8,7 @@ import {
   montarTerminalSaidaErro,
   desenharSetasMemoria,
 } from "./renderizar-memoria.js";
-import {
-  explicarComandoPython,
-  linhaEstaEmClasse,
-  montarCaixaErro,
-  obterBlocoAspasTriplas,
-} from "./explicacao.js";
+import { montarCaixaErro } from "./explicacao.js";
 import {
   definirFluxo,
   atualizarFluxo,
@@ -73,12 +68,6 @@ export function limparEntradasColetadas() {
   entradasColetadas = [];
 }
 
-export function ocultarExplicacaoLinha() {
-  document.getElementById("explicacao-card").style.display = "none";
-  document.getElementById("explicacao-corpo").innerHTML = "";
-  document.getElementById("explicacao-linha-numero").textContent = "";
-}
-
 export function limparMarcacoes() {
   if (linhaExecutadaMarcada !== null) {
     editor.removeLineClass(
@@ -121,7 +110,6 @@ export function resetarExecucaoVisual() {
   slider.value = 0;
   slider.disabled = true;
   document.getElementById("contador").textContent = traduzir("counter.empty");
-  ocultarExplicacaoLinha();
   atualizarBotoes();
 }
 
@@ -199,60 +187,6 @@ export function atualizarBotoes() {
     semPassos || indiceAtual === passos.length - 1;
 }
 
-function alvoExplicacaoLinha() {
-  const proxima = linhaProximaAtual();
-  if (proxima !== null) return { indice: proxima };
-  const executada = linhaExecutadaAtual();
-  if (executada !== null) return { indice: executada };
-  return null;
-}
-
-function atualizarExplicacaoLinha() {
-  const card = document.getElementById("explicacao-card");
-  const corpo = document.getElementById("explicacao-corpo");
-  if (passos.length === 0) {
-    ocultarExplicacaoLinha();
-    return;
-  }
-
-  const alvo = alvoExplicacaoLinha();
-  card.style.display = "block";
-  const numeroLinha = document.getElementById("explicacao-linha-numero");
-  if (!alvo) {
-    numeroLinha.textContent = "";
-    corpo.innerHTML =
-      '<p class="explicacao-texto">' +
-      escaparHTML(traduzir("line.finishedExplain")) +
-      "</p>";
-    return;
-  }
-
-  const linhaCodigo = editor.getLine(alvo.indice) || "";
-  const blocoAspasTriplas = obterBlocoAspasTriplas(alvo.indice);
-  const codigoExplicado = blocoAspasTriplas
-    ? blocoAspasTriplas.codigo
-    : linhaCodigo;
-  const identificadorLinha =
-    blocoAspasTriplas && blocoAspasTriplas.indiceFinal !== alvo.indice
-      ? alvo.indice + 1 + "–" + (blocoAspasTriplas.indiceFinal + 1)
-      : String(alvo.indice + 1);
-  numeroLinha.textContent =
-    " (" + traduzir("input.line") + " " + identificadorLinha + ")";
-  corpo.innerHTML =
-    '<pre class="explicacao-codigo">' +
-    escaparHTML(codigoExplicado || traduzir("line.empty")) +
-    "</pre>" +
-    '<p class="explicacao-texto">' +
-    escaparHTML(
-      explicarComandoPython(
-        linhaCodigo,
-        blocoAspasTriplas,
-        linhaEstaEmClasse(alvo.indice),
-      ),
-    ) +
-    "</p>";
-}
-
 export function renderizarPasso() {
   if (passos.length === 0)
     return;
@@ -286,7 +220,6 @@ export function renderizarPasso() {
   atualizarBotoes();
   aplicarMarcacoes();
   atualizarFluxo({ passos, indiceAtual, linhaProxima, linhaExecutada });
-  atualizarExplicacaoLinha();
 
   if (estaNoPassoPendente)
     mostrarEntradaPendente(pendenteNoFim);

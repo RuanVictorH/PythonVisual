@@ -488,26 +488,6 @@ button i,
   cursor: pointer;
 }
 
-.explicacao-linha {
-  display: grid;
-  gap: 10px;
-}
-.explicacao-codigo {
-  white-space: pre-wrap;
-  word-break: break-word;
-  background: #0f172a;
-  color: #e2e8f0;
-  border-radius: 8px;
-  padding: 10px 12px;
-  font-family: "Fira Mono", "Courier New", monospace;
-  font-size: 0.86rem;
-}
-.explicacao-texto {
-  color: #334155;
-  font-size: 0.9rem;
-  line-height: 1.45;
-}
-
 #saida > .card-body {
   padding: 12px;
 }
@@ -1119,7 +1099,6 @@ body.tema-escuro .terminal {
   box-shadow: none;
 }
 body.tema-escuro .header-text h1,
-body.tema-escuro .explicacao-texto,
 body.tema-escuro .pilha-chamada,
 body.tema-escuro .quadro-cel-valor,
 body.tema-escuro .lista-item,
@@ -1250,11 +1229,6 @@ body.tema-escuro .objeto-titulo {
   background: var(--objeto-fundo-escuro);
   color: #e2e8f0;
   border-bottom-color: #334155;
-}
-body.tema-escuro .explicacao-codigo {
-  background: #020617;
-  color: #e2e8f0;
-  border: 1px solid #334155;
 }
 body.tema-escuro .terminal-erro {
   border-color: #991b1b;

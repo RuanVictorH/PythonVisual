@@ -20,6 +20,8 @@
       examples: "Carregar um exemplo pronto no editor de código",
       run: "Executar o código e gerar a visualização passo a passo (Ctrl + Enter)",
       clear: "Apagar o código do editor e limpar a execução atual",
+      translateEnable: "Mostrar a tradução de cada linha ao passar o mouse sobre o editor",
+      translateDisable: "Parar de mostrar a tradução das linhas ao passar o mouse sobre o editor",
       collapse: "Minimizar o bloco «{name}»",
       expand: "Expandir o bloco «{name}»",
       needsRun: "Execute o código para navegar pelos passos",
@@ -52,6 +54,8 @@
       examples: "Load a ready-made example into the code editor",
       run: "Run the code and generate the step-by-step visualization (Ctrl + Enter)",
       clear: "Erase the editor code and clear the current execution",
+      translateEnable: "Show a plain-English version of each line when hovering over the editor",
+      translateDisable: "Stop showing the translation of lines when hovering over the editor",
       collapse: "Minimize the “{name}” block",
       expand: "Expand the “{name}” block",
       needsRun: "Run the code to navigate through the steps",
@@ -127,6 +131,12 @@
         return texto(el.disabled ? "needsRun" : "slider");
       case "follow":
         return texto(el.getAttribute("aria-pressed") === "true" ? "followOff" : "follow");
+      case "translate":
+        return texto(
+          el.getAttribute("aria-pressed") === "true"
+            ? "translateDisable"
+            : "translateEnable"
+        );
       default:
         return texto(chave);
     }

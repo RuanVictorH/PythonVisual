@@ -18,6 +18,10 @@ import {
   renderizarPasso,
 } from "./execucao.js";
 import { rolarFluxoParaNoAtivo } from "./fluxo.js";
+import {
+  alternarTraducaoCodigo,
+  iniciarTraducaoCodigo,
+} from "./traducao-editor.js";
 
 let escalaFonte = parseFloat(localStorage.getItem("pythonvisual_escala_fonte")) || 1;
 let temaEscuro = localStorage.getItem("pythonvisual_tema_escuro") === "1";
@@ -278,6 +282,7 @@ window.limparCodigo = limparCodigo;
 window.alterarFonte = alterarFonte;
 window.alternarCard = alternarCard;
 window.alternarTema = alternarTema;
+window.alternarTraducaoCodigo = alternarTraducaoCodigo;
 
 carregarExemplos();
 resetarExecucaoVisual();
@@ -286,3 +291,4 @@ aplicarTemaEditor();
 aplicarFonte();
 aplicarIdioma();
 atualizarEntradaDinamica();
+iniciarTraducaoCodigo();

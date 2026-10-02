@@ -102,6 +102,7 @@ header img {
 .btn-entrada:focus-visible,
 .btn-recolher:focus-visible,
 .btn-tela-cheia:focus-visible,
+.aba:focus-visible,
 .top-nav a:focus-visible,
 .exemplos-row select:focus-visible,
 .entrada-area:focus-visible,
@@ -144,13 +145,6 @@ header img {
   padding: 24px 32px;
   max-width: 1400px;
   margin: 0 auto;
-}
-.intro-visualizador {
-  text-align: center;
-  color: #475569;
-  font-size: 1rem;
-  line-height: 1.45;
-  padding: 20px 32px 0;
 }
 .coluna-esquerda,
 .coluna-direita {
@@ -1836,4 +1830,230 @@ body.tema-escuro .fluxo-aviso {
 body.tema-escuro .fluxo-rolagem {
   background: #0b1120;
   border-color: #334155;
+}
+
+/* ===== Visualizador: abas à direita e layout compacto ===== */
+
+/* Cabeçalho do site mais fino só nesta página (body.visualizador) */
+body.visualizador .site-header {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+body.visualizador .site-logo {
+  width: 46px;
+  height: 40px;
+}
+body.visualizador .site-header .header-text h1 {
+  font-size: 1.35rem;
+}
+
+/* Abas da coluna da direita (static/js/abas-direita.js) */
+.abas-direita {
+  display: flex;
+  flex: none;
+  gap: 6px;
+}
+.abas-direita[hidden] {
+  display: none;
+}
+.aba {
+  flex: 1;
+  /* as regras antigas de celular (até 1024px) forçam padding e fonte em todo
+     botão com !important */
+  padding: 6px 10px !important;
+  border: 1.5px solid #bfdbfe;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #17324d;
+  font-family: "Inter", sans-serif;
+  font-size: 0.82rem !important;
+  font-weight: 700;
+  cursor: pointer;
+}
+.aba[aria-pressed="false"]:hover:not(:disabled) {
+  background: #eff6ff;
+  border-color: #2563eb;
+}
+.aba[aria-pressed="true"] {
+  background: #dbeafe;
+  border-color: #2563eb;
+  color: #1e3a8a;
+}
+.aba:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+body.tema-escuro .aba {
+  background: #1e293b;
+  border-color: #475569;
+  color: #dbeafe;
+}
+body.tema-escuro .aba[aria-pressed="false"]:hover:not(:disabled) {
+  background: #334155;
+  border-color: #60a5fa;
+}
+body.tema-escuro .aba[aria-pressed="true"] {
+  background: #1e3a5f;
+  border-color: #60a5fa;
+}
+
+/* Só o painel da aba escolhida fica à vista. O !important vence o display:
+   flex dos painéis (mais abaixo), que também precisa dele por causa do
+   style="display: block" que o JavaScript escreve nos cards. */
+.coluna-direita:not(.aba-fluxograma) > #fluxo-card,
+.coluna-direita.aba-fluxograma > #saida {
+  display: none !important;
+}
+
+/* A legenda do fluxograma só aparece na tela cheia, onde há espaço */
+.fluxo-card:not(.em-tela-cheia) .fluxo-legenda {
+  display: none;
+}
+
+/* Saída e Pilha de chamadas lado a lado, no fim da coluna da direita */
+.faixa-saida-pilha {
+  display: grid;
+  flex: none;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+/* sem nenhum dos dois cards à vista (antes da primeira execução) a faixa não
+   deve ocupar espaço */
+.faixa-saida-pilha:not(:has(> .card[style*="display: block"])) {
+  display: none;
+}
+@media (max-width: 600px) {
+  .faixa-saida-pilha {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* A partir de 901px as duas colunas ficam lado a lado e o espaço é compactado
+   para que a primeira execução caiba em telas baixas (1366x768 ou menos) */
+@media (min-width: 901px) {
+  .main {
+    padding: 12px 32px 8px;
+    gap: 12px;
+  }
+  .coluna-esquerda,
+  .coluna-direita {
+    gap: 10px;
+  }
+  .card-header {
+    padding: 6px 12px;
+  }
+  .btn-recolher,
+  .btn-tela-cheia {
+    width: 26px;
+    height: 26px;
+  }
+  .card-body,
+  #saida > .card-body {
+    padding: 10px 12px;
+  }
+  #codigo-corpo {
+    padding: 10px 12px 8px;
+  }
+  .exemplos-row {
+    margin-bottom: 8px;
+  }
+  /* até 1024px as regras antigas de celular forçam o padding de todo botão
+     com !important */
+  .btn-executar {
+    padding: 9px 12px !important;
+  }
+  .btn-limpar,
+  .btn-traduzir {
+    padding: 0 12px !important;
+  }
+  .btn-nav {
+    padding: 6px 14px !important;
+  }
+  .contador {
+    padding: 5px 8px;
+  }
+
+  /* Navegação vira uma barra fina, sem o cabeçalho do card */
+  #navegacao > .card-header {
+    display: none;
+  }
+  #navegacao-corpo {
+    padding: 8px 12px;
+  }
+  .nav-container {
+    gap: 6px;
+  }
+
+  /* Visualização e Fluxograma ocupam o que sobra ao lado do código e crescem
+     com o conteúdo até um limite razoável; depois disso rolam por dentro */
+  #saida[style*="display: block"],
+  #fluxo-card[style*="display: block"] {
+    display: flex !important;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-height: 200px;
+    max-height: min(44rem, 88vh);
+  }
+  #saida[style*="display: block"] > #saida-corpo {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: auto;
+  }
+  #fluxo-corpo {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-height: 0;
+    padding: 8px 10px;
+  }
+  #fluxo-rolagem {
+    flex: 1 1 auto;
+    min-height: 0;
+    max-height: none;
+    resize: none;
+  }
+  /* recolhido: o painel volta a ter só a altura do cabeçalho */
+  #saida.recolhido[style*="display: block"],
+  #fluxo-card.recolhido[style*="display: block"] {
+    flex: none;
+    min-height: 0;
+  }
+  .card.recolhido > #fluxo-corpo {
+    display: none;
+  }
+
+  /* Saída e Pilha de chamadas têm altura fixa: não crescem com o conteúdo,
+     rolam por dentro */
+  .faixa-saida-pilha {
+    height: clamp(117px, 16vh, 160px);
+  }
+  .faixa-saida-pilha > .card[style*="display: block"] {
+    display: flex !important;
+    flex-direction: column;
+    min-height: 0;
+  }
+  .faixa-saida-pilha > .card > .card-header {
+    padding: 4px 12px;
+  }
+  .faixa-saida-pilha > .card > .card-body {
+    flex: 1 1 0;
+    min-height: 0;
+    overflow: auto;
+  }
+  .faixa-saida-pilha .terminal-header {
+    padding: 4px 10px;
+  }
+  .faixa-saida-pilha .terminal-body {
+    min-height: 34px;
+    max-height: none;
+    padding: 6px 10px;
+  }
+  /* card recolhido da faixa: só o cabeçalho; com os dois recolhidos a faixa
+     não reserva altura */
+  .faixa-saida-pilha > .card.recolhido {
+    align-self: start;
+  }
+  .faixa-saida-pilha:not(:has(> .card[style*="display: block"]:not(.recolhido))) {
+    height: auto;
+  }
 }

@@ -16,6 +16,7 @@ import {
   obterEntradaPendente,
   renderizarPasso,
 } from "./execucao.js";
+import { iniciarAbas } from "./abas-direita.js";
 import { rolarFluxoParaNoAtivo } from "./fluxo.js";
 import { fluxoEmTelaCheia, sairDaTelaCheia } from "./fluxo-tela-cheia.js";
 import {
@@ -312,6 +313,10 @@ window.alternarTema = alternarTema;
 window.alternarTraducaoCodigo = alternarTraducaoCodigo;
 
 carregarExemplos();
+iniciarAbas({
+  aoMostrarFluxograma: rolarFluxoParaNoAtivo,
+  aoMostrarVisualizacao: desenharSetasMemoria,
+});
 resetarExecucaoVisual();
 document.body.classList.toggle("tema-escuro", temaEscuro);
 aplicarTemaEditor();

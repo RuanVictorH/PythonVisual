@@ -1,7 +1,6 @@
 const i18n = {
   pt: {
     title: "PythonVisual",
-    "app.subtitle": "Analise a execução do seu código Python passo a passo",
     "nav.home": "Home",
     "nav.visualizer": "Visualizador",
     "nav.about": "Sobre",
@@ -16,6 +15,7 @@ const i18n = {
     "section.navigation": "Navegação",
     "section.input": "Entrada solicitada",
     "section.visualization": "Visualização",
+    "tabs.label": "Painéis da visualização",
     "examples.label": "Exemplo:",
     "examples.choose": "-- Escolha um exemplo --",
     "examples.variables": "Variáveis e operações",
@@ -249,7 +249,6 @@ const i18n = {
   },
   en: {
     title: "PythonVisual",
-    "app.subtitle": "Analyze your Python code execution step by step",
     "nav.home": "Home",
     "nav.visualizer": "Visualizer",
     "nav.about": "About",
@@ -264,6 +263,7 @@ const i18n = {
     "section.navigation": "Navigation",
     "section.input": "Requested input",
     "section.visualization": "Visualization",
+    "tabs.label": "Visualization panels",
     "examples.label": "Example:",
     "examples.choose": "-- Choose an example --",
     "examples.variables": "Variables and operations",

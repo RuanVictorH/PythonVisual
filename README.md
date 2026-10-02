@@ -14,9 +14,10 @@ Protótipo didático inspirado no Python Tutor para visualizar a execução de c
 - Organização da memória em Variáveis, Objetos, Funções e Importações.
 - Serialização mais segura de valores grandes ou com `repr()` problemático.
 - Fluxograma automático do código, com o bloco em execução destacado a cada passo (veja [Fluxograma](#fluxograma)).
-- Fluxograma em tela cheia, com botão no cabeçalho do card; a tecla Espaço avança e Esc sai (veja [Fluxograma](#fluxograma)).
+- Fluxograma em tela cheia, com botão no cabeçalho do card; Espaço ou → avança, ← volta, Home e End vão ao início e ao fim, e Esc sai (veja [Fluxograma](#fluxograma)).
 - Tradução de cada linha do código ao passar o mouse sobre o editor, com botão para ligar e desligar (veja [Tradução de código](#tradução-de-código)).
 - Visualizador em duas colunas, com as abas **Visualização** e **Fluxograma** e a faixa **Saída** | **Pilha de chamadas** embaixo, pensado para telas de 1366×768 ou menos (veja [Layout do visualizador](#layout-do-visualizador)).
+- Atalhos de teclado novos: **Ctrl+Delete** limpa, **Alt+T** liga e desliga a tradução e, na tela cheia do fluxograma, as setas, **Home** e **End** navegam pelos passos (veja [Atalhos de teclado](#atalhos-de-teclado)).
 
 ## Requisitos
 
@@ -75,7 +76,7 @@ Ao executar um código, a aba **Fluxograma** (ao lado de **Visualização**) des
 - A estrutura é montada com o módulo `ast` dentro do sandbox (`fluxo_builder.py`), então o código do usuário nunca é interpretado fora do container. A resposta de `/executar` continua sendo uma lista de passos; o fluxograma vai na chave `fluxo` do primeiro elemento.
 - `match`, `async` e geradores aparecem simplificados, como um único bloco. Programas grandes têm o fluxograma resumido, e execuções interrompidas por timeout ou com erro de sintaxe não exibem o fluxograma (a aba fica desabilitada).
 - A legenda das formas e das marcas só aparece na tela cheia, onde há espaço para ela.
-- O botão de tela cheia, no cabeçalho do painel, abre o fluxograma ocupando a tela inteira, o que ajuda em códigos que crescem na horizontal. Lá dentro, **Espaço** avança um passo, **Esc** (ou o mesmo botão) sai, e o cabeçalho mostra o passo atual. Se a execução chegar a um `input()`, a tela cheia fecha sozinha para você digitar o valor. A lógica fica em `static/js/fluxo-tela-cheia.js`, e o botão não aparece em navegadores sem suporte a tela cheia (como o Safari do iPhone).
+- O botão de tela cheia, no cabeçalho do painel, abre o fluxograma ocupando a tela inteira, o que ajuda em códigos que crescem na horizontal. Lá dentro, **Espaço** ou **→** avançam um passo, **←** volta um passo, **Home** e **End** vão ao primeiro e ao último passo, **Esc** (ou o mesmo botão) sai, e o cabeçalho mostra o passo atual e essas teclas. As setas deixam de rolar o diagrama: para ver a parte que não cabe na tela use a roda do mouse, as barras de rolagem ou o toque. Se a execução chegar a um `input()`, a tela cheia fecha sozinha para você digitar o valor. A lógica fica em `static/js/fluxo-tela-cheia.js`, e o botão não aparece em navegadores sem suporte a tela cheia (como o Safari do iPhone).
 
 Configuração em `env.conf`:
 
@@ -91,7 +92,7 @@ Nas telas dos laboratórios (1366×768 ou menos) o visualizador usa duas colunas
 
 - **Coluna da esquerda:** o card **Código**, os botões **Executar código**, **Limpar** e **Traduzir** e a **Navegação**, que aparece como uma barra fina, sem cabeçalho de card (e por isso não pode ser recolhida).
 - **Coluna da direita:** as abas **Visualização** e **Fluxograma** (uma de cada vez), o card de entrada do `input()` e, embaixo, **Saída** e **Pilha de chamadas** lado a lado. A barra de abas só aparece depois da primeira execução, e a aba **Fluxograma** fica desabilitada quando não há fluxograma. Se ela estiver aberta e a execução seguinte não gerar fluxograma, a página volta sozinha para **Visualização**.
-- **Alturas:** o painel da aba preenche o espaço ao lado do código e cresce com o conteúdo até `min(44rem, 88vh)` (cerca de 563 px numa janela de 640 px de altura e 704 px numa de 950 px); passando disso, rola por dentro. **Saída** e **Pilha de chamadas** têm altura fixa (`clamp(117px, 16vh, 160px)`) e rolam por dentro, em vez de crescer. Quando o painel chega ao limite numa janela baixa, a página passa a rolar e a faixa **Saída** | **Pilha de chamadas** fica abaixo da dobra.
+- **Alturas:** o painel da aba preenche o espaço ao lado do código e cresce com o conteúdo até `min(44rem, 88vh)` (cerca de 563 px numa janela de 640 px de altura e 704 px numa de 950 px); passando disso, rola por dentro. **Saída** e **Pilha de chamadas** também crescem com o conteúdo, mas só até a metade desse limite, `min(22rem, 44vh)` (cerca de 282 px numa janela de 640 px de altura e 352 px numa de 950 px), e depois rolam por dentro; os dois cards da faixa ficam sempre com a mesma altura. Com o código pequeno de uma primeira execução a faixa mede uns 117 px. Quando o painel e a faixa crescem juntos numa janela baixa, a página passa a rolar.
 - **Compactação:** só no visualizador, o cabeçalho do site fica mais fino (sem o subtítulo) e os espaçamentos dos cards diminuem. O editor continua com 17 linhas visíveis.
 - **Telas estreitas:** abaixo de 901 px de largura tudo volta a uma única coluna, com os espaçamentos e as alturas de antes. As abas continuam valendo.
 
@@ -107,6 +108,23 @@ O botão **Traduzir**, ao lado de **Limpar** no card **Código**, liga e desliga
 - Funciona só com o mouse. A caixa some ao sair do editor, rolar, editar o código, apertar `Esc` ou desligar o botão.
 - As regras ficam em `static/js/traducao-codigo.js`, sem depender do navegador, e a ligação com o editor em `static/js/traducao-editor.js`.
 
+## Atalhos de teclado
+
+| Atalho | O que faz |
+| --- | --- |
+| `Ctrl` + `Enter` ou `R` | Executa o código (o `R` só quando você não está digitando). |
+| `Ctrl` + `Delete` ou `C` | Limpa o editor e a execução (o `C` só quando você não está digitando). No editor, o `Ctrl` + `Delete` deixa de apagar a palavra seguinte, e o `Ctrl` + `Z` desfaz a limpeza. |
+| `Alt` + `T` | Liga e desliga a tradução do código, até com o cursor no editor. |
+| `→` ou `Espaço` | Avança um passo. |
+| `←` | Volta um passo. |
+| `Home` e `End` | Vão ao primeiro e ao último passo. |
+| `Esc` | Põe o foco no editor; na tela cheia do fluxograma, sai da tela cheia. |
+
+- Fora a exceção do `Ctrl` + `Enter` e do `Alt` + `T`, os atalhos não agem com o foco em campos de texto ou listas, como o campo do `input()`.
+- Na tela cheia do fluxograma só valem as teclas de navegação e o `Esc`: executar, limpar e traduzir ficam inativos, e as setas, o `Home` e o `End` navegam pelos passos mesmo com o foco no diagrama.
+- O `Ctrl` + `T` não serve para a tradução: o navegador o reserva para abrir uma nova aba e a página nunca recebe a tecla.
+- As regras ficam em `static/js/atalhos.js`, sem depender do navegador, e a ligação com a página em `static/js/app.js`.
+
 ## Testes
 
 Os testes usam apenas a biblioteca padrão. Os que exercitam o sandbox são pulados automaticamente se o Docker não estiver disponível:
@@ -115,7 +133,7 @@ Os testes usam apenas a biblioteca padrão. Os que exercitam o sandbox são pula
 python -m unittest discover -s tests -t . -v
 ```
 
-Os testes da tradução de código (`tests/test_traducao_codigo.py`) executam o módulo JavaScript com o Node.js e também são pulados se ele não estiver instalado. Os das abas do visualizador (`tests/test_abas_direita.py`) conferem a estrutura de `templates/index.html` e as chaves de tradução e, com o Node.js, executam `static/js/abas-direita.js` sobre um DOM simulado.
+Os testes da tradução de código (`tests/test_traducao_codigo.py`) executam o módulo JavaScript com o Node.js e também são pulados se ele não estiver instalado. Os das abas do visualizador (`tests/test_abas_direita.py`) conferem a estrutura de `templates/index.html` e as chaves de tradução e, com o Node.js, executam `static/js/abas-direita.js` sobre um DOM simulado. Os dos atalhos de teclado (`tests/test_atalhos.py`) e os das marcas do fluxograma (`tests/test_fluxo_marcas.py`) também executam módulos JavaScript no Node.js.
 
 ## Segurança
 

@@ -247,7 +247,7 @@
             <li data-i18n="flow.item3">Os comandos match e async e os geradores aparecem de forma simplificada, como um único bloco. O else de for e while é desenhado logo após o laço.</li>
             <li data-i18n="flow.item4">O bloco try/except é desenhado como uma decisão "Ocorreu exceção?" seguida dos tratadores.</li>
             <li data-i18n="flow.item5">Programas grandes têm o fluxograma resumido (limite de blocos). Execuções interrompidas por timeout ou com erro de sintaxe não exibem fluxograma.</li>
-            <li data-i18n="flow.item6">Na tela cheia só o fluxograma fica à vista (o Espaço avança e o Esc sai) e um diagrama maior que a tela ainda precisa de rolagem. O botão não aparece em navegadores sem suporte a tela cheia, como o Safari do iPhone.</li>
+            <li data-i18n="flow.item6">Na tela cheia só o fluxograma fica à vista (Espaço ou → avança, ← volta, Home e End vão ao início e ao fim, Esc sai). As setas não rolam o diagrama: um diagrama maior que a tela se vê com a roda do mouse, as barras de rolagem ou o toque. O botão não aparece em navegadores sem suporte a tela cheia, como o Safari do iPhone.</li>
           </ul>
         </article>
 
@@ -256,7 +256,7 @@
           <ul>
             <li data-i18n="layout.item1">A partir de 901 px de largura o visualizador usa duas colunas: código e navegação à esquerda; à direita, as abas Visualização e Fluxograma (uma de cada vez), a entrada do input() e, embaixo, Saída e Pilha de chamadas lado a lado. Em telas mais estreitas tudo fica em uma única coluna.</li>
             <li data-i18n="layout.item2">Visualização e Fluxograma crescem com o conteúdo até um limite de altura e depois rolam por dentro. Numa tela baixa, como 1366×768, um painel que chega ao limite empurra Saída e Pilha de chamadas para baixo da dobra e a página passa a rolar.</li>
-            <li data-i18n="layout.item3">Saída e Pilha de chamadas têm altura fixa e mostram só algumas linhas por vez; o restante aparece rolando dentro do card.</li>
+            <li data-i18n="layout.item3">Saída e Pilha de chamadas também crescem com o conteúdo, até a metade do limite dos painéis, e depois rolam por dentro do card. Os dois cards ficam sempre com a mesma altura.</li>
             <li data-i18n="layout.item4">A primeira execução de um programa pequeno cabe inteira em 1366×768. Programas com muitas variáveis, saída longa ou pilha funda pedem rolagem.</li>
             <li data-i18n="layout.item5">Para ganhar espaço, o cabeçalho do site fica mais fino e a Navegação vira uma barra sem cabeçalho, que não pode ser recolhida. A legenda do fluxograma só aparece na tela cheia.</li>
           </ul>
@@ -269,7 +269,7 @@
             <li data-i18n="translation.item2">A tradução é feita uma linha por vez, sem executar o código e sem olhar as linhas vizinhas. Por isso, em listas, chamadas e textos de várias linhas, uma linha pode ser mal interpretada (um argumento nome=1 sozinho na linha, por exemplo, aparece como atribuição).</li>
             <li data-i18n="translation.item3">Palavras dentro de textos entre aspas e de comentários não são traduzidas.</li>
             <li data-i18n="translation.item4">Cobre os comandos mais comuns (if, for, while, def, class, return, try/except, import e atribuições). Nas demais linhas, o português troca só algumas palavras (como print por escreva) e o inglês não mostra tradução.</li>
-            <li data-i18n="translation.item5">Funciona só com o mouse e só no editor do card Código; não há versão por teclado ou toque.</li>
+            <li data-i18n="translation.item5">A dica aparece só com o mouse e só no editor do card Código; não há versão por teclado ou toque. Ligar e desligar o recurso também pode ser feito pelo teclado, com Alt + T.</li>
           </ul>
         </article>
 
@@ -336,14 +336,14 @@
           "flow.item5":
             "Programas grandes têm o fluxograma resumido (limite de blocos). Execuções interrompidas por timeout ou com erro de sintaxe não exibem fluxograma.",
           "flow.item6":
-            "Na tela cheia só o fluxograma fica à vista (o Espaço avança e o Esc sai) e um diagrama maior que a tela ainda precisa de rolagem. O botão não aparece em navegadores sem suporte a tela cheia, como o Safari do iPhone.",
+            "Na tela cheia só o fluxograma fica à vista (Espaço ou → avança, ← volta, Home e End vão ao início e ao fim, Esc sai). As setas não rolam o diagrama: um diagrama maior que a tela se vê com a roda do mouse, as barras de rolagem ou o toque. O botão não aparece em navegadores sem suporte a tela cheia, como o Safari do iPhone.",
           "layout.title": "Layout do visualizador",
           "layout.item1":
             "A partir de 901 px de largura o visualizador usa duas colunas: código e navegação à esquerda; à direita, as abas Visualização e Fluxograma (uma de cada vez), a entrada do input() e, embaixo, Saída e Pilha de chamadas lado a lado. Em telas mais estreitas tudo fica em uma única coluna.",
           "layout.item2":
             "Visualização e Fluxograma crescem com o conteúdo até um limite de altura e depois rolam por dentro. Numa tela baixa, como 1366×768, um painel que chega ao limite empurra Saída e Pilha de chamadas para baixo da dobra e a página passa a rolar.",
           "layout.item3":
-            "Saída e Pilha de chamadas têm altura fixa e mostram só algumas linhas por vez; o restante aparece rolando dentro do card.",
+            "Saída e Pilha de chamadas também crescem com o conteúdo, até a metade do limite dos painéis, e depois rolam por dentro do card. Os dois cards ficam sempre com a mesma altura.",
           "layout.item4":
             "A primeira execução de um programa pequeno cabe inteira em 1366×768. Programas com muitas variáveis, saída longa ou pilha funda pedem rolagem.",
           "layout.item5":
@@ -358,7 +358,7 @@
           "translation.item4":
             "Cobre os comandos mais comuns (if, for, while, def, class, return, try/except, import e atribuições). Nas demais linhas, o português troca só algumas palavras (como print por escreva) e o inglês não mostra tradução.",
           "translation.item5":
-            "Funciona só com o mouse e só no editor do card Código; não há versão por teclado ou toque.",
+            "A dica aparece só com o mouse e só no editor do card Código; não há versão por teclado ou toque. Ligar e desligar o recurso também pode ser feito pelo teclado, com Alt + T.",
           "advanced.title": "Recursos avançados",
           "advanced.item1":
             "Threads, processos, rede, arquivos e interfaces gráficas não são foco da ferramenta.",
@@ -421,14 +421,14 @@
           "flow.item5":
             "Large programs get a summarized flowchart (block limit). Runs interrupted by a timeout or with a syntax error show no flowchart.",
           "flow.item6":
-            "In full screen only the flowchart is visible (Space advances and Esc exits), and a diagram larger than the screen still needs scrolling. The button does not appear in browsers without full-screen support, such as Safari on iPhone.",
+            "In full screen only the flowchart is visible (Space or → goes forward, ← goes back, Home and End jump to the first and last step, Esc exits). The arrow keys do not scroll the diagram: a diagram larger than the screen is reached with the mouse wheel, the scroll bars or touch. The button does not appear in browsers without full-screen support, such as Safari on iPhone.",
           "layout.title": "Visualizer layout",
           "layout.item1":
             "From 901 px of width on, the visualizer uses two columns: code and navigation on the left; on the right, the Visualization and Flowchart tabs (one at a time), the input() prompt and, at the bottom, Output and Call stack side by side. On narrower screens everything stays in a single column.",
           "layout.item2":
             "Visualization and Flowchart grow with their content up to a height limit and then scroll inside. On a short screen such as 1366×768, a panel that reaches the limit pushes Output and Call stack below the fold and the page starts to scroll.",
           "layout.item3":
-            "Output and Call stack have a fixed height and show only a few lines at a time; the rest is reached by scrolling inside the card.",
+            "Output and Call stack also grow with their content, up to half the limit of the panels, and then scroll inside the card. The two cards always have the same height.",
           "layout.item4":
             "The first run of a small program fits entirely in 1366×768. Programs with many variables, long output or a deep call stack need scrolling.",
           "layout.item5":
@@ -443,7 +443,7 @@
           "translation.item4":
             "It covers the most common statements (if, for, while, def, class, return, try/except, import, and assignments). On other lines, Portuguese replaces only a few words (such as print with escreva) and English shows no translation.",
           "translation.item5":
-            "It works only with the mouse and only in the editor of the Code card; there is no keyboard or touch version.",
+            "The hint appears only with the mouse and only in the editor of the Code card; there is no keyboard or touch version. Turning the feature on and off can also be done with the keyboard, using Alt + T.",
           "advanced.title": "Advanced features",
           "advanced.item1":
             "Threads, processes, networking, files, and graphical interfaces are not the tool's focus.",

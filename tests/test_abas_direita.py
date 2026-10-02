@@ -220,6 +220,27 @@ class TestEstruturaDasAbas(unittest.TestCase):
         self.assertIn(f".coluna-direita.{classe} > #saida", css)
         self.assertIn(f".coluna-direita:not(.{classe}) > #fluxo-card", css)
 
+    def test_teto_do_painel_acompanha_a_janela_com_piso_em_rem(self):
+        css = CSS.read_text(encoding="utf-8")
+        painel = re.search(
+            r'#fluxo-card\[style\*="display: block"\]\s*\{([^}]*)\}', css
+        )
+
+        self.assertIsNotNone(painel)
+        self.assertIn(
+            "max-height: min(44rem, max(60vh, 25rem))", painel.group(1)
+        )
+
+    def test_coluna_da_direita_nao_e_presa_a_altura_da_janela(self):
+        # a página precisa rolar quando o conteúdo passa da janela
+        css = CSS.read_text(encoding="utf-8")
+        corpos = re.findall(r"(?m)^\s*\.coluna-direita\s*\{([^}]*)\}", css)
+
+        self.assertTrue(corpos)
+
+        for corpo in corpos:
+            self.assertNotIn("max-height", corpo)
+
 
 # Um DOM de mentira só com o que o módulo usa: ids, estilo, classes, atributos,
 # ouvintes de clique e um MutationObserver que o roteiro dispara à mão.

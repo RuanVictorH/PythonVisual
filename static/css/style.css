@@ -1985,14 +1985,18 @@ body.tema-escuro .aba[aria-pressed="true"] {
   }
 
   /* Visualização e Fluxograma ocupam o que sobra ao lado do código e crescem
-     com o conteúdo até um limite razoável; depois disso rolam por dentro */
+     com o conteúdo até um limite razoável; depois disso rolam por dentro. O
+     teto acompanha a janela (60%) para o início da faixa Saída | Pilha ficar
+     perto do painel, mas nunca fica abaixo de 25rem: é o que o painel precisa
+     para preencher o espaço ao lado do código, também em janelas de 1024px,
+     em que a coluna do código fica mais alta. */
   #saida[style*="display: block"],
   #fluxo-card[style*="display: block"] {
     display: flex !important;
     flex: 1 1 auto;
     flex-direction: column;
     min-height: 200px;
-    max-height: min(44rem, 88vh);
+    max-height: min(44rem, max(60vh, 25rem));
   }
   #saida[style*="display: block"] > #saida-corpo {
     flex: 1 1 auto;

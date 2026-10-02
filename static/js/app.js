@@ -17,6 +17,7 @@ import {
   renderizarPasso,
 } from "./execucao.js";
 import { iniciarAbas } from "./abas-direita.js";
+import { acaoDoAtalho } from "./atalhos.js";
 import { rolarFluxoParaNoAtivo } from "./fluxo.js";
 import { fluxoEmTelaCheia, sairDaTelaCheia } from "./fluxo-tela-cheia.js";
 import {
@@ -183,33 +184,50 @@ function alternarTema() {
   requestAnimationFrame(desenharSetasMemoria);
 }
 
+function ehCampoNativo(alvo) {
+  if (!alvo)
+    return false;
+  if (alvo.isContentEditable)
+    return true;
+  return ["INPUT", "TEXTAREA", "SELECT"].includes(alvo.tagName);
+}
+
 function focoEmCampoDeTexto(evento) {
   const alvo = evento.target;
   if (!alvo)
     return false;
   if (alvo.closest && alvo.closest(".CodeMirror, .fluxo-rolagem"))
     return true;
-  if (alvo.isContentEditable)
-    return true;
-  return ["INPUT", "TEXTAREA", "SELECT"].includes(alvo.tagName);
+  return ehCampoNativo(alvo);
 }
 
 function alvoAtivavel(alvo) {
   return !!(alvo && alvo.closest && alvo.closest("button, a"));
 }
 
-// Na tela cheia o Espaço avança o passo mesmo com o foco na área do diagrama
-// (um clique nela já a focaliza), mas continua sendo de botões, listas e campos.
-function espacoAvancaNaTelaCheia(evento) {
-  if (evento.key !== " " || !fluxoEmTelaCheia())
-    return false;
-  if (evento.altKey || evento.ctrlKey || evento.metaKey)
-    return false;
+// As regras dos atalhos ficam em atalhos.js; aqui só se descreve o foco.
+function contextoDoAtalho(evento) {
   const alvo = evento.target;
-  if (alvoAtivavel(alvo))
-    return false;
-  return !["INPUT", "TEXTAREA", "SELECT"].includes(alvo.tagName);
+  return {
+    telaCheia: fluxoEmTelaCheia(),
+    campoDeTexto: focoEmCampoDeTexto(evento),
+    campoNativo: ehCampoNativo(alvo),
+    noEditor: !!(alvo && alvo.closest && alvo.closest(".CodeMirror")),
+    ativavel: alvoAtivavel(alvo),
+  };
 }
+
+const ACOES_DE_ATALHO = {
+  executar: () => executar(),
+  limpar: () => limparCodigo(),
+  traduzir: () => alternarTraducaoCodigo(),
+  proximo: () => passo(1),
+  anterior: () => passo(-1),
+  primeiro: () => irParaPrimeiro(),
+  ultimo: () => irParaUltimo(),
+  sairTelaCheia: () => sairDaTelaCheia(),
+  focarEditor: () => editor.focus(),
+};
 
 editor.on("change", () => {
   limparEntradasColetadas();
@@ -222,75 +240,29 @@ document.getElementById("entrada").addEventListener("keydown", (evento) => {
   }
 });
 
-document.addEventListener("keydown", (evento) => {
-  const tecla = evento.key;
-  // em tela cheia só o fluxograma está à vista: executar e limpar agiriam às cegas
-  const emTelaCheia = fluxoEmTelaCheia();
-
-  if (
-    !emTelaCheia &&
-    (evento.ctrlKey || evento.metaKey) &&
-    tecla === "Enter"
-  ) {
+// O Ctrl+Delete é tratado na fase de captura, antes do CodeMirror, que o usa
+// para apagar a palavra seguinte: sem isso o Ctrl+Z devolveria o código sem
+// essa palavra.
+document.addEventListener(
+  "keydown",
+  (evento) => {
+    if (evento.key !== "Delete")
+      return;
+    if (acaoDoAtalho(evento, contextoDoAtalho(evento)) !== "limpar")
+      return;
     evento.preventDefault();
-    executar();
-    return;
-  }
-
-  if (tecla === "Escape") {
-    evento.preventDefault();
-    if (emTelaCheia)
-      sairDaTelaCheia();
-    else
-      editor.focus();
-    return;
-  }
-
-  if (espacoAvancaNaTelaCheia(evento)) {
-    evento.preventDefault();
-    passo(1);
-    return;
-  }
-
-  if (
-    focoEmCampoDeTexto(evento) ||
-    evento.altKey ||
-    evento.ctrlKey ||
-    evento.metaKey
-  )
-    return;
-  if (tecla === " " && alvoAtivavel(evento.target))
-    return;
-
-  if (tecla === "ArrowRight" || tecla === " ") {
-    evento.preventDefault();
-    passo(1);
-    return;
-  }
-  if (tecla === "ArrowLeft") {
-    evento.preventDefault();
-    passo(-1);
-    return;
-  }
-  if (tecla === "Home") {
-    evento.preventDefault();
-    irParaPrimeiro();
-    return;
-  }
-  if (tecla === "End") {
-    evento.preventDefault();
-    irParaUltimo();
-    return;
-  }
-  if (tecla.toLowerCase() === "r" && !emTelaCheia) {
-    evento.preventDefault();
-    executar();
-    return;
-  }
-  if (tecla.toLowerCase() === "c" && !emTelaCheia) {
-    evento.preventDefault();
+    evento.stopPropagation();
     limparCodigo();
-  }
+  },
+  true,
+);
+
+document.addEventListener("keydown", (evento) => {
+  const acao = acaoDoAtalho(evento, contextoDoAtalho(evento));
+  if (!acao)
+    return;
+  evento.preventDefault();
+  ACOES_DE_ATALHO[acao]();
 });
 
 window.addEventListener("resize", desenharSetasMemoria);

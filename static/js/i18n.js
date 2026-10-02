@@ -6,7 +6,7 @@ const i18n = {
     "nav.about": "Sobre",
     "nav.limitations": "Limitações",
     "editor.shortcutsPlaceholder":
-      "Atalhos PythonVisual\n\n→ ou Espaço: próximo passo\n←: passo anterior\nHome: início\nEnd: fim\nCtrl + Enter: executar\nEsc: focar o editor\nR: executar, quando não estiver digitando\nC: limpar, quando não estiver digitando",
+      "Atalhos PythonVisual\n\n→ ou Espaço: próximo passo\n←: passo anterior\nHome: início\nEnd: fim\nCtrl + Enter: executar\nCtrl + Delete: limpar\nAlt + T: ligar ou desligar a tradução\nEsc: focar o editor\nR: executar, quando não estiver digitando\nC: limpar, quando não estiver digitando",
     "access.fontDown": "Diminuir fonte",
     "access.fontUp": "Aumentar fonte",
     "theme.dark": "Tema escuro",
@@ -210,7 +210,7 @@ const i18n = {
     "flow.legend.visited": "Já executado",
     "flow.fullscreen.label": "Tela cheia",
     "flow.fullscreen.hint":
-      "Pressione a tecla Espaço para avançar um passo · Esc para sair da tela cheia",
+      "Espaço ou → avança · ← volta · Home início · End fim · Esc sai da tela cheia",
     "memory.title": "Memória",
     "memory.empty": "Nenhum dado armazenado neste passo.",
     "memory.frames": "Quadros de memória",
@@ -254,7 +254,7 @@ const i18n = {
     "nav.about": "About",
     "nav.limitations": "Limitations",
     "editor.shortcutsPlaceholder":
-      "PythonVisual shortcuts\n\n→ or Space: next step\n←: previous step\nHome: start\nEnd: end\nCtrl + Enter: run\nEsc: focus the editor\nR: run, when not typing\nC: clear, when not typing",
+      "PythonVisual shortcuts\n\n→ or Space: next step\n←: previous step\nHome: start\nEnd: end\nCtrl + Enter: run\nCtrl + Delete: clear\nAlt + T: turn the translation on or off\nEsc: focus the editor\nR: run, when not typing\nC: clear, when not typing",
     "access.fontDown": "Decrease font size",
     "access.fontUp": "Increase font size",
     "theme.dark": "Dark theme",
@@ -458,7 +458,7 @@ const i18n = {
     "flow.legend.visited": "Already executed",
     "flow.fullscreen.label": "Full screen",
     "flow.fullscreen.hint":
-      "Press the Space key to go to the next step · Esc to exit full screen",
+      "Space or → next step · ← back · Home start · End end · Esc exits full screen",
     "memory.title": "Memory",
     "memory.empty": "No data stored in this step.",
     "memory.frames": "Memory frames",

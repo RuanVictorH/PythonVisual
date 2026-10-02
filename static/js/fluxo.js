@@ -4,6 +4,7 @@
 // (.visitado). O texto dos nós vem do código do usuário: entra sempre como textContent.
 import { traduzir, obterIdioma } from "./i18n.js";
 import { calcularLayout, GEOMETRIA } from "./fluxo-layout.js";
+import { calcularMarcas } from "./fluxo-marcas.js";
 import {
   definirBotaoTelaCheia,
   iniciarTelaCheia,
@@ -469,34 +470,6 @@ function aplicarEstados(g, novos) {
   g.aplicados = novos;
 }
 
-function profundidade(passo) {
-  return Array.isArray(passo.pilha_chamadas) ? passo.pilha_chamadas.length : 0;
-}
-
-function visitadasDaInvocacao(passos, k) {
-  const linhas = new Set();
-  const d = profundidade(passos[k]);
-  for (let j = k - 1; j >= 0; j--) {
-    const p = passos[j];
-    const dj = profundidade(p);
-    if (dj < d || (p.evento === "return" && dj === d))
-      break;
-    if (dj === d && p.evento === "line" && Number.isInteger(p.linha))
-      linhas.add(p.linha);
-  }
-  return linhas;
-}
-
-function todasAsLinhasExecutadas(passos, k) {
-  const linhas = new Set();
-  for (let j = 0; j < k; j++) {
-    const p = passos[j];
-    if (p.evento === "line" && Number.isInteger(p.linha))
-      linhas.add(p.linha);
-  }
-  return linhas;
-}
-
 function mostrarGrafico(id) {
   if (estado.exibidoId === id)
     return;
@@ -589,32 +562,17 @@ function atualizar(ctx) {
   const executando = idExibido === idExecutando;
   const indice = exibido.layout.indice;
 
-  const novos = new Map();
-  const visitadas = executando
-    ? visitadasDaInvocacao(passos, indiceAtual)
-    : todasAsLinhasExecutadas(passos, indiceAtual);
-  for (const linha of visitadas) {
-    if (indice.has(linha))
-      novos.set(indice.get(linha), "visitado");
-  }
-  if (executando && exibido.formas.has("inicio"))
-    novos.set("inicio", "visitado");
-  let idExecutado;
-  if (linhaExecutada !== null && indice.has(linhaExecutada)) {
-    idExecutado = indice.get(linhaExecutada);
-    novos.set(idExecutado, "executado");
-  }
-  if (exibido.formas.has("fim") && executando) {
-    const ehFimDoGlobal = passo.evento === "fim" && exibido.def.tipo === "principal";
-    if (ehFimDoGlobal || (passo.evento === "return" && exibido.def.tipo !== "principal"))
-      novos.set("fim", "executado");
-  }
-  let idProximo;
-  if (linhaProxima !== null && executando && indice.has(linhaProxima)) {
-    idProximo = indice.get(linhaProxima);
-    novos.set(idProximo, "proximo");
-  }
-  aplicarEstados(exibido, novos);
+  const { marcas, idProximo, idExecutado } = calcularMarcas({
+    passos,
+    indiceAtual,
+    linhaProxima,
+    linhaExecutada,
+    executando,
+    indice,
+    formas: exibido.formas,
+    tipo: exibido.def.tipo,
+  });
+  aplicarEstados(exibido, marcas);
   estado.noAtivoId = idProximo !== undefined ? idProximo : idExecutado;
   atualizarControles(exibido, executando, passo);
   atualizarResumo(exibido, idProximo, idExecutado);

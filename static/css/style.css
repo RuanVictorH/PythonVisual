@@ -2022,21 +2022,20 @@ body.tema-escuro .aba[aria-pressed="true"] {
     display: none;
   }
 
-  /* Saída e Pilha de chamadas têm altura fixa: não crescem com o conteúdo,
-     rolam por dentro */
-  .faixa-saida-pilha {
-    height: clamp(117px, 16vh, 160px);
-  }
+  /* Saída e Pilha de chamadas crescem com o conteúdo até a metade do limite dos
+     painéis e depois rolam por dentro. O limite fica em cada card: a linha do
+     grid mede o maior deles e os dois ficam com a mesma altura. */
   .faixa-saida-pilha > .card[style*="display: block"] {
     display: flex !important;
     flex-direction: column;
     min-height: 0;
+    max-height: min(22rem, 44vh);
   }
   .faixa-saida-pilha > .card > .card-header {
     padding: 4px 12px;
   }
   .faixa-saida-pilha > .card > .card-body {
-    flex: 1 1 0;
+    flex: 1 1 auto;
     min-height: 0;
     overflow: auto;
   }
@@ -2048,12 +2047,8 @@ body.tema-escuro .aba[aria-pressed="true"] {
     max-height: none;
     padding: 6px 10px;
   }
-  /* card recolhido da faixa: só o cabeçalho; com os dois recolhidos a faixa
-     não reserva altura */
+  /* card recolhido da faixa: só o cabeçalho */
   .faixa-saida-pilha > .card.recolhido {
     align-self: start;
-  }
-  .faixa-saida-pilha:not(:has(> .card[style*="display: block"]:not(.recolhido))) {
-    height: auto;
   }
 }

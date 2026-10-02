@@ -16,6 +16,7 @@ Protótipo didático inspirado no Python Tutor para visualizar a execução de c
 - Fluxograma automático do código, com o bloco em execução destacado a cada passo (veja [Fluxograma](#fluxograma)).
 - Fluxograma em tela cheia, com botão no cabeçalho do card; a tecla Espaço avança e Esc sai (veja [Fluxograma](#fluxograma)).
 - Tradução de cada linha do código ao passar o mouse sobre o editor, com botão para ligar e desligar (veja [Tradução de código](#tradução-de-código)).
+- Visualizador em duas colunas, com as abas **Visualização** e **Fluxograma** e a faixa **Saída** | **Pilha de chamadas** embaixo, pensado para telas de 1366×768 ou menos (veja [Layout do visualizador](#layout-do-visualizador)).
 
 ## Requisitos
 
@@ -68,12 +69,13 @@ PYTHONVISUAL_DEBUG=true python app.py
 
 ## Fluxograma
 
-Ao executar um código, o card **Fluxograma** desenha o fluxo do programa a partir do próprio código do editor (não há outra caixa de texto). Cada linha executável vira um bloco (terminal, retângulo, losango ou paralelogramo) e, ao navegar pelos passos, o bloco da próxima linha fica em vermelho e o da linha já executada em verde, como no editor.
+Ao executar um código, a aba **Fluxograma** (ao lado de **Visualização**) desenha o fluxo do programa a partir do próprio código do editor (não há outra caixa de texto). Cada linha executável vira um bloco (terminal, retângulo, losango ou paralelogramo) e, ao navegar pelos passos, o bloco da próxima linha fica em vermelho e o da linha já executada em verde, como no editor.
 
 - Cada função, método e classe ganha um fluxograma próprio. Por padrão o card acompanha a função em execução; escolher outro no seletor (ou clicar num bloco de definição) fixa o gráfico, e o botão **Seguir execução** volta a acompanhar.
 - A estrutura é montada com o módulo `ast` dentro do sandbox (`fluxo_builder.py`), então o código do usuário nunca é interpretado fora do container. A resposta de `/executar` continua sendo uma lista de passos; o fluxograma vai na chave `fluxo` do primeiro elemento.
-- `match`, `async` e geradores aparecem simplificados, como um único bloco. Programas grandes têm o fluxograma resumido, e execuções interrompidas por timeout ou com erro de sintaxe não exibem o card.
-- O botão de tela cheia, no cabeçalho do card, abre o fluxograma ocupando a tela inteira, o que ajuda em códigos que crescem na horizontal. Lá dentro, **Espaço** avança um passo, **Esc** (ou o mesmo botão) sai, e o cabeçalho mostra o passo atual. Se a execução chegar a um `input()`, a tela cheia fecha sozinha para você digitar o valor. A lógica fica em `static/js/fluxo-tela-cheia.js`, e o botão não aparece em navegadores sem suporte a tela cheia (como o Safari do iPhone).
+- `match`, `async` e geradores aparecem simplificados, como um único bloco. Programas grandes têm o fluxograma resumido, e execuções interrompidas por timeout ou com erro de sintaxe não exibem o fluxograma (a aba fica desabilitada).
+- A legenda das formas e das marcas só aparece na tela cheia, onde há espaço para ela.
+- O botão de tela cheia, no cabeçalho do painel, abre o fluxograma ocupando a tela inteira, o que ajuda em códigos que crescem na horizontal. Lá dentro, **Espaço** avança um passo, **Esc** (ou o mesmo botão) sai, e o cabeçalho mostra o passo atual. Se a execução chegar a um `input()`, a tela cheia fecha sozinha para você digitar o valor. A lógica fica em `static/js/fluxo-tela-cheia.js`, e o botão não aparece em navegadores sem suporte a tela cheia (como o Safari do iPhone).
 
 Configuração em `env.conf`:
 
@@ -82,6 +84,18 @@ Configuração em `env.conf`:
 | `USAR_FLUXOGRAMA` | `true` | Liga ou desliga o fluxograma. |
 | `FLUXO_MAXIMO_NOS` | `150` | Máximo de blocos desenhados (o restante vira um bloco "resumido"). |
 | `FLUXO_TAMANHO_MAXIMO_TEXTO` | `100` | Máximo de caracteres do texto de cada bloco no dado enviado ao navegador. |
+
+## Layout do visualizador
+
+Nas telas dos laboratórios (1366×768 ou menos) o visualizador usa duas colunas e procura mostrar, na primeira execução de um programa pequeno, tudo o que se usa a cada passo sem rolar a página.
+
+- **Coluna da esquerda:** o card **Código**, os botões **Executar código**, **Limpar** e **Traduzir** e a **Navegação**, que aparece como uma barra fina, sem cabeçalho de card (e por isso não pode ser recolhida).
+- **Coluna da direita:** as abas **Visualização** e **Fluxograma** (uma de cada vez), o card de entrada do `input()` e, embaixo, **Saída** e **Pilha de chamadas** lado a lado. A barra de abas só aparece depois da primeira execução, e a aba **Fluxograma** fica desabilitada quando não há fluxograma. Se ela estiver aberta e a execução seguinte não gerar fluxograma, a página volta sozinha para **Visualização**.
+- **Alturas:** o painel da aba preenche o espaço ao lado do código e cresce com o conteúdo até `min(44rem, 88vh)` (cerca de 563 px numa janela de 640 px de altura e 704 px numa de 950 px); passando disso, rola por dentro. **Saída** e **Pilha de chamadas** têm altura fixa (`clamp(117px, 16vh, 160px)`) e rolam por dentro, em vez de crescer. Quando o painel chega ao limite numa janela baixa, a página passa a rolar e a faixa **Saída** | **Pilha de chamadas** fica abaixo da dobra.
+- **Compactação:** só no visualizador, o cabeçalho do site fica mais fino (sem o subtítulo) e os espaçamentos dos cards diminuem. O editor continua com 17 linhas visíveis.
+- **Telas estreitas:** abaixo de 901 px de largura tudo volta a uma única coluna, com os espaçamentos e as alturas de antes. As abas continuam valendo.
+
+A lógica das abas fica em `static/js/abas-direita.js`, e o estilo na seção "Visualizador: abas à direita e layout compacto" de `static/css/style.css`.
 
 ## Tradução de código
 
@@ -101,7 +115,7 @@ Os testes usam apenas a biblioteca padrão. Os que exercitam o sandbox são pula
 python -m unittest discover -s tests -t . -v
 ```
 
-Os testes da tradução de código (`tests/test_traducao_codigo.py`) executam o módulo JavaScript com o Node.js e também são pulados se ele não estiver instalado.
+Os testes da tradução de código (`tests/test_traducao_codigo.py`) executam o módulo JavaScript com o Node.js e também são pulados se ele não estiver instalado. Os das abas do visualizador (`tests/test_abas_direita.py`) conferem a estrutura de `templates/index.html` e as chaves de tradução e, com o Node.js, executam `static/js/abas-direita.js` sobre um DOM simulado.
 
 ## Segurança
 

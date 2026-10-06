@@ -39,7 +39,7 @@ def executar():
 
     if not isinstance(codigo, str) or not isinstance(entrada, str):
         execucoes = [
-            {"erro": "RequisicaoInvalida: codigo e entrada devem ser textos.", "saida": ""}
+            {"erro": "RequisicaoInvalida: código e entrada devem ser textos.", "saida": ""}
         ]
         registrar_execucao(request, codigo, execucoes)
         return jsonify(execucoes), 400

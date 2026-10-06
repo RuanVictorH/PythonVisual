@@ -705,7 +705,7 @@ def executar_codigo(
             return [
                 {
                     "erro": (
-                        "FalhaInterna: o Docker nao esta disponivel. Inicie o Docker "
+                        "FalhaInterna: o Docker não está disponível. Inicie o Docker "
                         "Desktop/daemon ou, apenas para desenvolvimento local, defina "
                         "USAR_SANDBOX_DOCKER=false em env.conf."
                     ),
@@ -715,7 +715,7 @@ def executar_codigo(
         if not _garantir_imagem_sandbox():
             return [
                 {
-                    "erro": "FalhaInterna: nao foi possivel preparar a imagem de sandbox (docker build falhou).",
+                    "erro": "FalhaInterna: não foi possível preparar a imagem de sandbox (docker build falhou).",
                     "saida": "",
                 }
             ]
@@ -801,7 +801,7 @@ def executar_codigo(
         try:
             dados = json.loads(resultado.stdout)
         except json.JSONDecodeError:
-            return [{"erro": "FalhaInterna: resposta invalida do executor.", "saida": ""}]
+            return [{"erro": "FalhaInterna: resposta inválida do executor.", "saida": ""}]
 
         if isinstance(dados, list):
             return dados

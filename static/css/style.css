@@ -2026,14 +2026,16 @@ body.tema-escuro .aba[aria-pressed="true"] {
     display: none;
   }
 
-  /* Saída e Pilha de chamadas crescem com o conteúdo até a metade do limite dos
-     painéis e depois rolam por dentro. O limite fica em cada card: a linha do
-     grid mede o maior deles e os dois ficam com a mesma altura. */
+  /* Saída e Pilha de chamadas crescem com o conteúdo até um limite próprio e
+     depois rolam por dentro. O limite fica em cada card: a linha do grid mede o
+     maior deles e os dois ficam com a mesma altura. Cada quadro da pilha soma
+     uns 89px: 26rem / 52vh mostram o escopo global e uma chamada sem rolar numa
+     janela de 640px de altura (333px) e duas chamadas numa de 950px (416px). */
   .faixa-saida-pilha > .card[style*="display: block"] {
     display: flex !important;
     flex-direction: column;
     min-height: 0;
-    max-height: min(22rem, 44vh);
+    max-height: min(26rem, 52vh);
   }
   .faixa-saida-pilha > .card > .card-header {
     padding: 4px 12px;

@@ -189,10 +189,18 @@ class RoteiroDeExecucao:
                         f"grafico={grafico['nome']}",
                     )
 
+    def test_codigo_com_acentos_roda_e_imprime_certo(self):
+        # o "A" agudo (C3 81 em UTF-8) nao existe no cp1252: o modo local do Windows lia o
+        # codigo nessa tabela e devolvia FalhaInterna
+        passos = self.rodar('print("Área: 40")\nprint("Perímetro: 26, não é?")\n')
+        ultimo = passos[-1]
+        self.assertNotIn("erro", ultimo, ultimo)
+        self.assertEqual(ultimo["saida"], "Área: 40\nPerímetro: 26, não é?\n")
+
 
 class TestExecucaoLocal(RoteiroDeExecucao, unittest.TestCase):
-    # Roda o runner num subprocesso do proprio Python, sem Docker. Fixtures confiaveis e ASCII
-    # (no Windows o stdout do filho nao e UTF-8 quando o Docker esta desligado).
+    # Roda o runner num subprocesso do proprio Python, sem Docker. O filho roda em modo UTF-8
+    # (-X utf8), entao o codigo pode ter acentos; as fixtures abaixo seguem confiaveis e ASCII.
     def setUp(self):
         patcher = mock.patch.object(executor, "USAR_SANDBOX_DOCKER", False)
         patcher.start()

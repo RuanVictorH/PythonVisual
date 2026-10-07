@@ -753,7 +753,10 @@ def executar_codigo(
         ]
         tempo_limite_processo = tempo_limite + 5
     else:
-        comando = [sys.executable, "-I", "-B", "-c", RUNNER_CODE]
+        # -X utf8: sem ele o filho le o codigo e escreve a saida em cp1252 no Windows, e o byte
+        # 0x81 do "A" maiusculo com acento agudo nem existe nessa tabela. O -I ignora PYTHONUTF8,
+        # mas nao as opcoes -X.
+        comando = [sys.executable, "-I", "-B", "-X", "utf8", "-c", RUNNER_CODE]
         tempo_limite_processo = tempo_limite
 
     try:

@@ -156,7 +156,7 @@ class RoteiroDeTerminologia:
 
 
 class TestTerminologiaLocal(RoteiroDeTerminologia, unittest.TestCase):
-    # Fixtures confiaveis e ASCII (no Windows o stdout do filho nao e UTF-8 sem Docker).
+    # Fixtures confiaveis e ASCII. O filho do modo local roda em modo UTF-8 (-X utf8).
     def setUp(self):
         patcher = mock.patch.object(executor, "USAR_SANDBOX_DOCKER", False)
         patcher.start()

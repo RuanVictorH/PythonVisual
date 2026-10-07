@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 35" width="20" height="14">
+  <clipPath id="quadro">
+    <path d="M0 0h50v35H0z"/>
+  </clipPath>
+  <clipPath id="metades">
+    <path d="M25 17.5H50V35zM25 17.5V35H0zM25 17.5H0V0zM25 17.5V0H50z"/>
+  </clipPath>
+  <g clip-path="url(#quadro)">
+    <path d="M0 0h50v35H0z" fill="#012169"/>
+    <path d="M0 0 50 35M50 0 0 35" stroke="#ffffff" stroke-width="7"/>
+    <path d="M0 0 50 35M50 0 0 35" stroke="#c8102e" stroke-width="4.67" clip-path="url(#metades)"/>
+    <path d="M25 0V35M0 17.5H50" stroke="#ffffff" stroke-width="11.67"/>
+    <path d="M25 0V35M0 17.5H50" stroke="#c8102e" stroke-width="7"/>
+  </g>
+</svg>

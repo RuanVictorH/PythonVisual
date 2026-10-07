@@ -29,7 +29,9 @@
   border-bottom: 1px solid #dbe3ef;
   padding: 14px 32px;
   display: grid;
-  grid-template-columns: 68px 250px 480px minmax(0, 1fr);
+  /* O título ocupa uns 140 a 170px; o resto da coluna fica para os controles, que com as
+     bandeiras de PT e EN precisam de 390px para ficar numa linha só. */
+  grid-template-columns: 68px 190px 480px minmax(0, 1fr);
   align-items: center;
   column-gap: 16px;
   box-shadow: 0 1px 4px rgba(15, 23, 42, 0.08);
@@ -47,7 +49,7 @@
 }
 
 .site-header .header-text {
-  width: 250px;
+  width: 190px;
 }
 
 .site-header .header-text h1 {
@@ -117,6 +119,9 @@
 }
 
 .site-header .lang-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   border: none;
   border-radius: 6px;
   padding: 5px 8px;
@@ -132,6 +137,17 @@
 .site-header .lang-btn.active {
   background: #2563eb;
   color: #ffffff;
+}
+
+/* Bandeira ao lado de PT e EN: decorativa, o nome do botão vem do aria-label. O contorno
+   evita que as partes brancas da bandeira se percam no fundo claro do botão. */
+.site-header .lang-bandeira {
+  display: block;
+  flex: none;
+  width: 20px;
+  height: 14px;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.22);
 }
 
 @media (min-width: 721px) {
@@ -177,7 +193,7 @@
 
 @media (max-width: 1250px) {
   .site-header {
-    grid-template-columns: 68px 250px minmax(0, 1fr);
+    grid-template-columns: 68px 190px minmax(0, 1fr);
     grid-template-areas:
       "logo title controls"
       "navigation navigation navigation";
@@ -280,6 +296,10 @@ body.tema-escuro .site-header .lang-btn {
 body.tema-escuro .site-header .lang-btn.active {
   background: #60a5fa;
   color: #0b1120;
+}
+
+body.tema-escuro .site-header .lang-bandeira {
+  box-shadow: 0 0 0 1px rgba(226, 232, 240, 0.4);
 }
 
 /* Tooltip dos botões (static/js/tooltip.js) */

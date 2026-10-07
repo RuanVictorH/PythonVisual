@@ -18,6 +18,7 @@ Protótipo didático inspirado no Python Tutor para visualizar a execução de c
 - Tradução de cada linha do código ao passar o mouse sobre o editor, com botão para ligar e desligar (veja [Tradução de código](#tradução-de-código)).
 - Visualizador em duas colunas, com as abas **Visualização** e **Fluxograma** e a faixa **Saída** | **Pilha de chamadas** embaixo, pensado para telas de 1366×768 ou menos (veja [Layout do visualizador](#layout-do-visualizador)).
 - Atalhos de teclado novos: **Ctrl+Delete** limpa, **Alt+T** liga e desliga a tradução e, na tela cheia do fluxograma, as setas, **Home** e **End** navegam pelos passos (veja [Atalhos de teclado](#atalhos-de-teclado)).
+- Bandeiras do Brasil e do Reino Unido ao lado de **PT** e **EN** no seletor de idioma, em todas as páginas.
 
 ## Requisitos
 

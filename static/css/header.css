@@ -308,7 +308,7 @@ body.tema-escuro .site-header .lang-bandeira {
   z-index: 10000;
   display: none;
   box-sizing: border-box;
-  max-width: min(18rem, calc(100vw - 16px));
+  max-width: min(20rem, calc(100vw - 16px));
   padding: 6px 10px;
   border: 1px solid #334155;
   border-radius: 6px;
@@ -319,6 +319,8 @@ body.tema-escuro .site-header .lang-bandeira {
   font-weight: 500;
   line-height: 1.4;
   overflow-wrap: anywhere;
+  /* as dicas de A- e A+ têm uma segunda linha, com o zoom atual */
+  white-space: pre-line;
   box-shadow: 0 4px 14px rgba(15, 23, 42, 0.28);
   opacity: 0;
   transition: opacity 0.12s;

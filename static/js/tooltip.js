@@ -12,8 +12,8 @@
       navLimitations: "Ver as limitações e o que a ferramenta não cobre",
       langPt: "Exibir o sistema em português",
       langEn: "Exibir o sistema em inglês",
-      fontDown: "Diminuir a fonte da página (mínimo de 60%)",
-      fontUp: "Aumentar a fonte da página (máximo de 180%)",
+      fontDown: "Diminuir a fonte da página (mínimo de 60%)\nZoom atual: {zoom}%",
+      fontUp: "Aumentar a fonte da página (máximo de 180%)\nZoom atual: {zoom}%",
       themeDark: "Ativar o tema escuro",
       themeLight: "Voltar ao tema claro",
       ctaOpen: "Ir para o visualizador e começar a executar seu código",
@@ -48,8 +48,8 @@
       navLimitations: "See the limitations and what the tool does not cover",
       langPt: "Display the system in Portuguese",
       langEn: "Display the system in English",
-      fontDown: "Decrease the page font size (minimum 60%)",
-      fontUp: "Increase the page font size (maximum 180%)",
+      fontDown: "Decrease the page font size (minimum 60%)\nCurrent zoom: {zoom}%",
+      fontUp: "Increase the page font size (maximum 180%)\nCurrent zoom: {zoom}%",
       themeDark: "Turn on the dark theme",
       themeLight: "Go back to the light theme",
       ctaOpen: "Go to the visualizer and start running your code",
@@ -107,6 +107,24 @@
     return t;
   }
 
+  // Zoom da página, em porcentagem. Vem do que a página está usando agora (--font-scale,
+  // aplicado no <html> pelo app.js e pelas outras páginas); se faltar, vale o valor salvo
+  // no navegador e, por fim, 100%.
+  function zoomAtual() {
+    var escala = parseFloat(
+      getComputedStyle(document.documentElement).getPropertyValue("--font-scale")
+    );
+    if (!(escala > 0)) {
+      try {
+        escala = parseFloat(localStorage.getItem("pythonvisual_escala_fonte"));
+      } catch (erro) {
+        escala = NaN;
+      }
+    }
+    if (!(escala > 0)) escala = 1;
+    return String(Math.round(escala * 100));
+  }
+
   function nomeDoCard(botao) {
     var cabecalho = botao.closest(".card-header");
     var titulo = cabecalho && cabecalho.querySelector("[data-i18n]");
@@ -119,6 +137,9 @@
     switch (chave) {
       case "theme":
         return texto(document.body.classList.contains("tema-escuro") ? "themeLight" : "themeDark");
+      case "fontDown":
+      case "fontUp":
+        return texto(chave, { zoom: zoomAtual() });
       case "collapse":
         return texto(el.getAttribute("aria-expanded") === "false" ? "expand" : "collapse", {
           name: nomeDoCard(el)

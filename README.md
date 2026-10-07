@@ -19,6 +19,7 @@ Protótipo didático inspirado no Python Tutor para visualizar a execução de c
 - Visualizador em duas colunas, com as abas **Visualização** e **Fluxograma** e a faixa **Saída** | **Pilha de chamadas** embaixo, pensado para telas de 1366×768 ou menos (veja [Layout do visualizador](#layout-do-visualizador)).
 - Atalhos de teclado novos: **Ctrl+Delete** limpa, **Alt+T** liga e desliga a tradução e, na tela cheia do fluxograma, as setas, **Home** e **End** navegam pelos passos (veja [Atalhos de teclado](#atalhos-de-teclado)).
 - Bandeiras do Brasil e do Reino Unido ao lado de **PT** e **EN** no seletor de idioma, em todas as páginas.
+- As dicas dos botões **A-** e **A+** mostram o zoom atual da página, em porcentagem (de 60% a 180%).
 
 ## Requisitos
 

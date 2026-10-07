@@ -140,7 +140,8 @@ class TestSeletorDeIdioma(unittest.TestCase):
         regra = re.search(r"\.lang-bandeira-invertida\s*\{([^}]*)\}", css)
 
         self.assertIsNotNone(regra)
-        self.assertIn("transform: rotate(180deg)", regra.group(1))
+        # de cabeça para baixo (girada 180°) e com os lados trocados (espelhada na horizontal)
+        self.assertIn("transform: rotate(180deg) scaleX(-1)", regra.group(1))
 
     def test_o_arquivo_da_bandeira_do_brasil_segue_o_desenho_normal(self):
         # a inversão é só de CSS: tirar a regra devolve a bandeira ao normal

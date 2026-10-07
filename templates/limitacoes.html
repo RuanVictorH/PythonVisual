@@ -266,9 +266,9 @@
           <h3><i class="fa-solid fa-language" aria-hidden="true"></i><span data-i18n="translation.title">Tradução de código</span></h3>
           <ul>
             <li data-i18n="translation.item1">Com o botão Traduzir ligado, passar o mouse sobre uma linha do editor mostra essa linha em português simples (ou em inglês, conforme o idioma da página).</li>
-            <li data-i18n="translation.item2">A tradução é feita uma linha por vez, sem executar o código e sem olhar as linhas vizinhas. Por isso, em listas, chamadas e textos de várias linhas, uma linha pode ser mal interpretada (um argumento nome=1 sozinho na linha, por exemplo, aparece como atribuição).</li>
+            <li data-i18n="translation.item2">A tradução é feita uma linha por vez, sem executar o código e sem olhar as linhas vizinhas. Por isso, em listas, chamadas e textos de várias linhas, uma linha pode ser mal interpretada (um argumento nome=1 sozinho na linha, por exemplo, aparece como atribuição, e o último item de uma lista que é uma chamada, sem vírgula, aparece como “chame ...”).</li>
             <li data-i18n="translation.item3">Palavras dentro de textos entre aspas e de comentários não são traduzidas.</li>
-            <li data-i18n="translation.item4">Cobre os comandos mais comuns (if, for, while, def, class, return, try/except, import e atribuições). Nas demais linhas, o português troca só algumas palavras (como print por escreva) e o inglês não mostra tradução.</li>
+            <li data-i18n="translation.item4">Cobre os comandos mais comuns (if, for, while, def, class, return, try/except, with, assert, del, global, yield, raise, import, decoradores e atribuições, inclusive em cadeia). Uma linha que é só uma chamada ganha uma frase (notas.append(5.5) vira “adicione 5.5 ao fim de notas”; as demais viram “chame ...”). Dentro das expressões, o português troca palavras (print por escreva, round por arredonda, len por tamanho, and por e, is por é); em inglês as palavras não mudam, porque o código já está em inglês. Os operadores (>=, ==, %) não mudam.</li>
             <li data-i18n="translation.item5">A dica aparece só com o mouse e só no editor do card Código; não há versão por teclado ou toque. Ligar e desligar o recurso também pode ser feito pelo teclado, com Alt + T.</li>
           </ul>
         </article>
@@ -352,11 +352,11 @@
           "translation.item1":
             "Com o botão Traduzir ligado, passar o mouse sobre uma linha do editor mostra essa linha em português simples (ou em inglês, conforme o idioma da página).",
           "translation.item2":
-            "A tradução é feita uma linha por vez, sem executar o código e sem olhar as linhas vizinhas. Por isso, em listas, chamadas e textos de várias linhas, uma linha pode ser mal interpretada (um argumento nome=1 sozinho na linha, por exemplo, aparece como atribuição).",
+            "A tradução é feita uma linha por vez, sem executar o código e sem olhar as linhas vizinhas. Por isso, em listas, chamadas e textos de várias linhas, uma linha pode ser mal interpretada (um argumento nome=1 sozinho na linha, por exemplo, aparece como atribuição, e o último item de uma lista que é uma chamada, sem vírgula, aparece como “chame ...”).",
           "translation.item3":
             "Palavras dentro de textos entre aspas e de comentários não são traduzidas.",
           "translation.item4":
-            "Cobre os comandos mais comuns (if, for, while, def, class, return, try/except, import e atribuições). Nas demais linhas, o português troca só algumas palavras (como print por escreva) e o inglês não mostra tradução.",
+            "Cobre os comandos mais comuns (if, for, while, def, class, return, try/except, with, assert, del, global, yield, raise, import, decoradores e atribuições, inclusive em cadeia). Uma linha que é só uma chamada ganha uma frase (notas.append(5.5) vira “adicione 5.5 ao fim de notas”; as demais viram “chame ...”). Dentro das expressões, o português troca palavras (print por escreva, round por arredonda, len por tamanho, and por e, is por é); em inglês as palavras não mudam, porque o código já está em inglês. Os operadores (>=, ==, %) não mudam.",
           "translation.item5":
             "A dica aparece só com o mouse e só no editor do card Código; não há versão por teclado ou toque. Ligar e desligar o recurso também pode ser feito pelo teclado, com Alt + T.",
           "advanced.title": "Recursos avançados",
@@ -437,11 +437,11 @@
           "translation.item1":
             "With the Translate button turned on, hovering over a line in the editor shows that line in plain language (Portuguese or English, according to the page language).",
           "translation.item2":
-            "The translation is done one line at a time, without running the code and without looking at neighboring lines. Because of this, in lists, calls, and texts that span several lines, a line may be misinterpreted (an argument name=1 alone on its line, for example, appears as an assignment).",
+            "The translation is done one line at a time, without running the code and without looking at neighboring lines. Because of this, in lists, calls, and texts that span several lines, a line may be misinterpreted (an argument name=1 alone on its line, for example, appears as an assignment, and the last item of a list that is a call, without a comma, appears as “call ...”).",
           "translation.item3":
             "Words inside quoted texts and comments are not translated.",
           "translation.item4":
-            "It covers the most common statements (if, for, while, def, class, return, try/except, import, and assignments). On other lines, Portuguese replaces only a few words (such as print with escreva) and English shows no translation.",
+            "It covers the most common statements (if, for, while, def, class, return, try/except, with, assert, del, global, yield, raise, import, decorators, and assignments, including chained ones). A line that is just a call gets a sentence (notas.append(5.5) becomes “add 5.5 to the end of notas”; other calls become “call ...”). Inside expressions, Portuguese replaces words (print with escreva, round with arredonda, len with tamanho, and with e, is with é); in English the words do not change, because the code is already in English. Operators (>=, ==, %) do not change.",
           "translation.item5":
             "The hint appears only with the mouse and only in the editor of the Code card; there is no keyboard or touch version. Turning the feature on and off can also be done with the keyboard, using Alt + T.",
           "advanced.title": "Advanced features",

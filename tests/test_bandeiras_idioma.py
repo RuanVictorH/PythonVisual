@@ -129,6 +129,26 @@ class TestSeletorDeIdioma(unittest.TestCase):
                 self.assertEqual(botao["texto"].strip(), texto)
                 self.assertEqual(botao["atributos"]["aria-label"], nome)
 
+    def test_so_a_bandeira_do_brasil_fica_de_cabeca_para_baixo(self):
+        classes_pt = self.botoes["lang-pt"]["imagens"][0]["class"].split()
+        classes_en = self.botoes["lang-en"]["imagens"][0]["class"].split()
+
+        self.assertIn("lang-bandeira-invertida", classes_pt)
+        self.assertNotIn("lang-bandeira-invertida", classes_en)
+
+        css = (RAIZ / "static" / "css" / "header.css").read_text(encoding="utf-8")
+        regra = re.search(r"\.lang-bandeira-invertida\s*\{([^}]*)\}", css)
+
+        self.assertIsNotNone(regra)
+        self.assertIn("transform: rotate(180deg)", regra.group(1))
+
+    def test_o_arquivo_da_bandeira_do_brasil_segue_o_desenho_normal(self):
+        # a inversão é só de CSS: tirar a regra devolve a bandeira ao normal
+        _, texto = ler_svg("bandeira-brasil.svg")
+
+        self.assertNotIn("rotate", texto)
+        self.assertNotIn("scale(", texto)
+
     def test_todas_as_paginas_usam_o_mesmo_seletor(self):
         for pagina in PAGINAS:
             with self.subTest(pagina=pagina):

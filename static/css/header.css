@@ -150,6 +150,12 @@
   box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.22);
 }
 
+/* A bandeira do Brasil fica de cabeça para baixo (girada 180°), a pedido do autor. O arquivo
+   da bandeira segue o desenho normal: para desvirar, basta tirar esta regra. */
+.site-header .lang-bandeira-invertida {
+  transform: rotate(180deg);
+}
+
 @media (min-width: 721px) {
   html.fonte-ampliada .site-header {
     grid-template-columns: 68px minmax(0, 1fr);

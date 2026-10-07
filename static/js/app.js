@@ -18,6 +18,7 @@ import {
 } from "./execucao.js";
 import { iniciarAbas } from "./abas-direita.js";
 import { acaoDoAtalho } from "./atalhos.js";
+import { iniciarCopiarCodigo } from "./copiar-codigo.js";
 import { rolarFluxoParaNoAtivo } from "./fluxo.js";
 import { fluxoEmTelaCheia, sairDaTelaCheia } from "./fluxo-tela-cheia.js";
 import {
@@ -296,3 +297,4 @@ aplicarFonte();
 aplicarIdioma();
 atualizarEntradaDinamica();
 iniciarTraducaoCodigo();
+iniciarCopiarCodigo({ obterCodigo: () => editor.getValue(), traduzir });

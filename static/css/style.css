@@ -102,6 +102,7 @@ header img {
 .btn-entrada:focus-visible,
 .btn-recolher:focus-visible,
 .btn-tela-cheia:focus-visible,
+.btn-copiar:focus-visible,
 .aba:focus-visible,
 .top-nav a:focus-visible,
 .exemplos-row select:focus-visible,
@@ -201,7 +202,8 @@ button i,
   gap: 8px;
 }
 .btn-recolher,
-.btn-tela-cheia {
+.btn-tela-cheia,
+.btn-copiar {
   width: 32px;
   height: 32px;
   flex: 0 0 auto;
@@ -217,13 +219,41 @@ button i,
     border-color 0.2s;
 }
 .btn-recolher:hover,
-.btn-tela-cheia:hover {
+.btn-tela-cheia:hover,
+.btn-copiar:hover {
   background: #dbeafe;
   border-color: #2563eb;
 }
 .btn-recolher i,
-.btn-tela-cheia i {
+.btn-tela-cheia i,
+.btn-copiar i {
   margin: 0;
+}
+/* resultado da cópia: o botão e o aviso ao lado dele mudam de cor por alguns segundos */
+.btn-copiar[data-estado="copiado"] {
+  background: #f0fdf4;
+  border-color: #86efac;
+  color: #166534;
+}
+.copiar-aviso {
+  color: #475569;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: nowrap;
+}
+.copiar-aviso:empty {
+  display: none;
+}
+.copiar-aviso[data-estado="copiado"] {
+  color: #166534;
+}
+.copiar-aviso[data-estado="vazio"] {
+  color: #92400e;
+}
+.copiar-aviso[data-estado="falhou"] {
+  color: #b91c1c;
 }
 /* o display do botão anularia o atributo hidden */
 .btn-tela-cheia[hidden],
@@ -1265,7 +1295,8 @@ body.tema-escuro .btn-access,
 body.tema-escuro .btn-limpar,
 body.tema-escuro .btn-traduzir,
 body.tema-escuro .btn-recolher,
-body.tema-escuro .btn-tela-cheia {
+body.tema-escuro .btn-tela-cheia,
+body.tema-escuro .btn-copiar {
   background: #1e293b;
   color: #dbeafe;
   border-color: #475569;
@@ -1274,9 +1305,27 @@ body.tema-escuro .btn-access:hover,
 body.tema-escuro .btn-limpar:hover,
 body.tema-escuro .btn-traduzir:hover,
 body.tema-escuro .btn-recolher:hover,
-body.tema-escuro .btn-tela-cheia:hover {
+body.tema-escuro .btn-tela-cheia:hover,
+body.tema-escuro .btn-copiar:hover {
   background: #334155;
   border-color: #60a5fa;
+}
+body.tema-escuro .btn-copiar[data-estado="copiado"] {
+  background: #14532d;
+  border-color: #4ade80;
+  color: #bbf7d0;
+}
+body.tema-escuro .copiar-aviso {
+  color: #cbd5e1;
+}
+body.tema-escuro .copiar-aviso[data-estado="copiado"] {
+  color: #86efac;
+}
+body.tema-escuro .copiar-aviso[data-estado="vazio"] {
+  color: #fcd34d;
+}
+body.tema-escuro .copiar-aviso[data-estado="falhou"] {
+  color: #fca5a5;
 }
 body.tema-escuro .btn-traduzir.ativo {
   background: #1e3a5f;
@@ -1391,7 +1440,8 @@ body {
   }
 
   .btn-recolher,
-  .btn-tela-cheia {
+  .btn-tela-cheia,
+  .btn-copiar {
     padding: 0 !important;
   }
 
@@ -1943,7 +1993,8 @@ body.tema-escuro .aba[aria-pressed="true"] {
     padding: 6px 12px;
   }
   .btn-recolher,
-  .btn-tela-cheia {
+  .btn-tela-cheia,
+  .btn-copiar {
     width: 26px;
     height: 26px;
   }

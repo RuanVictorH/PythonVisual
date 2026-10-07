@@ -37,7 +37,11 @@
         <div class="card" id="codigo-card">
           <div class="card-header">
             <span class="card-header-title"><i class="fa-solid fa-terminal"></i><span data-i18n="section.code">Código</span></span>
-            <button class="btn-recolher" type="button" data-tip="collapse" onclick="alternarCard('codigo-card')" aria-expanded="true" aria-controls="codigo-corpo"><i class="fa-solid fa-chevron-up" aria-hidden="true"></i></button>
+            <span class="card-header-acoes">
+              <span class="copiar-aviso" id="copiar-aviso" role="status" aria-live="polite"></span>
+              <button class="btn-copiar" id="btn-copiar" type="button" data-tip="copyCode" aria-label="Copiar código" data-i18n-aria="code.copy"><i class="fa-regular fa-copy" aria-hidden="true"></i></button>
+              <button class="btn-recolher" type="button" data-tip="collapse" onclick="alternarCard('codigo-card')" aria-expanded="true" aria-controls="codigo-corpo"><i class="fa-solid fa-chevron-up" aria-hidden="true"></i></button>
+            </span>
           </div>
           <div class="card-body" id="codigo-corpo">
             <div class="exemplos-row">

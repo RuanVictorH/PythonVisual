@@ -20,6 +20,7 @@ Protótipo didático inspirado no Python Tutor para visualizar a execução de c
 - Atalhos de teclado novos: **Ctrl+Delete** limpa, **Alt+T** liga e desliga a tradução e, na tela cheia do fluxograma, as setas, **Home** e **End** navegam pelos passos (veja [Atalhos de teclado](#atalhos-de-teclado)).
 - Bandeiras do Brasil e do Reino Unido ao lado de **PT** e **EN** no seletor de idioma, em todas as páginas.
 - As dicas dos botões **A-** e **A+** mostram o zoom atual da página, em porcentagem (de 60% a 180%).
+- Botão de copiar no cabeçalho do card **Código**: copia todo o código do editor e avisa ao lado do botão quando terminou. Sem a API de área de transferência do navegador (página aberta por http fora do localhost), usa um campo escondido para copiar; com o editor vazio só avisa que não há nada para copiar.
 
 ## Requisitos
 

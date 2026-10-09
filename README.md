@@ -22,6 +22,7 @@ Protótipo didático inspirado no Python Tutor para visualizar a execução de c
 - As dicas dos botões **A-** e **A+** mostram o zoom atual da página, em porcentagem (de 60% a 180%).
 - Botão de copiar no cabeçalho do card **Código**: copia todo o código do editor e avisa ao lado do botão quando terminou. Sem a API de área de transferência do navegador (página aberta por http fora do localhost), usa um campo escondido para copiar; com o editor vazio só avisa que não há nada para copiar.
 - Tradução de código revisada: `round` vira `arredonda` e outras funções ganham tradução (`max`, `min`, `sum`...), `not in`, `is`, `x = y = 0` e `;` passam a sair certos, e `with`, `assert`, `del`, `global`, `yield`, decoradores e chamadas como `notas.append(5.5)` ganham dica (veja [Tradução de código](#tradução-de-código)).
+- Teclas da tela cheia do fluxograma com ícones: cada atalho do cabeçalho aparece como uma tecla ao lado do ícone da ação (avançar, voltar, início, fim e sair da tela cheia), nos dois idiomas e nos dois temas (veja [Fluxograma](#fluxograma)).
 
 ## Requisitos
 
@@ -80,7 +81,7 @@ Ao executar um código, a aba **Fluxograma** (ao lado de **Visualização**) des
 - A estrutura é montada com o módulo `ast` dentro do sandbox (`fluxo_builder.py`), então o código do usuário nunca é interpretado fora do container. A resposta de `/executar` continua sendo uma lista de passos; o fluxograma vai na chave `fluxo` do primeiro elemento.
 - `match`, `async` e geradores aparecem simplificados, como um único bloco. Programas grandes têm o fluxograma resumido, e execuções interrompidas por timeout ou com erro de sintaxe não exibem o fluxograma (a aba fica desabilitada).
 - A legenda das formas e das marcas só aparece na tela cheia, onde há espaço para ela.
-- O botão de tela cheia, no cabeçalho do painel, abre o fluxograma ocupando a tela inteira, o que ajuda em códigos que crescem na horizontal. Lá dentro, **Espaço** ou **→** avançam um passo, **←** volta um passo, **Home** e **End** vão ao primeiro e ao último passo, **Esc** (ou o mesmo botão) sai, e o cabeçalho mostra o passo atual e essas teclas. As setas deixam de rolar o diagrama: para ver a parte que não cabe na tela use a roda do mouse, as barras de rolagem ou o toque. Se a execução chegar a um `input()`, a tela cheia fecha sozinha para você digitar o valor. A lógica fica em `static/js/fluxo-tela-cheia.js`, e o botão não aparece em navegadores sem suporte a tela cheia (como o Safari do iPhone).
+- O botão de tela cheia, no cabeçalho do painel, abre o fluxograma ocupando a tela inteira, o que ajuda em códigos que crescem na horizontal. Lá dentro, **Espaço** ou **→** avançam um passo, **←** volta um passo, **Home** e **End** vão ao primeiro e ao último passo, **Esc** (ou o mesmo botão) sai, e o cabeçalho mostra o passo atual e essas teclas, cada uma ao lado do ícone da ação (avançar, voltar, início, fim e sair); em janelas estreitas os atalhos descem para uma segunda linha. As setas deixam de rolar o diagrama: para ver a parte que não cabe na tela use a roda do mouse, as barras de rolagem ou o toque. Se a execução chegar a um `input()`, a tela cheia fecha sozinha para você digitar o valor. A lógica fica em `static/js/fluxo-tela-cheia.js`, e o botão não aparece em navegadores sem suporte a tela cheia (como o Safari do iPhone).
 
 Configuração em `env.conf`:
 

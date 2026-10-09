@@ -1496,6 +1496,9 @@ body {
   --fluxo-executado-borda: #047857;
   --fluxo-executado-texto: #052e16;
   --fluxo-visitado-marca: #1d4ed8;
+  --fluxo-tecla-fundo: #ffffff;
+  --fluxo-tecla-borda: #94a3b8;
+  --fluxo-tecla-texto: #17324d;
 }
 body.tema-escuro .fluxo-card {
   --fluxo-aresta: #94a3b8;
@@ -1526,6 +1529,9 @@ body.tema-escuro .fluxo-card {
   --fluxo-executado-borda: #34d399;
   --fluxo-executado-texto: #dcfce7;
   --fluxo-visitado-marca: #60a5fa;
+  --fluxo-tecla-fundo: #0f172a;
+  --fluxo-tecla-borda: #64748b;
+  --fluxo-tecla-texto: #e2e8f0;
 }
 .fluxo-barra {
   display: flex;
@@ -1678,8 +1684,10 @@ body.tema-escuro .fluxo-card {
 .fluxo-card.em-tela-cheia .fluxo-dica-teclado {
   display: inline-flex;
   flex: 1 1 18rem;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
+  row-gap: 0.3rem;
   min-width: 0;
   text-align: center;
   text-transform: none;
@@ -1693,6 +1701,32 @@ body.tema-escuro .fluxo-card {
     order: 1;
     flex-basis: 100%;
   }
+}
+/* Atalhos da dica: cada um tem a tecla, o ícone da ação e o rótulo traduzido */
+.fluxo-dica-teclado .atalho {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0 0.5rem;
+  white-space: nowrap;
+}
+/* sem a margem que .card-header i dá aos ícones dos títulos */
+.fluxo-dica-teclado .atalho i {
+  margin-right: 0;
+  color: var(--fluxo-visitado-marca);
+}
+.fluxo-dica-teclado kbd {
+  min-width: 1.7em;
+  padding: 0.1em 0.5em;
+  border: 1px solid var(--fluxo-tecla-borda);
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  background: var(--fluxo-tecla-fundo);
+  color: var(--fluxo-tecla-texto);
+  font: inherit;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  text-align: center;
 }
 .fluxo-card.em-tela-cheia .fluxo-passo {
   display: inline-block;

@@ -22,6 +22,7 @@ Protótipo didático inspirado no Python Tutor para visualizar a execução de c
 - As dicas dos botões **A-** e **A+** mostram o zoom atual da página, em porcentagem (de 60% a 180%).
 - Botão de copiar no cabeçalho do card **Código**: copia todo o código do editor e avisa ao lado do botão quando terminou. Sem a API de área de transferência do navegador (página aberta por http fora do localhost), usa um campo escondido para copiar; com o editor vazio só avisa que não há nada para copiar.
 - Tradução de código revisada: `round` vira `arredonda` e outras funções ganham tradução (`max`, `min`, `sum`...), `not in`, `is`, `x = y = 0` e `;` passam a sair certos, e `with`, `assert`, `del`, `global`, `yield`, decoradores e chamadas como `notas.append(5.5)` ganham dica (veja [Tradução de código](#tradução-de-código)).
+- Sair do editor pelo teclado: o **Esc** seguido de **Tab** (ou **Shift+Tab**) leva o foco ao próximo (ou ao anterior) controle, já que no editor o **Tab** sozinho recua o código; o contorno de foco ficou mais escuro no tema claro (3:1 ou mais de contraste) e o editor ganhou um contorno quando está com o foco (veja [Atalhos de teclado](#atalhos-de-teclado)).
 - Teclas da tela cheia do fluxograma com ícones: cada atalho do cabeçalho aparece como uma tecla ao lado do ícone da ação (avançar, voltar, início, fim e sair da tela cheia), nos dois idiomas e nos dois temas (veja [Fluxograma](#fluxograma)).
 
 ## Requisitos
@@ -126,11 +127,13 @@ O botão **Traduzir**, ao lado de **Limpar** no card **Código**, liga e desliga
 | `←` | Volta um passo. |
 | `Home` e `End` | Vão ao primeiro e ao último passo. |
 | `Esc` | Põe o foco no editor; na tela cheia do fluxograma, sai da tela cheia. |
+| `Esc` e depois `Tab` (ou `Shift` + `Tab`) | Sai do editor pelo teclado: o foco vai ao próximo (ou ao anterior) controle. Sozinho, o `Tab` recua o código. |
 
 - Fora a exceção do `Ctrl` + `Enter` e do `Alt` + `T`, os atalhos não agem com o foco em campos de texto ou listas, como o campo do `input()`.
 - Na tela cheia do fluxograma só valem as teclas de navegação e o `Esc`: executar, limpar e traduzir ficam inativos, e as setas, o `Home` e o `End` navegam pelos passos mesmo com o foco no diagrama.
+- A saída do editor vale só para o gesto `Esc` e logo depois `Tab`: digitar qualquer outra tecla, sair do editor ou clicar nele desfaz o `Esc`. Um texto escondido, que só o leitor de tela lê, avisa o gesto quando o foco chega ao editor, e o editor vazio mostra a linha na lista de atalhos.
 - O `Ctrl` + `T` não serve para a tradução: o navegador o reserva para abrir uma nova aba e a página nunca recebe a tecla.
-- As regras ficam em `static/js/atalhos.js`, sem depender do navegador, e a ligação com a página em `static/js/app.js`.
+- As regras ficam em `static/js/atalhos.js`, sem depender do navegador, e a ligação com a página em `static/js/app.js`. A regra da saída do editor fica em `static/js/saida-do-editor.js`, ligada ao CodeMirror em `static/js/editor.js`.
 
 ## Testes
 

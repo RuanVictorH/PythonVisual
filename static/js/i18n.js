@@ -6,7 +6,9 @@ const i18n = {
     "nav.about": "Sobre",
     "nav.limitations": "Limitações",
     "editor.shortcutsPlaceholder":
-      "Atalhos PythonVisual\n\n→ ou Espaço: próximo passo\n←: passo anterior\nHome: início\nEnd: fim\nCtrl + Enter: executar\nCtrl + Delete: limpar\nAlt + T: ligar ou desligar a tradução\nEsc: focar o editor\nR: executar, quando não estiver digitando\nC: limpar, quando não estiver digitando",
+      "Atalhos PythonVisual\n\n→ ou Espaço: próximo passo\n←: passo anterior\nHome: início\nEnd: fim\nCtrl + Enter: executar\nCtrl + Delete: limpar\nAlt + T: ligar ou desligar a tradução\nEsc: focar o editor\nEsc, depois Tab: sair do editor\nR: executar, quando não estiver digitando\nC: limpar, quando não estiver digitando",
+    "editor.exitHint":
+      "Para sair do editor com o teclado, aperte Esc e depois Tab. O Tab sozinho recua o código.",
     "access.fontDown": "Diminuir fonte",
     "access.fontUp": "Aumentar fonte",
     "theme.dark": "Tema escuro",
@@ -263,7 +265,9 @@ const i18n = {
     "nav.about": "About",
     "nav.limitations": "Limitations",
     "editor.shortcutsPlaceholder":
-      "PythonVisual shortcuts\n\n→ or Space: next step\n←: previous step\nHome: start\nEnd: end\nCtrl + Enter: run\nCtrl + Delete: clear\nAlt + T: turn the translation on or off\nEsc: focus the editor\nR: run, when not typing\nC: clear, when not typing",
+      "PythonVisual shortcuts\n\n→ or Space: next step\n←: previous step\nHome: start\nEnd: end\nCtrl + Enter: run\nCtrl + Delete: clear\nAlt + T: turn the translation on or off\nEsc: focus the editor\nEsc, then Tab: leave the editor\nR: run, when not typing\nC: clear, when not typing",
+    "editor.exitHint":
+      "To leave the editor with the keyboard, press Esc and then Tab. Tab alone indents the code.",
     "access.fontDown": "Decrease font size",
     "access.fontUp": "Increase font size",
     "theme.dark": "Dark theme",

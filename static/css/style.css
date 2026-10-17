@@ -1,5 +1,6 @@
 :root {
   --font-scale: 1;
+  --cor-foco: #b45309;
   font-size: calc(16px * var(--font-scale));
 }
 *,
@@ -111,7 +112,7 @@ header img {
 .fluxo-select:focus-visible,
 .btn-fluxo-seguir:focus-visible,
 #slider:focus-visible {
-  outline: 3px solid #f59e0b;
+  outline: 3px solid var(--cor-foco);
   outline-offset: 2px;
 }
 .language-switch {
@@ -312,6 +313,10 @@ button i,
   font-family: "Fira Mono", "Courier New", monospace;
   background: #f8fafc;
   color: #0f172a;
+}
+.CodeMirror-focused {
+  outline: 3px solid var(--cor-foco);
+  outline-offset: 2px;
 }
 .CodeMirror-gutters {
   background: #eef2f7;
@@ -1107,6 +1112,7 @@ button i,
   margin-bottom: 8px;
 }
 body.tema-escuro {
+  --cor-foco: #f59e0b;
   background: #0f172a;
   color: #e2e8f0;
 }

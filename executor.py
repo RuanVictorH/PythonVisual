@@ -459,6 +459,10 @@ def registrar_passo(frame, evento, erro_ocorrido=None, valor_retorno=SEM_RETORNO
     if frame.f_code.co_filename != ARQUIVO_USUARIO:
         return
 
+    # programa sem instrucoes: o CPython dispara um 'line' na linha 0, que o editor nao tem
+    if frame.f_lineno == 0:
+        return
+
     if len(execucoes) >= limite_passos:
         controle_interno_em_desenrolamento = True
         raise LimiteDePassos()

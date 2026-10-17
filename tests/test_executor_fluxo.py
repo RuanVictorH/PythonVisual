@@ -104,6 +104,33 @@ class RoteiroDeExecucao:
         self.assertNotIn("fluxo", r[0])
         self.assertIn("SyntaxError", r[-1]["erro"])
 
+    def test_programa_sem_instrucoes_so_tem_o_passo_final(self):
+        # Sem instrucoes o CPython dispara um evento 'line' na linha 0, que o editor nao tem
+        # (o frontend converte a linha em indice com linha - 1). Esse evento nao vira passo.
+        casos = {
+            "vazio": "",
+            "so_quebras_de_linha": "\n\n",
+            "so_espacos": "   \n  ",
+            "so_comentario": "# nada para executar\n",
+        }
+        for nome, codigo in casos.items():
+            with self.subTest(caso=nome):
+                passos = self.rodar(codigo)
+                self.assertEqual([p["evento"] for p in passos], ["fim"])
+                self.assertIsNone(passos[0]["linha"])
+                self.assertIn("fluxo", passos[0])
+
+    def test_programa_com_instrucoes_continua_gerando_o_passo_de_linha(self):
+        casos = {
+            "atribuicao": ("x = 1\n", [("line", 1), ("fim", None)]),
+            "so_docstring": ('"""modulo"""\n', [("line", 1), ("fim", None)]),
+            "comentario_antes": ("# oi\nx = 1\n", [("line", 2), ("fim", None)]),
+        }
+        for nome, (codigo, esperado) in casos.items():
+            with self.subTest(caso=nome):
+                passos = self.rodar(codigo)
+                self.assertEqual([(p["evento"], p["linha"]) for p in passos], esperado)
+
     def test_config_invalida_gera_fluxo_nulo_sem_quebrar_o_trace(self):
         r = self.rodar("x = 1\n", fluxo_maximo_nos="x")
         self.assertIn("fluxo", r[0])

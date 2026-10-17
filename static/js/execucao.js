@@ -117,17 +117,22 @@ export function resetarExecucaoVisual() {
   atualizarBotoes();
 }
 
+// O editor começa na linha 1: a linha 0 vira o índice -1, que o CodeMirror recusa.
+function linhaValida(linha) {
+  return Number.isInteger(linha) && linha >= 1;
+}
+
 export function linhaExecutadaAtual() {
   const passoAtual = passos[indiceAtual];
   if (
     passoAtual &&
     (passoAtual.evento === "return" || passoAtual.evento === "exception") &&
-    Number.isInteger(passoAtual.linha)
+    linhaValida(passoAtual.linha)
   ) {
     return passoAtual.linha - 1;
   }
   for (let i = indiceAtual - 1; i >= 0; i--) {
-    if (Number.isInteger(passos[i].linha))
+    if (linhaValida(passos[i].linha))
       return passos[i].linha - 1;
   }
   return null;
@@ -138,13 +143,13 @@ export function linhaProximaAtual() {
   if (
     passoAtual &&
     (passoAtual.evento === "line" || passoAtual.evento === "input_pendente") &&
-    Number.isInteger(passoAtual.linha)
+    linhaValida(passoAtual.linha)
   ) {
     return passoAtual.linha - 1;
   }
   if (passoAtual && passoAtual.evento === "exception") {
     for (let i = indiceAtual + 1; i < passos.length; i++) {
-      if (passos[i].evento === "line" && Number.isInteger(passos[i].linha)) {
+      if (passos[i].evento === "line" && linhaValida(passos[i].linha)) {
         return passos[i].linha - 1;
       }
       if (passos[i].erro)

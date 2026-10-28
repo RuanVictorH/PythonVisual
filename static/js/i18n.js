@@ -1,7 +1,7 @@
 const i18n = {
   pt: {
     title: "PythonVisual",
-    "nav.home": "Home",
+    "nav.home": "Principal",
     "nav.visualizer": "Visualizador",
     "nav.about": "Sobre",
     "nav.limitations": "Limitações",

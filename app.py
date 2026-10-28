@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, jsonify, render_template, request, send_from_directory
 
 from auditoria import registrar_execucao
 from executor import executar_codigo
@@ -28,6 +28,14 @@ def sobre():
 @app.route("/limitacoes")
 def limitacoes():
     return render_template("limitacoes.html")
+
+
+@app.route("/favicon.ico")
+def favicon():
+    # os navegadores pedem este caminho sozinhos, mesmo sem o <link> da página
+    return send_from_directory(
+        os.path.join(app.static_folder, "img"), "favicon.ico", mimetype="image/vnd.microsoft.icon"
+    )
 
 
 @app.route("/executar", methods=["POST"])

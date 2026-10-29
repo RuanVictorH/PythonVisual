@@ -1,4 +1,5 @@
 import json
+import os
 import subprocess
 import sys
 import tempfile
@@ -25,7 +26,15 @@ TEMPO_LIMITE_SEGUNDOS = int(CONFIG.get("TEMPO_LIMITE_SEGUNDOS", 3))
 LIMITE_PASSOS = int(CONFIG.get("LIMITE_PASSOS", 1000))
 LIMITE_RECURSAO = int(CONFIG.get("LIMITE_RECURSAO", 200))
 TAMANHO_MAXIMO_OBJETO = int(CONFIG.get("TAMANHO_MAXIMO_OBJETO", 50))
+TAMANHO_MAXIMO_REPR = int(CONFIG.get("TAMANHO_MAXIMO_REPR", 120))
 TAMANHO_MAXIMO_SAIDA = int(CONFIG.get("TAMANHO_MAXIMO_SAIDA", 20000))
+
+# Limites da requisicao: o servidor recusa o que passar deles antes de abrir um container.
+TAMANHO_MAXIMO_CODIGO = int(CONFIG.get("TAMANHO_MAXIMO_CODIGO", 20000))
+TAMANHO_MAXIMO_ENTRADA = int(CONFIG.get("TAMANHO_MAXIMO_ENTRADA", 10000))
+TAMANHO_MAXIMO_REQUISICAO = int(CONFIG.get("TAMANHO_MAXIMO_REQUISICAO", 256 * 1024))
+
+AMBIENTE_PRODUCAO = os.environ.get("PYTHONVISUAL_ENV", "").strip().lower() == "production"
 
 USAR_SANDBOX_DOCKER = CONFIG.get("USAR_SANDBOX_DOCKER", "true").strip().lower() != "false"
 SANDBOX_IMAGEM = CONFIG.get("SANDBOX_IMAGEM", "pythonvisual-sandbox:latest")
@@ -37,6 +46,18 @@ SANDBOX_DOCKERFILE_DIR = Path(__file__).with_name("docker")
 USAR_FLUXOGRAMA = CONFIG.get("USAR_FLUXOGRAMA", "true").strip().lower() != "false"
 FLUXO_MAXIMO_NOS = int(CONFIG.get("FLUXO_MAXIMO_NOS", 150))
 FLUXO_TAMANHO_MAXIMO_TEXTO = int(CONFIG.get("FLUXO_TAMANHO_MAXIMO_TEXTO", 100))
+
+
+def validar_modo_de_execucao():
+    # Sem o sandbox o codigo dos usuarios roda na propria maquina do servidor.
+    if AMBIENTE_PRODUCAO and not USAR_SANDBOX_DOCKER:
+        raise RuntimeError(
+            "USAR_SANDBOX_DOCKER=false não é permitido quando PYTHONVISUAL_ENV=production: "
+            "o código dos usuários rodaria na própria máquina do servidor."
+        )
+
+
+validar_modo_de_execucao()
 
 
 def _carregar_fluxo_fonte():
@@ -62,6 +83,8 @@ referencias_objetos = {}
 proxima_referencia_objeto = 1
 ordem_importacoes = {}
 SEM_RETORNO = object()
+limite_objeto = 50
+limite_repr = 120
 
 
 class LimiteDePassos(Exception):
@@ -76,7 +99,9 @@ class EntradaPendente(Exception):
         self.frame = frame
 
 
-def repr_seguro(valor, limite=120):
+def repr_seguro(valor, limite=None):
+    if limite is None:
+        limite = limite_repr
     try:
         texto = repr(valor)
     except Exception as exc:
@@ -103,7 +128,9 @@ def obter_referencia_objeto(valor):
     return referencias_objetos[identificador]
 
 
-def serializar_sequencia(valores, limite=50):
+def serializar_sequencia(valores, limite=None):
+    if limite is None:
+        limite = limite_objeto
     itens = [serializar_item_objeto(item) for item in list(valores)[:limite]]
     return {
         "elementos": itens,
@@ -150,7 +177,9 @@ def obter_ordem_importacoes(codigo):
     return resultado
 
 
-def listar_metodos_classe(classe, limite=50):
+def listar_metodos_classe(classe, limite=None):
+    if limite is None:
+        limite = limite_objeto
     metodos = []
     for nome, item in list(vars(classe).items()):
         tipo_metodo = "metodo"
@@ -281,7 +310,7 @@ def serializar_variavel(valor, nome_variavel=None):
     if isinstance(valor, dict):
         pares = []
         for indice, (chave, item) in enumerate(valor.items()):
-            if indice >= 50:
+            if indice >= limite_objeto:
                 break
             pares.append({
                 "chave": serializar_item_objeto(chave),
@@ -292,13 +321,13 @@ def serializar_variavel(valor, nome_variavel=None):
             "tipo": "dict",
             "referencia": obter_referencia_objeto(valor),
             "pares": pares,
-            "truncado": len(valor) > 50
+            "truncado": len(valor) > limite_objeto
         }
 
     if hasattr(valor, "__dict__") and getattr(type(valor), "__module__", "") == "__main__":
         atributos = []
         for indice, (nome, item) in enumerate(vars(valor).items()):
-            if indice >= 50:
+            if indice >= limite_objeto:
                 break
             atributos.append({
                 "nome": nome,
@@ -309,7 +338,7 @@ def serializar_variavel(valor, nome_variavel=None):
             "tipo": tipo,
             "referencia": obter_referencia_objeto(valor),
             "atributos": atributos,
-            "truncado": len(vars(valor)) > 50,
+            "truncado": len(vars(valor)) > limite_objeto,
             "repr": repr_seguro(valor)
         }
 
@@ -386,7 +415,7 @@ def serializar_pilha(frame):
                         "exibir_valor": nome not in ("self", "cls")
                     }
                     if argumento["exibir_valor"]:
-                        argumento["valor"] = repr_seguro(atual.f_locals[nome], limite=70)
+                        argumento["valor"] = repr_seguro(atual.f_locals[nome], limite=min(70, limite_repr))
                     argumentos.append(argumento)
             pilha.append({
                 "escopo": escopo if escopo != "<module>" else "Global",
@@ -410,6 +439,8 @@ entradas_payload = payload.get("entradas")
 limite_passos = int(payload.get("limite_passos", 1000))
 limite_recursao = int(payload.get("limite_recursao", 200))
 tamanho_maximo_saida = int(payload.get("tamanho_maximo_saida", 20000))
+limite_objeto = int(payload.get("tamanho_maximo_objeto", 50))
+limite_repr = int(payload.get("tamanho_maximo_repr", 120))
 ordem_importacoes = obter_ordem_importacoes(codigo)
 
 # Fluxograma: montado antes de rodar o codigo do usuario. Sem chave = codigo invalido;
@@ -684,6 +715,8 @@ def executar_codigo(
     limite_passos=LIMITE_PASSOS,
     limite_recursao=LIMITE_RECURSAO,
     tamanho_maximo_saida=TAMANHO_MAXIMO_SAIDA,
+    tamanho_maximo_objeto=TAMANHO_MAXIMO_OBJETO,
+    tamanho_maximo_repr=TAMANHO_MAXIMO_REPR,
     gerar_fluxo=USAR_FLUXOGRAMA,
     fluxo_maximo_nos=FLUXO_MAXIMO_NOS,
     fluxo_tamanho_maximo_texto=FLUXO_TAMANHO_MAXIMO_TEXTO,
@@ -696,6 +729,8 @@ def executar_codigo(
             "limite_passos": limite_passos,
             "limite_recursao": limite_recursao,
             "tamanho_maximo_saida": tamanho_maximo_saida,
+            "tamanho_maximo_objeto": tamanho_maximo_objeto,
+            "tamanho_maximo_repr": tamanho_maximo_repr,
             "gerar_fluxo": gerar_fluxo,
             "fluxo_maximo_nos": fluxo_maximo_nos,
             "fluxo_tamanho_maximo_texto": fluxo_tamanho_maximo_texto,
@@ -784,7 +819,8 @@ def executar_codigo(
                 )
             return [
                 {
-                    "erro": f"TempoLimite: execução interrompida após {tempo_limite} segundos.",
+                    # o valor real: no Docker o limite do processo inclui a folga de abertura
+                    "erro": f"TempoLimite: execução interrompida após {tempo_limite_processo} segundos.",
                     "saida": "",
                 }
             ]

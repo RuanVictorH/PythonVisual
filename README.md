@@ -5,7 +5,7 @@ Protótipo didático inspirado no Python Tutor para visualizar a execução de c
 ## Melhorias desta versão
 
 - Execução do código em subprocesso, evitando travar o servidor Flask.
-- Timeout de 3 segundos para interromper loops infinitos ou execuções longas.
+- Timeout de 3 segundos para interromper loops infinitos ou execuções longas (no Docker, o processo ganha 5 segundos de folga para abrir o container, e a mensagem de erro informa o valor total, 8 segundos).
 - Limite de 1000 passos de rastreamento por execução.
 - Campo de entrada padrão para códigos que usam `input()`.
 - Evento final de execução para mostrar o estado depois da última linha.
@@ -158,3 +158,24 @@ O código Python enviado pelos usuários é executado dentro de um **container D
 Isso impede que o código executado leia ou modifique o código-fonte do projeto, acesse a rede ou consuma recursos além do previsto — mesmo em um deploy acessível pela internet.
 
 Se o Docker não estiver disponível, a execução é recusada com um erro claro em vez de cair silenciosamente para um modo inseguro. Para desenvolvimento local sem Docker, é possível desativar o sandbox definindo `USAR_SANDBOX_DOCKER=false` em `env.conf` — **isso não deve ser usado em produção**, pois volta a executar o código diretamente na máquina host.
+
+### Ambiente de produção
+
+Ao implantar o sistema, defina a variável de ambiente `PYTHONVISUAL_ENV=production`. Com ela, os dois modos de desenvolvimento perigosos são recusados na inicialização, com uma mensagem de erro:
+
+- `USAR_SANDBOX_DOCKER=false` (o código dos usuários rodaria na própria máquina do servidor);
+- o depurador do Flask, ligado por `PYTHONVISUAL_DEBUG=true` ou por `FLASK_DEBUG=1` (ele executa código no servidor).
+
+Sem a variável, nada muda: ela só vale para quem a define.
+
+### Limites da requisição
+
+O servidor recusa, com o status 413 e antes de abrir um container, o que passar destes limites (todos ajustáveis em `env.conf`):
+
+| Chave | Padrão | Efeito |
+| --- | --- | --- |
+| `TAMANHO_MAXIMO_REQUISICAO` | `262144` | Tamanho máximo do corpo da requisição, em bytes. |
+| `TAMANHO_MAXIMO_CODIGO` | `20000` | Máximo de caracteres do código (o mesmo teto do código guardado no log de auditoria). |
+| `TAMANHO_MAXIMO_ENTRADA` | `10000` | Máximo de caracteres de cada valor digitado para o `input()`. |
+
+Os limites de exibição `TAMANHO_MAXIMO_OBJETO` (`50`, itens mostrados de cada lista, dicionário, conjunto ou objeto) e `TAMANHO_MAXIMO_REPR` (`120`, caracteres de cada valor mostrado) também valem no executor.

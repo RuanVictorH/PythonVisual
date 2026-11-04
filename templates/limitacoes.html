@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Limitações - PythonVisual</title>
+    <title data-i18n="limitations.pageTitle">Limitações - PythonVisual</title>
     {% include "_favicon.html" %}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -194,271 +194,88 @@
     <main>
       <section class="grid">
         <article class="card intro">
-          <h2><i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i><span data-i18n="intro.title">Explicação da ferramenta e limitações</span></h2>
-          <p data-i18n="intro.text">O PythonVisual executa um único trecho de código Python em ambiente isolado, captura os passos com rastreamento de execução e transforma o estado interno em uma visualização didática. Ele é adequado para exemplos pequenos e médios de lógica, estruturas de dados e funções.</p>
+          <h2><i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i><span data-i18n="limitations.intro.title">Explicação da ferramenta e limitações</span></h2>
+          <p data-i18n="limitations.intro.text">O PythonVisual executa um único trecho de código Python em ambiente isolado, captura os passos com rastreamento de execução e transforma o estado interno em uma visualização didática. Ele é adequado para exemplos pequenos e médios de lógica, estruturas de dados e funções.</p>
         </article>
 
         <article class="card">
-          <h3><i class="fa-solid fa-box-open" aria-hidden="true"></i><span>Imports</span></h3>
+          <h3><i class="fa-solid fa-box-open" aria-hidden="true"></i><span data-i18n="limitations.imports.title">Imports</span></h3>
           <ul>
-            <li data-i18n="imports.item1">Imports da biblioteca padrão podem funcionar quando disponíveis no ambiente Python.</li>
-            <li data-i18n="imports.item2">Bibliotecas externas não instaladas no ambiente não serão carregadas.</li>
-            <li data-i18n="imports.item3">Importações pesadas, gráficas ou que dependem de sistema operacional podem falhar.</li>
+            <li data-i18n="limitations.imports.item1">Imports da biblioteca padrão podem funcionar quando disponíveis no ambiente Python.</li>
+            <li data-i18n="limitations.imports.item2">Bibliotecas externas não instaladas no ambiente não serão carregadas.</li>
+            <li data-i18n="limitations.imports.item3">Importações pesadas, gráficas ou que dependem de sistema operacional podem falhar.</li>
           </ul>
         </article>
 
         <article class="card">
-          <h3><i class="fa-solid fa-file-circle-xmark" aria-hidden="true"></i><span data-i18n="files.title">Múltiplos arquivos</span></h3>
+          <h3><i class="fa-solid fa-file-circle-xmark" aria-hidden="true"></i><span data-i18n="limitations.files.title">Múltiplos arquivos</span></h3>
           <ul>
-            <li data-i18n="files.item1">A ferramenta executa apenas o código digitado no editor.</li>
-            <li data-i18n="files.item2">Não há suporte para projetos com vários arquivos, pacotes locais ou leitura de módulos criados pelo usuário.</li>
-            <li data-i18n="files.item3">O foco é ensino de fluxo e memória, não simulação completa de um projeto Python.</li>
+            <li data-i18n="limitations.files.item1">A ferramenta executa apenas o código digitado no editor.</li>
+            <li data-i18n="limitations.files.item2">Não há suporte para projetos com vários arquivos, pacotes locais ou leitura de módulos criados pelo usuário.</li>
+            <li data-i18n="limitations.files.item3">O foco é ensino de fluxo e memória, não simulação completa de um projeto Python.</li>
           </ul>
         </article>
 
         <article class="card">
-          <h3><i class="fa-solid fa-right-left" aria-hidden="true"></i><span data-i18n="io.title">Entrada e saída</span></h3>
+          <h3><i class="fa-solid fa-right-left" aria-hidden="true"></i><span data-i18n="limitations.io.title">Entrada e saída</span></h3>
           <ul>
-            <li data-i18n="io.item1">O comando de entrada solicita um valor por vez, conforme a linha em execução.</li>
-            <li data-i18n="io.item2">A saída exibida considera principalmente chamadas de print().</li>
-            <li data-i18n="io.item3">Programas interativos longos não são o cenário ideal.</li>
+            <li data-i18n="limitations.io.item1">O comando de entrada solicita um valor por vez, conforme a linha em execução.</li>
+            <li data-i18n="limitations.io.item2">A saída exibida considera principalmente chamadas de print().</li>
+            <li data-i18n="limitations.io.item3">Programas interativos longos não são o cenário ideal.</li>
           </ul>
         </article>
 
         <article class="card">
-          <h3><i class="fa-solid fa-shield-halved" aria-hidden="true"></i><span data-i18n="safety.title">Tempo e segurança</span></h3>
+          <h3><i class="fa-solid fa-shield-halved" aria-hidden="true"></i><span data-i18n="limitations.safety.title">Tempo e segurança</span></h3>
           <ul>
-            <li data-i18n="safety.item1">A execução tem limite de tempo para evitar travamentos.</li>
-            <li data-i18n="safety.item2">Loops infinitos são interrompidos por timeout ou limite de passos.</li>
-            <li data-i18n="safety.item4">O código é executado dentro de um container isolado, sem acesso à rede, ao disco do servidor ou a outros processos.</li>
+            <li data-i18n="limitations.safety.item1">A execução tem limite de tempo para evitar travamentos.</li>
+            <li data-i18n="limitations.safety.item2">Loops infinitos são interrompidos por timeout ou limite de passos.</li>
+            <li data-i18n="limitations.safety.item4">O código é executado dentro de um container isolado, sem acesso à rede, ao disco do servidor ou a outros processos.</li>
           </ul>
         </article>
 
         <article class="card">
-          <h3><i class="fa-solid fa-memory" aria-hidden="true"></i><span data-i18n="memory.title">Visualização de memória</span></h3>
+          <h3><i class="fa-solid fa-memory" aria-hidden="true"></i><span data-i18n="limitations.memory.title">Visualização de memória</span></h3>
           <ul>
-            <li data-i18n="memory.item1">Listas, tuplas, conjuntos, dicionários e objetos simples são representados visualmente.</li>
-            <li data-i18n="memory.item2">Objetos complexos podem aparecer resumidos.</li>
-            <li data-i18n="memory.item3">Valores muito grandes são truncados para manter a interface legível.</li>
+            <li data-i18n="limitations.memory.item1">Listas, tuplas, conjuntos, dicionários e objetos simples são representados visualmente.</li>
+            <li data-i18n="limitations.memory.item2">Objetos complexos podem aparecer resumidos.</li>
+            <li data-i18n="limitations.memory.item3">Valores muito grandes são truncados para manter a interface legível.</li>
           </ul>
         </article>
 
         <article class="card">
-          <h3><i class="fa-solid fa-code-branch" aria-hidden="true"></i><span data-i18n="flow.title">Fluxograma</span></h3>
+          <h3><i class="fa-solid fa-code-branch" aria-hidden="true"></i><span data-i18n="limitations.flow.title">Fluxograma</span></h3>
           <ul>
-            <li data-i18n="flow.item1">O fluxograma é gerado a partir do código do editor, com um bloco por linha executável, e destaca o bloco em execução a cada passo.</li>
-            <li data-i18n="flow.item2">Cada função, método e classe tem um fluxograma próprio, exibido automaticamente quando está em execução ou escolhido no seletor.</li>
-            <li data-i18n="flow.item3">Os comandos match e async e os geradores aparecem de forma simplificada, como um único bloco.</li>
-            <li data-i18n="flow.item4">O bloco try/except é desenhado como uma decisão "Ocorreu exceção?" seguida dos tratadores.</li>
-            <li data-i18n="flow.item5">Programas grandes têm o fluxograma resumido (limite de blocos). Execuções interrompidas por timeout ou com erro de sintaxe não exibem fluxograma.</li>
+            <li data-i18n="limitations.flow.item1">O fluxograma é gerado a partir do código do editor, com um bloco por linha executável, e destaca o bloco em execução a cada passo.</li>
+            <li data-i18n="limitations.flow.item2">Cada função, método e classe tem um fluxograma próprio, exibido automaticamente quando está em execução ou escolhido no seletor.</li>
+            <li data-i18n="limitations.flow.item3">Os comandos match e async e os geradores aparecem de forma simplificada, como um único bloco.</li>
+            <li data-i18n="limitations.flow.item4">Programas grandes têm o fluxograma resumido (limite de blocos). Execuções interrompidas por timeout ou com erro de sintaxe não exibem fluxograma.</li>
           </ul>
         </article>
 
         <article class="card">
-          <h3><i class="fa-solid fa-language" aria-hidden="true"></i><span data-i18n="translation.title">Tradução de código</span></h3>
+          <h3><i class="fa-solid fa-language" aria-hidden="true"></i><span data-i18n="limitations.translation.title">Tradução de código</span></h3>
           <ul>
-            <li data-i18n="translation.item1">Com o botão Traduzir ligado, passar o mouse sobre uma linha do editor mostra essa linha em português simples (ou em inglês, conforme o idioma da página).</li>
-            <li data-i18n="translation.item2">A tradução é feita uma linha por vez, sem executar o código e sem olhar as linhas vizinhas.</li>
-            <li data-i18n="translation.item3">Palavras dentro de textos entre aspas e de comentários não são traduzidas.</li>
+            <li data-i18n="limitations.translation.item1">Com o botão Traduzir ligado, passar o mouse sobre uma linha do editor mostra essa linha em português simples (ou em inglês, conforme o idioma da página).</li>
+            <li data-i18n="limitations.translation.item2">A tradução é feita uma linha por vez, sem executar o código e sem olhar as linhas vizinhas. Assim, comandos de múltiplas linhas podem aparecer traduzidos de forma errada.</li>
+            <li data-i18n="limitations.translation.item3">Palavras dentro de textos entre aspas e de comentários não são traduzidas.</li>
             </ul>
         </article>
 
         <article class="card">
-          <h3><i class="fa-solid fa-gears" aria-hidden="true"></i><span data-i18n="advanced.title">Recursos avançados</span></h3>
+          <h3><i class="fa-solid fa-gears" aria-hidden="true"></i><span data-i18n="limitations.advanced.title">Recursos avançados</span></h3>
           <ul>
-            <li data-i18n="advanced.item1">Threads, processos, rede, arquivos e interfaces gráficas não são foco da ferramenta.</li>
-            <li data-i18n="advanced.item2">Decorators, generators e recursos internos avançados podem ser exibidos de forma simplificada.</li>
-            <li data-i18n="advanced.item3">O rastreamento prioriza clareza didática sobre cobertura total da linguagem.</li>
+            <li data-i18n="limitations.advanced.item1">Threads, processos, rede, arquivos e interfaces gráficas não são foco da ferramenta.</li>
+            <li data-i18n="limitations.advanced.item2">Decorators, generators e recursos internos avançados podem ser exibidos de forma simplificada.</li>
+            <li data-i18n="limitations.advanced.item3">O rastreamento prioriza clareza didática sobre cobertura total da linguagem.</li>
           </ul>
         </article>
       </section>
     </main>
     <script>
-      const pageI18n = {
-        pt: {
-          title: "Limitações - PythonVisual",
-          "nav.home": "Principal",
-          "nav.visualizer": "Visualizador",
-          "nav.about": "Sobre",
-          "nav.limitations": "Limitações",
-          "intro.title": "Explicação da ferramenta e limitações",
-          "intro.text":
-            "O PythonVisual executa um único trecho de código Python em ambiente isolado, captura os passos com rastreamento de execução e transforma o estado interno em uma visualização didática. Ele é adequado para exemplos pequenos e médios de lógica, estruturas de dados e funções.",
-          "imports.item1":
-            "Imports da biblioteca padrão podem funcionar quando disponíveis no ambiente Python.",
-          "imports.item2":
-            "Bibliotecas externas não instaladas no ambiente não serão carregadas.",
-          "imports.item3":
-            "Importações pesadas, gráficas ou que dependem de sistema operacional podem falhar.",
-          "files.title": "Múltiplos arquivos",
-          "files.item1": "A ferramenta executa apenas o código digitado no editor.",
-          "files.item2":
-            "Não há suporte para projetos com vários arquivos, pacotes locais ou leitura de módulos criados pelo usuário.",
-          "files.item3":
-            "O foco é ensino de fluxo e memória, não simulação completa de um projeto Python.",
-          "io.title": "Entrada e saída",
-          "io.item1": "solicita um valor por vez, conforme a linha em execução.",
-          "io.item2": "A saída exibida considera principalmente chamadas de print().",
-          "io.item3": "Programas interativos longos não são o cenário ideal.",
-          "safety.title": "Tempo e segurança",
-          "safety.item1": "A execução tem limite de tempo para evitar travamentos.",
-          "safety.item2":
-            "Loops infinitos são interrompidos por timeout ou limite de passos.",
-          "safety.item4":
-            "O código é executado dentro de um container isolado, sem acesso à rede, ao disco do servidor ou a outros processos.",
-          "safety.item3":
-            "Ainda assim, evite depender da ferramenta para executar código de origem desconhecida em ambientes críticos.",
-          "memory.title": "Visualização de memória",
-          "memory.item1":
-            "Listas, tuplas, conjuntos, dicionários e objetos simples são representados visualmente.",
-          "memory.item2": "Objetos complexos podem aparecer resumidos.",
-          "memory.item3":
-            "Valores muito grandes são truncados para manter a interface legível.",
-          "flow.title": "Fluxograma",
-          "flow.item1":
-            "O fluxograma é gerado a partir do código do editor, com um bloco por linha executável, e destaca o bloco em execução a cada passo.",
-          "flow.item2":
-            "Cada função, método e classe tem um fluxograma próprio, exibido automaticamente quando está em execução ou escolhido no seletor.",
-          "flow.item3":
-            "Os comandos match e async e os geradores aparecem de forma simplificada, como um único bloco. O else de for e while é desenhado logo após o laço.",
-          "flow.item4":
-            "O bloco try/except é desenhado como uma decisão \"Ocorreu exceção?\" seguida dos tratadores.",
-          "flow.item5":
-            "Programas grandes têm o fluxograma resumido (limite de blocos). Execuções interrompidas por timeout ou com erro de sintaxe não exibem fluxograma.",
-          "flow.item6":
-            "Na tela cheia só o fluxograma fica à vista (Espaço ou → avança, ← volta, Home e End vão ao início e ao fim, Esc sai). As setas não rolam o diagrama: um diagrama maior que a tela se vê com a roda do mouse, as barras de rolagem ou o toque. O botão não aparece em navegadores sem suporte a tela cheia, como o Safari do iPhone.",
-          "layout.title": "Layout do visualizador",
-          "layout.item1":
-            "A partir de 901 px de largura o visualizador usa duas colunas: código e navegação à esquerda; à direita, as abas Visualização e Fluxograma (uma de cada vez), a entrada do input() e, embaixo, Saída e Pilha de chamadas lado a lado. Em telas mais estreitas tudo fica em uma única coluna.",
-          "layout.item2":
-            "Visualização e Fluxograma crescem com o conteúdo até um limite de altura (cerca de 60% da janela) e depois rolam por dentro. Numa tela baixa, como 1366×768, com saída longa ou pilha funda a faixa Saída | Pilha de chamadas passa do fim da janela e a página rola para chegar ao resto.",
-          "layout.item3":
-            "Saída e Pilha de chamadas também crescem com o conteúdo, até um limite de altura (cerca de 52% da janela), e depois rolam por dentro do card. Os dois cards ficam sempre com a mesma altura.",
-          "layout.item4":
-            "A primeira execução de um programa pequeno cabe inteira em 1366×768. Programas com muitas variáveis, saída longa ou pilha funda pedem rolagem.",
-          "layout.item5":
-            "Para ganhar espaço, o cabeçalho do site fica mais fino e a Navegação vira uma barra sem cabeçalho, que não pode ser recolhida. A legenda do fluxograma só aparece na tela cheia.",
-          "translation.title": "Tradução de código",
-          "translation.item1":
-            "Com o botão Traduzir ligado, passar o mouse sobre uma linha do editor mostra essa linha em português simples (ou em inglês, conforme o idioma da página).",
-          "translation.item2":
-            "A tradução é feita uma linha por vez, sem executar o código e sem olhar as linhas vizinhas. Por isso, em listas, chamadas e textos de várias linhas, uma linha pode ser mal interpretada (um argumento nome=1 sozinho na linha, por exemplo, aparece como atribuição, e o último item de uma lista que é uma chamada, sem vírgula, aparece como “chame ...”).",
-          "translation.item3":
-            "Palavras dentro de textos entre aspas e de comentários não são traduzidas.",
-          "translation.item4":
-            "Cobre os comandos mais comuns (if, for, while, def, class, return, try/except, with, assert, del, global, yield, raise, import, decoradores e atribuições, inclusive em cadeia). Uma linha que é só uma chamada ganha uma frase (notas.append(5.5) vira “adicione 5.5 ao fim de notas”; as demais viram “chame ...”). Dentro das expressões, o português troca palavras (print por escreva, round por arredonda, len por tamanho, and por e, is por é); em inglês as palavras não mudam, porque o código já está em inglês. Os operadores (>=, ==, %) não mudam.",
-          "translation.item5":
-            "A dica aparece só com o mouse e só no editor do card Código; não há versão por teclado ou toque. Ligar e desligar o recurso também pode ser feito pelo teclado, com Alt + T.",
-          "advanced.title": "Recursos avançados",
-          "advanced.item1":
-            "Threads, processos, rede, arquivos e interfaces gráficas não são foco da ferramenta.",
-          "advanced.item2":
-            "Decorators, generators e recursos internos avançados podem ser exibidos de forma simplificada.",
-          "advanced.item3":
-            "O rastreamento prioriza clareza didática sobre cobertura total da linguagem.",
-          "access.fontDown": "Diminuir fonte",
-          "access.fontUp": "Aumentar fonte",
-          "theme.dark": "Tema escuro",
-          "theme.light": "Tema claro",
-        },
-        en: {
-          title: "Limitations - PythonVisual",
-          "nav.home": "Home",
-          "nav.visualizer": "Visualizer",
-          "nav.about": "About",
-          "nav.limitations": "Limitations",
-          "intro.title": "Tool explanation and limitations",
-          "intro.text":
-            "PythonVisual runs a single Python code snippet in an isolated environment, captures execution steps through tracing, and turns the internal state into an educational visualization. It is suitable for small and medium examples of logic, data structures, and functions.",
-          "imports.item1":
-            "Standard-library imports may work when available in the Python environment.",
-          "imports.item2":
-            "External libraries not installed in the environment will not load.",
-          "imports.item3":
-            "Heavy, graphical, or operating-system-dependent imports may fail.",
-          "files.title": "Multiple files",
-          "files.item1": "The tool runs only the code typed in the editor.",
-          "files.item2":
-            "There is no support for multi-file projects, local packages, or reading user-created modules.",
-          "files.item3":
-            "The focus is teaching flow and memory, not fully simulating a Python project.",
-          "io.title": "Input and output",
-          "io.item1": "requests one value at a time, according to the running line.",
-          "io.item2": "Displayed output mainly considers print() calls.",
-          "io.item3": "Long interactive programs are not the ideal scenario.",
-          "safety.title": "Time and safety",
-          "safety.item1": "Execution has a time limit to prevent freezes.",
-          "safety.item2": "Infinite loops are interrupted by timeout or step limit.",
-          "safety.item4":
-            "Code runs inside an isolated container, with no access to the network, the server's disk, or other processes.",
-          "safety.item3":
-            "Even so, avoid relying on the tool to run code from unknown sources in critical environments.",
-          "memory.title": "Memory visualization",
-          "memory.item1":
-            "Lists, tuples, sets, dictionaries, and simple objects are represented visually.",
-          "memory.item2": "Complex objects may appear summarized.",
-          "memory.item3":
-            "Very large values are truncated to keep the interface readable.",
-          "flow.title": "Flowchart",
-          "flow.item1":
-            "The flowchart is generated from the code in the editor, with one block per executable line, and highlights the running block at each step.",
-          "flow.item2":
-            "Each function, method, and class has its own flowchart, shown automatically while it runs or chosen in the selector.",
-          "flow.item3":
-            "The match and async statements and generators appear in a simplified way, as a single block. The else of for and while is drawn right after the loop.",
-          "flow.item4":
-            "A try/except block is drawn as an \"Exception raised?\" decision followed by the handlers.",
-          "flow.item5":
-            "Large programs get a summarized flowchart (block limit). Runs interrupted by a timeout or with a syntax error show no flowchart.",
-          "flow.item6":
-            "In full screen only the flowchart is visible (Space or → goes forward, ← goes back, Home and End jump to the first and last step, Esc exits). The arrow keys do not scroll the diagram: a diagram larger than the screen is reached with the mouse wheel, the scroll bars or touch. The button does not appear in browsers without full-screen support, such as Safari on iPhone.",
-          "layout.title": "Visualizer layout",
-          "layout.item1":
-            "From 901 px of width on, the visualizer uses two columns: code and navigation on the left; on the right, the Visualization and Flowchart tabs (one at a time), the input() prompt and, at the bottom, Output and Call stack side by side. On narrower screens everything stays in a single column.",
-          "layout.item2":
-            "Visualization and Flowchart grow with their content up to a height limit (about 60% of the window) and then scroll inside. On a short screen such as 1366×768, with long output or a deep call stack the Output and Call stack strip extends past the bottom of the window and the page scrolls to reach the rest.",
-          "layout.item3":
-            "Output and Call stack also grow with their content, up to a height limit (about 52% of the window), and then scroll inside the card. The two cards always have the same height.",
-          "layout.item4":
-            "The first run of a small program fits entirely in 1366×768. Programs with many variables, long output or a deep call stack need scrolling.",
-          "layout.item5":
-            "To save space, the site header is thinner and Navigation becomes a bar without a header, which cannot be collapsed. The flowchart legend only appears in full screen.",
-          "translation.title": "Code translation",
-          "translation.item1":
-            "With the Translate button turned on, hovering over a line in the editor shows that line in plain language (Portuguese or English, according to the page language).",
-          "translation.item2":
-            "The translation is done one line at a time, without running the code and without looking at neighboring lines. Because of this, in lists, calls, and texts that span several lines, a line may be misinterpreted (an argument name=1 alone on its line, for example, appears as an assignment, and the last item of a list that is a call, without a comma, appears as “call ...”).",
-          "translation.item3":
-            "Words inside quoted texts and comments are not translated.",
-          "translation.item4":
-            "It covers the most common statements (if, for, while, def, class, return, try/except, with, assert, del, global, yield, raise, import, decorators, and assignments, including chained ones). A line that is just a call gets a sentence (notas.append(5.5) becomes “add 5.5 to the end of notas”; other calls become “call ...”). Inside expressions, Portuguese replaces words (print with escreva, round with arredonda, len with tamanho, and with e, is with é); in English the words do not change, because the code is already in English. Operators (>=, ==, %) do not change.",
-          "translation.item5":
-            "The hint appears only with the mouse and only in the editor of the Code card; there is no keyboard or touch version. Turning the feature on and off can also be done with the keyboard, using Alt + T.",
-          "advanced.title": "Advanced features",
-          "advanced.item1":
-            "Threads, processes, networking, files, and graphical interfaces are not the tool's focus.",
-          "advanced.item2":
-            "Decorators, generators, and advanced internals may be displayed in a simplified way.",
-          "advanced.item3":
-            "Tracing prioritizes educational clarity over full language coverage.",
-          "access.fontDown": "Decrease font size",
-          "access.fontUp": "Increase font size",
-          "theme.dark": "Dark theme",
-          "theme.light": "Light theme",
-        },
-      };
-      let currentLang = localStorage.getItem("pythonvisual_lang") || "pt";
-      if (!pageI18n[currentLang]) currentLang = "pt";
       let escalaFonte =
         parseFloat(localStorage.getItem("pythonvisual_escala_fonte")) || 1;
       let temaEscuro = localStorage.getItem("pythonvisual_tema_escuro") === "1";
-      function translate(key) {
-        return (
-          (pageI18n[currentLang] && pageI18n[currentLang][key]) ||
-          pageI18n.pt[key] ||
-          key
-        );
-      }
       function aplicarFonte() {
         document.documentElement.style.setProperty(
           "--font-scale",
@@ -479,9 +296,10 @@
         const label = document.getElementById("tema-label");
         if (!icone || !label) return;
         icone.className = temaEscuro ? "fa-solid fa-sun" : "fa-solid fa-moon";
+        const fnTraduzir = window.translate || window.traduzir;
         label.textContent = temaEscuro
-          ? translate("theme.light")
-          : translate("theme.dark");
+          ? (fnTraduzir ? fnTraduzir("theme.light") : "Tema claro")
+          : (fnTraduzir ? fnTraduzir("theme.dark") : "Tema escuro");
       }
       function alternarTema() {
         temaEscuro = !temaEscuro;
@@ -489,31 +307,10 @@
         localStorage.setItem("pythonvisual_tema_escuro", temaEscuro ? "1" : "0");
         atualizarBotaoTema();
       }
-      function applyPageLang() {
-        document.documentElement.lang = currentLang === "en" ? "en" : "pt-br";
-        document.title = translate("title");
-        document.querySelectorAll("[data-i18n]").forEach((el) => {
-          el.textContent = translate(el.dataset.i18n);
-        });
-        document.querySelectorAll("[data-i18n-aria]").forEach((el) => {
-          el.setAttribute("aria-label", translate(el.dataset.i18nAria));
-        });
-        document.querySelectorAll(".lang-btn").forEach((button) => {
-          const active = button.id === "lang-" + currentLang;
-          button.classList.toggle("active", active);
-          button.setAttribute("aria-pressed", active ? "true" : "false");
-        });
-        atualizarBotaoTema();
-      }
-      function setLang(lang) {
-        currentLang = pageI18n[lang] ? lang : "pt";
-        localStorage.setItem("pythonvisual_lang", currentLang);
-        applyPageLang();
-      }
       document.body.classList.toggle("tema-escuro", temaEscuro);
       aplicarFonte();
-      applyPageLang();
     </script>
+    <script type="module" src="/static/js/i18n.js"></script>
     <script src="/static/js/tooltip.js" defer></script>
   </body>
 </html>

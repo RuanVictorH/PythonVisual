@@ -1931,21 +1931,6 @@ body.tema-escuro .fluxo-rolagem {
   border-color: #334155;
 }
 
-/* ===== Visualizador: abas à direita e layout compacto ===== */
-
-/* Cabeçalho do site mais fino só nesta página (body.visualizador) */
-body.visualizador .site-header {
-  padding-top: 8px;
-  padding-bottom: 8px;
-}
-body.visualizador .site-logo {
-  width: 46px;
-  height: 40px;
-}
-body.visualizador .site-header .header-text h1 {
-  font-size: 1.35rem;
-}
-
 /* Abas da coluna da direita (static/js/abas-direita.js) */
 .abas-direita {
   display: flex;

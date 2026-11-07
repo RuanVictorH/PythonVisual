@@ -43,8 +43,8 @@
 
 .site-logo {
   display: block;
-  width: 46px;
-  height: 40px;
+  width: calc(46px * var(--font-scale));
+  height: calc(40px * var(--font-scale));
   object-fit: contain;
 }
 
